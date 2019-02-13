@@ -11,12 +11,14 @@ from functools import partial
 
 class Scola():
 	
-	def __init__(self, working_directory,disp=True):
+	def __init__(self, working_directory, disp=True):
 		self.disp = disp
 		self.working_directory = working_directory
+		self.null_model = "config"
 
 	# Main routine	
 	def run(self, C_samp, L, null_model = "config", lambda_list = np.logspace(-10, 0, 30)[::-1], disp=True, gamma = 0.5):	
+		self.null_model = null_model
 	
 		# Create working directory	
 		if not os.path.exists(self.working_directory):
@@ -59,19 +61,22 @@ class Scola():
 		
 		if disp:
 			print("")
-			print("")
-			print('Construction finished')
+			print('Finished')
 	
 		return self._find_best_model(networks)
 
-	def get_network(self, null_model="config"):
+	def get_network(self, null_model=None):
+		if null_model is None:
+			null_model = self.null_model
 		file_tentative_results = '%s/networks-%s.pickle' % (self.working_directory, null_model)
 		networks, Lams = self._load_results(file_tentative_results) 
 		EBICs = [net["EBIC"] for net in networks]	
 		idx = np.argmin(np.array(EBICs))
 		return networks[idx]["W"]
 
-	def get_null_corr_matrix(self, null_model="config"):
+	def get_null_corr_matrix(self, null_model=None):
+		if null_model is None:
+			null_model = self.null_model
 		file_null_model = '%s/null-model-%s.pickle' % (self.working_directory, null_model)
 		with open(file_null_model, 'rb') as f:
 			res = pickle.load(f)
@@ -79,8 +84,8 @@ class Scola():
 		num_parameters_null = res["num_parameters_null"]
 		return C_null, num_parameters_null	
 
-	def get_corr_matrix(self, null_model="config"):
-		W = self.get_network(null_model = null_model)
+	def get_corr_matrix(self, null_model=None):
+		W = self.get_network(null_model)
 		C_null, _ = self.get_null_corr_matrix(null_model)	
 		return C_null + W 
 
