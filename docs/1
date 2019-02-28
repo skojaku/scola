@@ -16,88 +16,74 @@ class Scola():
 
     Parameters
     ----------
-    disp : bool 
+    :param working_directory: 
+        Path to the working directory
+    :type working_directory: 
+        string
+
+    :param disp: 
         Set disp=True to disply the progress. Otherwise set disp=False.
+    :type disp: 
+        bool
+        
+
     """
 
-    def __init__(self):
-        pass
+    def __init__(self, working_directory, disp=True):
+        self.disp = disp
+        self.working_directory = working_directory
+        self.null_model = "config"
 
-    def run(self, C_samp, L, null_model="config", disp=True, gamma=0.5, working_directory = None):
+    def run(self, C_samp, L, null_model="config", disp=True, gamma=0.5):
         """
-        Construct a network from a correlation matrices 
-        using the Scola algorithm
-   
-        Parameters
-        ----------
-        C_samp : numpy.matrix
-            Sample correlation matrix. 
-            
-        L: int 
-            Number of samples
-
-        null_model : string, default 'config'
-            Name of the null model. Available null models are;
-                * White noise model (null_model='white-noise')
-                * HQS model (null_model='hqs')
-                * Configuration model (null_model='config')
-
-        disp : bool, default True 
-            Set disp=True to disply the progress. 
-            Otherwise set disp=False.
-            
-        gamma : float, default 0.5 
-            Hyperparameter for the extended Baysian information criterion.
-
-        working_directory : string, default None.
-            If working_directory is given, the program will create a directry of the name.
-            Then, the program saves its progress in the working directory.
-            If the directory already exists, then the program will read the results and resume the computation.
+        Construct a network from a correlation matrices using the Scola algorithm
     
-        Returns
-        -------
-        W : numpy.matrix 
-            Weighted adjacency matrix of the generated network.  
+        :param C_samp: 
+            Sample correlation matrix. 
 
-        EBIC : float 
-            Value of the extended BIC for the generated network.
-                
-        Note
-        ----
-        This function saves the tentative results in networks-<name of the null model>.pickle in the working directory.
-        """
+        :type C_samp:
+            numpy.matrix
+
+        :param L: Number of samples
+        :type L: int
+
+        :param null_model: 
+            Name of the null model.
+        :type null_model:
+            string, default 'config'
+
+        :param disp: 
+            Set disp=True to disply the progress. Otherwise set disp=False.
+        :type disp: 
+            bool, default True
             
-        # Check input types
-        if type(C_samp) is np.ndarray:
-                C_samp = np.matrix(C_samp)
+        :param gamma: 
+            Hyperparameter for the extended Baysian information criterion.
+        :type gamma: 
+            float, default 0.5
+    
+        Returns:
+            W:  EBIC: 
+            Weighted adjacency matrix of the generated network.  
+        :rtype W: 
+            numpy.matrix 
 
-        if type(C_samp) is not np.matrix:
-            raise TypeError("C_samp must be a numpy.matrix")
-
-        if (type(L) is not int) and (type(L) is not float):
-            raise TypeError("L must be an integer")
-
-        if type(null_model) is not str:
-            raise TypeError("null_model must be string")
-
-        if null_model not in ['white-noise', 'hqs', 'config']:
-            raise ValueError(
-                'Null model %s is unknown. See the Readme for the available null models' % null_model)
-
-        if type(disp) is not bool:
-            raise TypeError("disp must be a bool")
-
-        if type(gamma) is not float:
-            raise TypeError("gamma must be a float")
-
-
-        # Create working directory. The tentative results will be saved 
-        # in networks-<name of the null model>.pickle in the working directory
+    
+        :return: 
+            The value of the extended BIC for the generated network. 
+        :rtype EBIC: 
+            float 
+        """
         self.null_model = null_model
+
+        # Create working directory
         if not os.path.exists(self.working_directory):
             os.mkdir(self.working_directory)
             if disp:
                 print("Directory ", self.working_directory,  "is created.")
+
+        # The tentative results are saved in tentative-results.pickle
+        # in the working directory
         file_tentative_results = '%s/networks-%s.pickle' % (
             self.working_directory, null_model)
         Logs = self._load_logs(file_tentative_results)
@@ -194,7 +180,7 @@ class Scola():
         file_tentative_results = '%s/networks-%s.pickle' % (
             self.working_directory, null_model)
         Logs = self._load_logs(file_tentative_results)
-        W, EBIC = self._find_best_model(Logs)
+        W, EBIC, lam = self._find_best_model(Logs)
         return W
 
     def get_null_corr_matrix(self, null_model=None):
@@ -216,11 +202,13 @@ class Scola():
     def _find_best_model(self, Logs):
         W = None
         EBIC = 1e+30
+        lam = 0
         for lam_, net in Logs.items():
             if EBIC > net["EBIC"]:
                 W = net["W"]
                 EBIC = net["EBIC"]
-        return W, EBIC
+                lam = lam_
+        return W, EBIC, lam
 
     def _compute_null_model(self, C_samp, null_model, disp):
         file_null_model = '%s/null-model-%s.pickle' % (
