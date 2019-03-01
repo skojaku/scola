@@ -1,22 +1,6 @@
-scola package
-=============
+Functions
+=========
 
-Submodules
-----------
-
-scola.Scola module
-------------------
-
-.. automodule:: scola.Scola
+.. automodule:: scola.generate_network
     :members:
     :undoc-members:
-    :show-inheritance:
-
-
-Module contents
----------------
-
-.. automodule:: scola
-    :members:
-    :undoc-members:
-    :show-inheritance:

@@ -1,3 +1,3 @@
 __author_= "Sadamori Kojaku"
 
-from .Scola import * 
+from .generate_network import *

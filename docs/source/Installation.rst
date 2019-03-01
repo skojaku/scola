@@ -1,6 +1,5 @@
-############
 Installation
-############
+============
 
 .. role:: python(code)
     :language: python
@@ -17,8 +16,8 @@ We have tested ``scola`` on Ubuntu and CentOS.
 .. todo:: Check compatibility to Mac and Windows when I have time to do it
 
 
-Install with pip
-----------------
+Installation with pip
+---------------------
 
 #. `Upgrade pip to the latest <https://pip.pypa.io/en/stable/installing/>`_
 
@@ -35,8 +34,8 @@ Install with pip
         pip3 install --user scola
 
 
-Install from source
--------------------
+Installation from source
+------------------------
 
 #. Download `the source <https://github.com/skojaku/scola/>`_ from GitHub.
 
@@ -47,5 +46,3 @@ Install from source
    .. code-block:: bash
 
     python setup.py install
-    
-

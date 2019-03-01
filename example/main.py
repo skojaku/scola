@@ -1,13 +1,12 @@
+import os
+import sys
+sys.path.insert(0, os.path.abspath('../'))
 import scola
 import numpy as np
 
 C = np.loadtxt('motivation.txt')
-sc = scola.Scola('test')
-W, EBIC, lam = sc.run(C, 686, null_model="config")
-W = sc.get_network()
-C_null = sc.get_null_corr_matrix()
-C = sc.get_corr_matrix()
+W, EBIC, C_null, K_null, selected_model_id = scola.generate_network(C, 686, null_models=["hqs", "white-noise"], n_jobs = 3)
 
 import matplotlib.pyplot as plt
-plt.imshow(C)
+plt.imshow(W)
 plt.show()
