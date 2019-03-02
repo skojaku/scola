@@ -11,7 +11,7 @@ from functools import partial
 import cvxpy as cv
 from multiprocessing import Pool, current_process
 
-def generate_network(C_samp, L, null_models=["white-noise", "hqs", "config"], disp=True, gamma=0.5, n_jobs = 3):
+def generate_network(C_samp, L, null_model='all', disp=True, n_jobs = 3):
     """
     Generate a network from a correlation matrix
     using the Scola algorithm
@@ -19,34 +19,19 @@ def generate_network(C_samp, L, null_models=["white-noise", "hqs", "config"], di
     Parameters
     ----------
     C_samp : 2D numpy.matrix, shape (N, N)
-        NxN sample correlation matrix.
-
+        Sample correlation matrix. N is the number of nodes.
     L : int
         Number of samples
-
-    null_models : list, default ['white-noise', 'hqs', 'config']
-        List of null models to be used to construct networks.
-        The Scola will construct a network for each null model. 
-        Then, it selects the best network in terms of the extended BIC.
-        The null model can be specified by either a string or a tuple.
-        Specifically, one can use in-house null models for correlation 
-        matrices by setting the string of the name;  
-
-            * White noise model ('white-noise')
-            * Hirschberger-Qu-Steuer model ('hqs')
-            * Configuration model ('config')
-
-        Alternatively, one can use a user-defined null model by setting a tuple (C_null, K_null), where
-
-            * **C_null** : (*2D numpy.matrix, shape(N,N)*) - Correlation matrix under the null model.
-            * **K_null** : (*int*) - Number of parameters of C_null.
-
+    null_model : str, default 'all' 
+        Name of the null model to be used for constructing the network.  
+        Available null models are
+        the white noise model (null_model='white-noise'),
+        the Hirschberger-Qu-Steuer model (null_model='hqs')
+        and the configuration model (null_model='config')
+        If null_model='all', then the Scola selects the best one among the three null models in terms of the extended BIC.  
     disp : bool, default True
         Set disp=True to disply the progress.
         Otherwise set disp=False.
-
-    gamma : float, default 0.5
-        Hyperparameter for the extended Baysian information criterion.
 
     n_jobs : int, default 3
         Number of jobs to run in parallel.
@@ -55,17 +40,12 @@ def generate_network(C_samp, L, null_models=["white-noise", "hqs", "config"], di
     -------
     W : 2D numpy.matrix, shape (N, N)
         Weighted adjacency matrix of the generated network.
-
     C_null : 2D numpy.matrix, shape (N, N)
-       Null correlation matrix.
-
+        Null correlation matrix.
+    null_model : str
+        Name of the null model.
     EBIC : float
         The extended BIC for the generated network.
-        
-    selected_model_id : int
-        Index of the selected null model. 
-        In other words, the Scola selected ``null_models[selected_model_id]`` to
-        construct the network.
     """
 
     # Check input types
@@ -81,17 +61,19 @@ def generate_network(C_samp, L, null_models=["white-noise", "hqs", "config"], di
     if type(disp) is not bool:
         raise TypeError("disp must be a bool")
 
-    if type(gamma) is not float:
-        raise TypeError("gamma must be a float")
-
-    pool = Pool(n_jobs)
-    res = pool.map(partial(_gen_net_, C_samp, L, disp=disp, gamma=gamma), [(null_model, i) for i, null_model in enumerate(null_models)])
-    pool.close()
-    pool.join()
-    
-    idx = np.argmin(np.array([r[2] for r in res]))
-    print(np.array([r[2] for r in res]))
-    return res[idx]
+    if type(null_model) is not str:
+        raise TypeError("null_model must be a string")
+  
+    if null_model == 'all':
+        null_models_to_be_used = ["white-noise", "hqs", "config"]
+        pool = Pool(n_jobs)
+        res = pool.map(partial(_gen_net_, C_samp, L, disp=disp, gamma=0.5), [(null_model, i) for i, null_model in enumerate(null_models_to_be_used)])
+        pool.close()
+        pool.join()
+        idx = np.argmin(np.array([r[2] for r in res]))
+        return res[idx]
+    else:
+        return _gen_net_(C_samp, L, null_model_process_id = [null_model, 0], disp=disp, gamma=gamma)
 
 def _gen_net_(C_samp, L, null_model_process_id, disp, gamma):
     
@@ -190,9 +172,9 @@ def _gen_net_(C_samp, L, null_model_process_id, disp, gamma):
 
         pbar.update()
     pbar.close()
-    return W_best, C_null, EBIC_min, null_model_id  
+    return W_best, C_null, EBIC_min, null_model
 
-def generate_configuration_model(C, tolerance = 1e-5, transform_to_corr_mat = True):
+def _generate_configuration_model(C, tolerance = 1e-5, transform_to_corr_mat = True):
 
     if transform_to_corr_mat == True:
         cov = np.asanyarray(C)
@@ -226,7 +208,7 @@ def _compute_null_correlation_matrix(C_samp, null_model, disp):
         np.fill_diagonal(C_null, 1)
         K_null = 1
     elif null_model == "config":
-        C_null = generate_configuration_model(np.array(C_samp), 1e-4, True)
+        C_null = _generate_configuration_model(np.array(C_samp), 1e-4, True)
         std_ = np.sqrt(np.diag(C_null))
         C_null = C_null / np.outer(std_, std_)
         K_null = C_samp.shape[0]

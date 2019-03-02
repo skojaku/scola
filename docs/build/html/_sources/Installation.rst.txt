@@ -9,7 +9,7 @@ Requirements
 
 ``scola`` is compatible with python 3.4 or newer. 
 We recommend using pip for installation. 
-If you prefer Anaconda or other package managers, you can instead install ``scola`` from source. 
+If you do not have pip, you can instead install ``scola`` from source. 
 
 We have tested ``scola`` on Ubuntu and CentOS.
 

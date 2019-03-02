@@ -42,7 +42,9 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.viewcode',
     'sphinx.ext.napoleon',
-    'sphinx.ext.todo'
+    'sphinx.ext.todo',
+    'sphinx.ext.autosectionlabel',
+    'sphinxcontrib.fulltoc'
 ]
 
 [extensions]
@@ -51,6 +53,8 @@ autodoc_member_order = 'bysource'
 # Default flags used by autodoc directives
 autodoc_default_flags = ['members']
 napoleon_use_rtype = True
+autosectionlabel_prefix_document = True
+
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -85,14 +89,14 @@ pygments_style = 'sphinx'
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-#html_theme = 'alabaster'
+html_theme = 'alabaster'
 html_theme = "sphinx_rtd_theme"
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
 #
-# html_theme_options = {}
+html_theme_options = {'fixed_sidebar':True}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
@@ -108,7 +112,13 @@ html_static_path = ['_static']
 # 'searchbox.html']``.
 #
 # html_sidebars = {}
-
+html_sidebars = {
+    '**': [
+        'about.html',
+        'navigation.html',
+        'relations.html',
+    ]
+}
 
 # -- Options for HTMLHelp output ---------------------------------------------
 
