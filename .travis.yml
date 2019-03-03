@@ -47,7 +47,7 @@ before_install: |
   fi
 
 install: 
-   - python -m pip install scola 
+   - pip3 --no-cache-dir install --index-url https://test.pypi.org/simple scola 
 
 # command to run tests
 script:
