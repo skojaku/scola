@@ -83,7 +83,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#installing-scola">Installing Scola</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#getting-started">Getting Started</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#id1">API</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#dependencies">Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">Dependencies</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#licence">Licence</a><ul class="simple">
 </ul>
 </li>
@@ -164,21 +164,22 @@ The Scola stands for “Sparse network COnstruction from correlation matrices wi
 </div>
 <div class="section" id="installing-scola">
 <h2>Installing Scola<a class="headerlink" href="#installing-scola" title="Permalink to this headline">¶</a></h2>
-<ol class="arabic simple">
-<li>You need to install <code class="docutils literal notranslate"><span class="pre">cvxpy</span></code> prior to install <code class="docutils literal notranslate"><span class="pre">scola</span></code>.
-We recommend to follow <a class="reference external" href="https://ajfriendcvxpy.readthedocs.io/en/latest/install/">the instructions for installing cvxpy</a>.</li>
-</ol>
-<p><code class="docutils literal notranslate"><span class="pre">scola</span></code> supports both Python 2 Python 3.
-You can install <code class="docutils literal notranslate"><span class="pre">scola</span></code> using <strong>pip</strong>, i.e.,</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install -U cvxpy scs ecos
-pip install -U scola
+<ol class="arabic">
+<li><p class="first">You need to install <code class="docutils literal notranslate"><span class="pre">cvxpy</span></code> prior to install <code class="docutils literal notranslate"><span class="pre">scola</span></code>.
+We recommend to follow <a class="reference external" href="https://ajfriendcvxpy.readthedocs.io/en/latest/install/">the instructions for installing cvxpy</a>.</p>
+</li>
+<li><p class="first">Install <code class="docutils literal notranslate"><span class="pre">scola</span></code> using <strong>pip</strong>, i.e.,</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install -U scs ecos scola
 </pre></div>
 </div>
-<p>Test the installation with pytest</p>
+</li>
+<li><p class="first">Test the installation with pytest</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install pytest <span class="o">&amp;&amp;</span> python -m pytest
 </pre></div>
 </div>
-<p>If you fail to pass the test, please check if <code class="docutils literal notranslate"><span class="pre">cvxpy</span></code> is correctly installed.</p>
+<p>If you fail to pass the test, in many cases, <code class="docutils literal notranslate"><span class="pre">cvxpy</span></code> is not correctly installed (check its <a class="reference external" href="https://ajfriendcvxpy.readthedocs.io/en/latest/install/#other-platforms">dependencies</a>)</p>
+</li>
+</ol>
 </div>
 <div class="section" id="getting-started">
 <h2>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
@@ -246,8 +247,8 @@ Otherwise set disp=False.</li>
 </dd></dl>
 
 </div>
-<div class="section" id="dependencies">
-<h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id2">
+<h2>Dependencies<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">scola</span></code> automatically installs the following packages:</p>
 <ul class="simple">
 <li>NumPy</li>
