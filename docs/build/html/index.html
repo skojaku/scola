@@ -13,6 +13,8 @@
 
   
   
+  
+  
 
   
 
@@ -22,26 +24,19 @@
 
   
 
-  
-  
-    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="index" title="Index"
-              href="genindex.html"/>
-        <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="Scola 0.0.0 documentation" href="#"/> 
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -78,7 +73,10 @@
           
             
             
-                <p class="caption"><span class="caption-text">Table of contents:</span></p>
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">A Python package for the Scola algorithm</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
@@ -102,34 +100,54 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="#">Scola</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">Scola</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="#">Docs</a> &raquo;</li>
-      
-    <li>A Python package for the Scola algorithm</li>
+    
+      <li><a href="#">Docs</a> &raquo;</li>
+        
+      <li>A Python package for the Scola algorithm</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
+            
             <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -146,17 +164,21 @@ The Scola stands for “Sparse network COnstruction from correlation matrices wi
 </div>
 <div class="section" id="installing-scola">
 <h2>Installing Scola<a class="headerlink" href="#installing-scola" title="Permalink to this headline">¶</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">scola</span></code> requires Python 3.4 or newer.
+<ol class="arabic simple">
+<li>You need to install <code class="docutils literal notranslate"><span class="pre">cvxpy</span></code> prior to install <code class="docutils literal notranslate"><span class="pre">scola</span></code>.
+We recommend to follow <a class="reference external" href="https://ajfriendcvxpy.readthedocs.io/en/latest/install/">the instructions for installing cvxpy</a>.</li>
+</ol>
+<p><code class="docutils literal notranslate"><span class="pre">scola</span></code> supports both Python 2 Python 3.
 You can install <code class="docutils literal notranslate"><span class="pre">scola</span></code> using <strong>pip</strong>, i.e.,</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip3 install -U scola
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install -U cvxpy scs ecos
+pip install -U scola
 </pre></div>
 </div>
 <p>Test the installation with pytest</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install pytest <span class="o">&amp;&amp;</span> pytest
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install pytest <span class="o">&amp;&amp;</span> python -m pytest
 </pre></div>
 </div>
-<p>If you fail to pass the test, please check if <code class="docutils literal notranslate"><span class="pre">cvxpy</span></code> is correctly installed.
-We recommend to read <a class="reference external" href="https://ajfriendcvxpy.readthedocs.io/en/latest/install/">the instructions for installing cvxpy</a>.</p>
+<p>If you fail to pass the test, please check if <code class="docutils literal notranslate"><span class="pre">cvxpy</span></code> is correctly installed.</p>
 </div>
 <div class="section" id="getting-started">
 <h2>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
@@ -189,7 +211,7 @@ W[i][j] indicates the weight of the edge betwee nodes i and j.
 <h2>API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
 <span class="target" id="module-scola.generate_network"></span><dl class="function">
 <dt id="scola.generate_network.generate_network">
-<code class="descname">generate_network</code><span class="sig-paren">(</span><em>C_samp</em>, <em>L</em>, <em>null_model='all'</em>, <em>disp=True</em>, <em>n_jobs=3</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scola/generate_network.html#generate_network"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scola.generate_network.generate_network" title="Permalink to this definition">¶</a></dt>
+<code class="descname">generate_network</code><span class="sig-paren">(</span><em>C_samp</em>, <em>L</em>, <em>null_model='all'</em>, <em>disp=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scola/generate_network.html#generate_network"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scola.generate_network.generate_network" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a network from a correlation matrix
 using the Scola algorithm</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -207,7 +229,6 @@ and the configuration model (null_model=’config’)
 If null_model=’all’, then the Scola selects the best one among the three null models in terms of the extended BIC.</li>
 <li><strong>disp</strong> (<em>bool</em><em>, </em><em>default True</em>) – Set disp=True to disply the progress.
 Otherwise set disp=False.</li>
-<li><strong>n_jobs</strong> (<em>int</em><em>, </em><em>default 3</em>) – Number of jobs to run in parallel.</li>
 </ul>
 </td>
 </tr>
@@ -246,6 +267,7 @@ Otherwise set disp=False.</li>
 
 
            </div>
+           
           </div>
           <footer>
   
@@ -258,7 +280,7 @@ Otherwise set disp=False.</li>
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -277,9 +299,11 @@ Otherwise set disp=False.</li>
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
             VERSION:'0.0.0',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="_static/jquery.js"></script>
@@ -288,19 +312,13 @@ Otherwise set disp=False.</li>
 
   
 
-  
-  
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-  
+  <script type="text/javascript" src="_static/js/theme.js"></script>
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

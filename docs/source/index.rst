@@ -17,13 +17,13 @@ The Scola stands for "Sparse network COnstruction from correlation matrices with
 Installing Scola
 ================
 
+``scola`` supports both Python 2 Python 3. 
+We assume that you have  
 
-You need to install ``cvxpy`` prior to install ``scola``.
-We recommend to follow `the instructions for installing cvxpy <https://ajfriendcvxpy.readthedocs.io/en/latest/install/>`_.
+#. You need to install ``cvxpy`` prior to install ``scola``.
+   We recommend to follow `the instructions for installing cvxpy <https://ajfriendcvxpy.readthedocs.io/en/latest/install/>`_.
 
-``scola`` supports **Python 3.4 or newer**. So please check  
-After installing ``cvxpy``, we can install ``scola`` using **pip**, i.e.,  
-
+#. 
 You can install ``scola`` using **pip**, i.e., 
 
 .. code-block:: bash
