@@ -183,7 +183,7 @@ def _generate_configuration_model(C, tolerance=1e-5, transform_to_corr_mat=True)
     ]
 
     prob = cv.Problem(objective, constraints)
-    prob.solve(verbose=True, eps=tolerance)
+    prob.solve(verbose=False, eps=tolerance)
 
     return C_con.value
 
