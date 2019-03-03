@@ -7,12 +7,69 @@ matrix:
         - os: linux
           sudo: required
           python: 3.4
+          compiler: gcc
+          env: SOURCES=ubuntu-toolchain-r-test
+          addons:
+            apt:
+              sources:
+                - ubuntu-toolchain-r-test
+              packages:
+                - g++
+                - gfortran
+                - libblas-dev
+                - liblapack-dev
+                - libatlas-base-dev
+                - libopenblas-base
+                - libopenblas-dev
+                - openmpi-bin
+                - libopenmpi-dev
+                - libpython2.7
+                - libboost-all-dev
+
         - os: linux
           sudo: required
           python: 3.5
+          compiler: gcc
+          env: SOURCES=ubuntu-toolchain-r-test
+          addons:
+            apt:
+              sources:
+                - ubuntu-toolchain-r-test
+              packages:
+                - g++
+                - gfortran
+                - libblas-dev
+                - liblapack-dev
+                - libatlas-base-dev
+                - libopenblas-base
+                - libopenblas-dev
+                - openmpi-bin
+                - libopenmpi-dev
+                - libpython2.7
+                - libboost-all-dev
+
         - os: linux
           sudo: required
           python: 3.6
+          compiler: gcc
+          env: SOURCES=ubuntu-toolchain-r-test
+          addons:
+            apt:
+              sources:
+                - ubuntu-toolchain-r-test
+              packages:
+                - g++
+                - gfortran
+                - libblas-dev
+                - liblapack-dev
+                - libatlas-base-dev
+                - libopenblas-base
+                - libopenblas-dev
+                - openmpi-bin
+                - libopenmpi-dev
+                - libpython2.7
+                - libboost-all-dev
+
         - os: osx
           language: generic
           env: PYTHON=3.4.4
