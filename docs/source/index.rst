@@ -24,7 +24,7 @@ Installing Scola
 
    .. code-block:: bash
    
-      pip install -U scs ecos scola
+      pip install scola
 
 #. Test the installation with pytest
 
@@ -78,12 +78,11 @@ API
 
 Dependencies
 ============
-``scola`` automatically installs the following packages:
+``scola`` has dependencies with the following packages:
 
 * NumPy
 * SciPy
 * tqdm
-* multiprocessing
 * cvxpy
 
 Licence

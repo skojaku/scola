@@ -1,28 +1,13 @@
 import numpy as np 
 import matplotlib.pyplot as plt
 
-#cov =  np.kron(np.eye(5) * 0.8, np.ones((5,5)))
-#cov[cov==0] = 0.3
-#np.fill_diagonal(cov, 1)
-#X = np.random.multivariate_normal(np.zeros(25), cov, 300)
+import numpy as np
+import pandas as pd
 
-
-X = np.loadtxt('data/sample.txt')
+X = pd.read_csv("https://raw.githubusercontent.com/skojaku/scola/master/data/sample.txt", header=None, sep=" ").values
+L = X.shape[0] # Number of samples
+N = X.shape[1] # Number of nodes
+# Generate NxN correlation matrix
 C_samp = np.corrcoef(X.T)
-L = X.shape[0]
-
-
 import scola
-W, C_null, EBIC, model_selected = scola.generate_network(C_samp, L)
-
-
-
-#fig, axes = plt.subplots(nrows=1, ncols=2)
-#axes[0].imshow(C_samp, label="sample")
-#axes[0].set_title('C_samp')
-#im = axes[1].imshow(W)
-#axes[1].set_title('W')
-
-#fig.subplots_adjust(right=0.8)
-#fig.colorbar(im, cax=fig.add_axes([0.85, 0.15, 0.05, 0.7]))
-#plt.show()
+W, EBIC, C_null, selected_model = scola.generate_network(C_samp, L)
