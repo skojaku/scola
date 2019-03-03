@@ -18,18 +18,19 @@ Installing Scola
 ================
 
 
-``scola`` requires Python 3.4 or newer. 
+``scola`` requires **Python 3.4 or newer**. 
 You can install ``scola`` using **pip**, i.e., 
 
 .. code-block:: bash
 
-   pip3 install -U scola
+   pip install -U cvxpy
+   pip install -U scola
 
 Test the installation with pytest
 
 .. code-block:: bash
 
-   pip install pytest && pytest
+   pip install pytest && python -m pytest
 
 If you fail to pass the test, please check if ``cvxpy`` is correctly installed.
 We recommend to read `the instructions for installing cvxpy <https://ajfriendcvxpy.readthedocs.io/en/latest/install/>`_.
