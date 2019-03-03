@@ -47,7 +47,7 @@ before_install: |
   fi
 
 install: 
-   - pip3 install cvxpy 
+   - pip3 install cvxpy scs ecos 
    - pip3 --no-cache-dir install --index-url https://test.pypi.org/simple scola 
 
 # command to run tests

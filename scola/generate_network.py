@@ -44,11 +44,11 @@ def generate_network(C_samp, L, null_model="all", disp=True):
         The extended BIC for the generated network.
     """
 
-    if type(C_samp) is np.ndarray:
-        C_samp = np.matrix(C_samp)
+    if type(C_samp) is np.matrix:
+        C_samp = np.array(C_samp)
 
-    if type(C_samp) is not np.matrix:
-        raise TypeError("C_samp must be a numpy.matrix")
+    if type(C_samp) is not np.ndarray:
+        raise TypeError("C_samp must be a numpy.ndarray")
 
     if (type(L) is not int) and (type(L) is not float):
         raise TypeError("L must be an integer")
@@ -192,7 +192,7 @@ def _compute_null_correlation_matrix(C_samp, null_model):
     C_null = []
     K_null = -1
     if null_model == "white-noise":
-        C_null = np.matrix(np.eye(C_samp.shape[0]))
+        C_null = np.eye(C_samp.shape[0])
         K_null = 0
     elif null_model == "hqs":
         C_null = np.mean(np.triu(C_samp, 1)) * np.ones(C_samp.shape)
@@ -232,8 +232,8 @@ def _MM_algorithm(C_samp, C_null, lam):
 def _maximisation_step(C_samp, C_null, W_base, lam):
 
     N = C_samp.shape[0]
-    mt = np.matrix(np.zeros((N, N)))
-    vt = np.matrix(np.zeros((N, N)))
+    mt = np.zeros((N, N))
+    vt = np.zeros((N, N))
     t = 0
     eps = 1e-8
     b1 = 0.9
@@ -251,7 +251,7 @@ def _maximisation_step(C_samp, C_null, W_base, lam):
     while (t < maxIteration) & (t <= (t_best + maxLocalSearch + 1)):
         t = t + 1
         inv_C = _fast_inv_mat_lapack(C_null + W)
-        gt = inv_C_base - inv_C @ C_samp @ inv_C
+        gt = inv_C_base - np.matmul(np.matmul(inv_C, C_samp),inv_C)
         gt = (gt + gt.T) / 2
         gt = np.nan_to_num(gt)
         np.fill_diagonal(gt, 0)
@@ -289,10 +289,10 @@ def _loglikelihood(W, C_samp, C_null):
     if np.min(w) < 0:
         v = v[w > 0]
         w = w[w > 0]
-    iCov = np.real(v @ np.diag(1 / w) @ v.T)
+    iCov = np.real(np.matmul(np.matmul(v, np.diag(1 / w)), v.T))
     l = (
         -0.5 * np.sum(np.log(w))
-        - 0.5 * np.trace(C_samp @ iCov)
+        - 0.5 * np.trace(np.matmul(C_samp,iCov))
         - 0.5 * Cov.shape[0] * np.log(2 * np.pi)
     )
     return np.real(l)
@@ -312,7 +312,7 @@ def _calc_EBIC(W, C_samp, C_null, L, gamma, Knull):
 def _prox(y, lam):
 
     return np.multiply(
-        np.sign(y), np.maximum(np.abs(y) - lam, np.matrix(np.zeros(y.shape)))
+        np.sign(y), np.maximum(np.abs(y) - lam, np.zeros(y.shape))
     )
 
 
