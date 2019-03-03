@@ -13,7 +13,9 @@ L = X.shape[0]
 
 
 import scola
-W, C_null, EBIC, model_selected = scola.generate_network(C_samp, L, null_models=['white-noise'])
+W, C_null, EBIC, model_selected = scola.generate_network(C_samp, L)
+
+
 
 #fig, axes = plt.subplots(nrows=1, ncols=2)
 #axes[0].imshow(C_samp, label="sample")
