@@ -1,4 +1,0 @@
-sphinx_gallery
-nb2plots
-scola
-
