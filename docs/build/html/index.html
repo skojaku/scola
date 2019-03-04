@@ -137,11 +137,12 @@
             
   <div class="section" id="a-python-package-for-the-scola-algorithm">
 <h1>A Python package for the Scola algorithm<a class="headerlink" href="#a-python-package-for-the-scola-algorithm" title="Permalink to this headline">¶</a></h1>
+<img alt="https://travis-ci.org/skojaku/scola.svg?branch=master" src="https://travis-ci.org/skojaku/scola.svg?branch=master" />
 <div class="section" id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
 <p>The Scola is an algorithm that takes a correlation matrix as input and outputs a network of the variables.
 In the generated network, edges between nodes indicate correlations that are not accounted for by some trivial properties (e.g., noise and global trends affecting all variables).
-The details are described in our paper</p>
+The details are described in our paper:</p>
 <p><strong>(referenece will be here)</strong>.</p>
 </div>
 <div class="section" id="installing-scola">
@@ -181,14 +182,14 @@ The sample correlation matrix can be computed using numpy.</p>
 <span class="n">C_samp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Then, provide <code class="docutils literal notranslate"><span class="pre">C_samp</span></code> and <code class="docutils literal notranslate"><span class="pre">L</span></code> to the Scola as follows.</p>
+<p>Then, provide <code class="docutils literal notranslate"><span class="pre">C_samp</span></code> and <code class="docutils literal notranslate"><span class="pre">L</span></code> to the Scola.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">scola</span>
 <span class="n">W</span><span class="p">,</span> <span class="n">EBIC</span><span class="p">,</span> <span class="n">C_null</span><span class="p">,</span> <span class="n">selected_model</span> <span class="o">=</span> <span class="n">scola</span><span class="o">.</span><span class="n">generate_network</span><span class="p">(</span><span class="n">C_samp</span><span class="p">,</span> <span class="n">L</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">W</span></code> is the weighted adjacency matrix of the generated network, where
 W[i][j] indicates the weight of the edge betwee nodes i and j.
-(See <a class="reference external" href="#module-scola.generate_network">API</a> for other return values).</p>
+See <a class="reference external" href="#module-scola.generate_network">API</a> for other return values.</p>
 </div>
 <div class="section" id="id1">
 <h2>API<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
@@ -196,19 +197,19 @@ W[i][j] indicates the weight of the edge betwee nodes i and j.
 <dt id="scola.generate_network.generate_network">
 <code class="descname">generate_network</code><span class="sig-paren">(</span><em>C_samp</em>, <em>L</em>, <em>null_model='all'</em>, <em>disp=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scola/generate_network.html#generate_network"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scola.generate_network.generate_network" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a network from a correlation matrix
-using the Scola algorithm</p>
+using the Scola algorithm.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>C_samp</strong> (<em>2D numpy.matrix</em><em>, </em><em>shape</em><em> (</em><em>N</em><em>, </em><em>N</em><em>)</em>) – Sample correlation matrix. N is the number of nodes.</li>
+<li><strong>C_samp</strong> (<em>2D numpy.ndarray</em><em>, </em><em>shape</em><em> (</em><em>N</em><em>, </em><em>N</em><em>)</em>) – Sample correlation matrix. N is the number of nodes.</li>
 <li><strong>L</strong> (<em>int</em>) – Number of samples</li>
 <li><strong>null_model</strong> (<em>str</em><em>, </em><em>default 'all'</em>) – Name of the null model to be used for constructing the network.
 Available null models are
 the white noise model (null_model=’white-noise’),
 the Hirschberger-Qu-Steuer model (null_model=’hqs’)
-and the configuration model (null_model=’config’)
+and the configuration model (null_model=’config’).
 If null_model=’all’, then the Scola selects the best one among the three null models in terms of the extended BIC.</li>
 <li><strong>disp</strong> (<em>bool</em><em>, </em><em>default True</em>) – Set disp=True to disply the progress.
 Otherwise set disp=False.</li>
@@ -216,8 +217,8 @@ Otherwise set disp=False.</li>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><ul class="simple">
-<li><strong>W</strong> (<em>2D numpy.matrix, shape (N, N)</em>) – Weighted adjacency matrix of the generated network.</li>
-<li><strong>C_null</strong> (<em>2D numpy.matrix, shape (N, N)</em>) – Null correlation matrix.</li>
+<li><strong>W</strong> (<em>2D numpy.ndarray, shape (N, N)</em>) – Weighted adjacency matrix of the generated network.</li>
+<li><strong>C_null</strong> (<em>2D numpy.ndarray, shape (N, N)</em>) – Null correlation matrix.</li>
 <li><strong>null_model</strong> (<em>str</em>) – Name of the null model.</li>
 <li><strong>EBIC</strong> (<em>float</em>) – The extended BIC for the generated network.</li>
 </ul>

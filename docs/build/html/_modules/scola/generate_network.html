@@ -142,11 +142,11 @@
 <div class="viewcode-block" id="generate_network"><a class="viewcode-back" href="../../index.html#scola.generate_network.generate_network">[docs]</a><span class="k">def</span> <span class="nf">generate_network</span><span class="p">(</span><span class="n">C_samp</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">null_model</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">disp</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generate a network from a correlation matrix</span>
-<span class="sd">    using the Scola algorithm</span>
+<span class="sd">    using the Scola algorithm.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    C_samp : 2D numpy.matrix, shape (N, N)</span>
+<span class="sd">    C_samp : 2D numpy.ndarray, shape (N, N)</span>
 <span class="sd">        Sample correlation matrix. N is the number of nodes.</span>
 <span class="sd">    L : int</span>
 <span class="sd">        Number of samples</span>
@@ -155,7 +155,7 @@
 <span class="sd">        Available null models are</span>
 <span class="sd">        the white noise model (null_model=&#39;white-noise&#39;),</span>
 <span class="sd">        the Hirschberger-Qu-Steuer model (null_model=&#39;hqs&#39;)</span>
-<span class="sd">        and the configuration model (null_model=&#39;config&#39;)</span>
+<span class="sd">        and the configuration model (null_model=&#39;config&#39;).</span>
 <span class="sd">        If null_model=&#39;all&#39;, then the Scola selects the best one among the three null models in terms of the extended BIC.</span>
 <span class="sd">    disp : bool, default True</span>
 <span class="sd">        Set disp=True to disply the progress.</span>
@@ -163,9 +163,9 @@
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    W : 2D numpy.matrix, shape (N, N)</span>
+<span class="sd">    W : 2D numpy.ndarray, shape (N, N)</span>
 <span class="sd">        Weighted adjacency matrix of the generated network.</span>
-<span class="sd">    C_null : 2D numpy.matrix, shape (N, N)</span>
+<span class="sd">    C_null : 2D numpy.ndarray, shape (N, N)</span>
 <span class="sd">        Null correlation matrix.</span>
 <span class="sd">    null_model : str</span>
 <span class="sd">        Name of the null model.</span>

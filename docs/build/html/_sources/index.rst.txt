@@ -2,13 +2,14 @@
 A Python package for the Scola algorithm
 ========================================
 
+.. image:: https://travis-ci.org/skojaku/scola.svg?branch=master
 
 Introduction
 ============
 
 The Scola is an algorithm that takes a correlation matrix as input and outputs a network of the variables. 
 In the generated network, edges between nodes indicate correlations that are not accounted for by some trivial properties (e.g., noise and global trends affecting all variables).
-The details are described in our paper 
+The details are described in our paper: 
 
 
 **(referenece will be here)**.
@@ -59,7 +60,7 @@ The sample correlation matrix can be computed using numpy.
    # Generate NxN correlation matrix
    C_samp = np.corrcoef(X.T)
 
-Then, provide ``C_samp`` and ``L`` to the Scola as follows.  
+Then, provide ``C_samp`` and ``L`` to the Scola.  
 
 .. code-block:: python
 
@@ -68,7 +69,7 @@ Then, provide ``C_samp`` and ``L`` to the Scola as follows.
 
 ``W`` is the weighted adjacency matrix of the generated network, where 
 W[i][j] indicates the weight of the edge betwee nodes i and j.
-(See `API <#module-scola.generate_network>`_ for other return values).
+See `API <#module-scola.generate_network>`_ for other return values.
 
 API
 ===

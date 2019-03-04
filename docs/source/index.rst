@@ -2,6 +2,7 @@
 A Python package for the Scola algorithm
 ========================================
 
+.. image:: https://travis-ci.org/skojaku/scola.svg?branch=master
 
 Introduction
 ============
