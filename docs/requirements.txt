@@ -1,0 +1,4 @@
+sphinx_gallery
+sphinxcontrib-napoleon
+sphinxcontrib-fulltoc
+scola

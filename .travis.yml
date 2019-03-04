@@ -1,0 +1,128 @@
+language: python
+
+nguage: python
+
+matrix:
+    include:
+        - os: linux
+          sudo: required
+          python: 2.7
+          compiler: gcc
+          env: SOURCES=ubuntu-toolchain-r-test
+          addons:
+            apt:
+              sources:
+                - ubuntu-toolchain-r-test
+              packages:
+                - g++
+                - gfortran
+                - libblas-dev
+                - liblapack-dev
+                - libatlas-base-dev
+                - libopenblas-base
+                - libopenblas-dev
+                - openmpi-bin
+                - libopenmpi-dev
+                - libpython2.7
+                - libboost-all-dev
+
+        - os: linux
+          sudo: required
+          python: 3.4
+          compiler: gcc
+          env: SOURCES=ubuntu-toolchain-r-test
+          addons:
+            apt:
+              sources:
+                - ubuntu-toolchain-r-test
+              packages:
+                - g++
+                - gfortran
+                - libblas-dev
+                - liblapack-dev
+                - libatlas-base-dev
+                - libopenblas-base
+                - libopenblas-dev
+                - openmpi-bin
+                - libopenmpi-dev
+                - libpython2.7
+                - libboost-all-dev
+
+        - os: linux
+          sudo: required
+          python: 3.5
+          compiler: gcc
+          env: SOURCES=ubuntu-toolchain-r-test
+          addons:
+            apt:
+              sources:
+                - ubuntu-toolchain-r-test
+              packages:
+                - g++
+                - gfortran
+                - libblas-dev
+                - liblapack-dev
+                - libatlas-base-dev
+                - libopenblas-base
+                - libopenblas-dev
+                - openmpi-bin
+                - libopenmpi-dev
+                - libpython2.7
+                - libboost-all-dev
+
+        - os: linux
+          sudo: required
+          python: 3.6
+          compiler: gcc
+          env: SOURCES=ubuntu-toolchain-r-test
+          addons:
+            apt:
+              sources:
+                - ubuntu-toolchain-r-test
+              packages:
+                - g++
+                - gfortran
+                - libblas-dev
+                - liblapack-dev
+                - libatlas-base-dev
+                - libopenblas-base
+                - libopenblas-dev
+                - openmpi-bin
+                - libopenmpi-dev
+                - libpython2.7
+                - libboost-all-dev
+
+        - os: osx
+          language: generic
+          env: PYTHON=3.4
+        - os: osx
+          language: generic
+          env: PYTHON=3.5
+        - os: osx
+          language: generic
+          env: PYTHON=3.6
+
+before_install: |
+  if [ "$TRAVIS_OS_NAME" == "osx" ]; then
+    brew update
+    brew install cmake boost python gcc open-mpi homebrew/science/openblas
+    brew install openssl readline
+    brew outdated pyenv || brew upgrade pyenv
+    brew install pyenv-virtualenv
+    pyenv install $PYTHON
+    export PYENV_VERSION=$PYTHON
+    export PATH="/Users/travis/.pyenv/shims:${PATH}"
+    pyenv-virtualenv venv
+    source venv/bin/activate
+    python --version
+  fi
+
+install:
+   - pip install numpy
+   - pip install pytest 
+   - pip install cvxpy scs ecos 
+   - pip --no-cache-dir install --index-url https://test.pypi.org/simple scola 
+
+# command to run tests
+script:
+  - python -m pytest
