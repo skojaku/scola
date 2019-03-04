@@ -1,6 +1,11 @@
 language: python
 
-nguage: python
+python:
+- 3.6
+- 3.5
+- 3.4
+- 2.7
+
 
 matrix:
     include:
@@ -25,7 +30,6 @@ matrix:
                 - libopenmpi-dev
                 - libpython2.7
                 - libboost-all-dev
-
         - os: linux
           sudo: required
           python: 3.4
@@ -47,7 +51,6 @@ matrix:
                 - libopenmpi-dev
                 - libpython2.7
                 - libboost-all-dev
-
         - os: linux
           sudo: required
           python: 3.5
@@ -69,7 +72,6 @@ matrix:
                 - libopenmpi-dev
                 - libpython2.7
                 - libboost-all-dev
-
         - os: linux
           sudo: required
           python: 3.6
@@ -93,8 +95,8 @@ matrix:
                 - libboost-all-dev
 
         - os: osx
-          language: generic
-          env: PYTHON=3.4
+          language: sh
+          install: pip3 install -e numpy pytest scs ecos cvxpy && pip3 --no-cache-dir install --index-url https://test.pypi.org/simple scola 
         - os: osx
           language: generic
           env: PYTHON=3.5
