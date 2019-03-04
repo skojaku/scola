@@ -13,8 +13,6 @@
 
   
   
-  
-  
 
   
 
@@ -24,19 +22,26 @@
 
   
 
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" /> 
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="Scola 0.0.0 documentation" href="#"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav">
+<body class="wy-body-for-nav" role="document">
 
-   
   <div class="wy-grid-for-nav">
 
     
@@ -73,10 +78,7 @@
           
             
             
-              
-            
-            
-              <p class="caption"><span class="caption-text">Table of contents:</span></p>
+                <p class="caption"><span class="caption-text">Table of contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">A Python package for the Scola algorithm</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
@@ -100,54 +102,34 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="#">Scola</a>
-        
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="#">Scola</a>
       </nav>
 
 
+      
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
           
 
-
-
-
-
-
-
-
-
-
-
-
+ 
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
-
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="#">Docs</a> &raquo;</li>
-        
-      <li>A Python package for the Scola algorithm</li>
-    
-    
+    <li><a href="#">Docs</a> &raquo;</li>
+      
+    <li>A Python package for the Scola algorithm</li>
       <li class="wy-breadcrumbs-aside">
         
-            
+          
             <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -157,9 +139,9 @@
 <h1>A Python package for the Scola algorithm<a class="headerlink" href="#a-python-package-for-the-scola-algorithm" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
-<p>The Scola takes a correlation matrix as input and outputs a network of the variables.
+<p>The Scola is an algorithm that takes a correlation matrix as input and outputs a network of the variables.
 In the generated network, edges between nodes indicate correlations that are not accounted for by some trivial properties (e.g., noise and global trends affecting all variables).
-The Scola stands for “Sparse network COnstruction from correlation matrices with LAsso”. The details are described in our paper</p>
+The details are described in our paper</p>
 <p><strong>(referenece will be here)</strong>.</p>
 </div>
 <div class="section" id="installing-scola">
@@ -169,7 +151,7 @@ The Scola stands for “Sparse network COnstruction from correlation matrices wi
 We recommend to follow <a class="reference external" href="https://ajfriendcvxpy.readthedocs.io/en/latest/install/">the instructions for installing cvxpy</a>.</p>
 </li>
 <li><p class="first">Install <code class="docutils literal notranslate"><span class="pre">scola</span></code> using <strong>pip</strong>, i.e.,</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install -U scs ecos scola
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install scola
 </pre></div>
 </div>
 </li>
@@ -177,7 +159,7 @@ We recommend to follow <a class="reference external" href="https://ajfriendcvxpy
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install pytest <span class="o">&amp;&amp;</span> python -m pytest
 </pre></div>
 </div>
-<p>If you fail to pass the test, in many cases, <code class="docutils literal notranslate"><span class="pre">cvxpy</span></code> is not correctly installed (check its <a class="reference external" href="https://ajfriendcvxpy.readthedocs.io/en/latest/install/#other-platforms">dependencies</a>)</p>
+<p>If you fail to pass the test, please double check <code class="docutils literal notranslate"><span class="pre">cvxpy</span></code> is correctly installed (<code class="docutils literal notranslate"><span class="pre">cvxpy</span></code> has dependencies with some external software. See <a class="reference external" href="https://ajfriendcvxpy.readthedocs.io/en/latest/install/#other-platforms">dependencies</a>).</p>
 </li>
 </ol>
 </div>
@@ -249,12 +231,11 @@ Otherwise set disp=False.</li>
 </div>
 <div class="section" id="id2">
 <h2>Dependencies<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">scola</span></code> automatically installs the following packages:</p>
+<p><code class="docutils literal notranslate"><span class="pre">scola</span></code> has dependencies with the following packages:</p>
 <ul class="simple">
 <li>NumPy</li>
 <li>SciPy</li>
 <li>tqdm</li>
-<li>multiprocessing</li>
 <li>cvxpy</li>
 </ul>
 </div>
@@ -268,7 +249,6 @@ Otherwise set disp=False.</li>
 
 
            </div>
-           
           </div>
           <footer>
   
@@ -281,7 +261,7 @@ Otherwise set disp=False.</li>
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -300,11 +280,9 @@ Otherwise set disp=False.</li>
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
             VERSION:'0.0.0',
-            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
+            HAS_SOURCE:  true
         };
     </script>
       <script type="text/javascript" src="_static/jquery.js"></script>
@@ -313,13 +291,19 @@ Otherwise set disp=False.</li>
 
   
 
-  <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
 
+  
+  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
+          SphinxRtdTheme.StickyNav.enable();
       });
-  </script> 
+  </script>
+   
 
 </body>
 </html>

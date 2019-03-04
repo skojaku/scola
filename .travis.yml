@@ -118,7 +118,8 @@ before_install: |
   fi
 
 install:
-   - pip install numpy 
+   - pip install numpy
+   - pip install pytest 
    - pip install cvxpy scs ecos 
    - pip --no-cache-dir install --index-url https://test.pypi.org/simple scola 
 

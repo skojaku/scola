@@ -6,9 +6,9 @@ A Python package for the Scola algorithm
 Introduction
 ============
 
-The Scola takes a correlation matrix as input and outputs a network of the variables.  
+The Scola is an algorithm that takes a correlation matrix as input and outputs a network of the variables. 
 In the generated network, edges between nodes indicate correlations that are not accounted for by some trivial properties (e.g., noise and global trends affecting all variables).
-The Scola stands for "Sparse network COnstruction from correlation matrices with LAsso". The details are described in our paper 
+The details are described in our paper: 
 
 
 **(referenece will be here)**.
@@ -32,7 +32,7 @@ Installing Scola
    
       pip install pytest && python -m pytest
 
-   If you fail to pass the test, in many cases, ``cvxpy`` is not correctly installed (check its `dependencies <https://ajfriendcvxpy.readthedocs.io/en/latest/install/#other-platforms>`_)
+   If you fail to pass the test, please double check ``cvxpy`` is correctly installed (``cvxpy`` has dependencies with some external software. See `dependencies <https://ajfriendcvxpy.readthedocs.io/en/latest/install/#other-platforms>`_).
 
 
 Getting Started
@@ -59,7 +59,7 @@ The sample correlation matrix can be computed using numpy.
    # Generate NxN correlation matrix
    C_samp = np.corrcoef(X.T)
 
-Then, provide ``C_samp`` and ``L`` to the Scola as follows.  
+Then, provide ``C_samp`` and ``L`` to the Scola.  
 
 .. code-block:: python
 
@@ -68,7 +68,7 @@ Then, provide ``C_samp`` and ``L`` to the Scola as follows.
 
 ``W`` is the weighted adjacency matrix of the generated network, where 
 W[i][j] indicates the weight of the edge betwee nodes i and j.
-(See `API <#module-scola.generate_network>`_ for other return values).
+See `API <#module-scola.generate_network>`_ for other return values.
 
 API
 ===

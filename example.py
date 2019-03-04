@@ -11,3 +11,8 @@ N = X.shape[1] # Number of nodes
 C_samp = np.corrcoef(X.T)
 import scola
 W, EBIC, C_null, selected_model = scola.generate_network(C_samp, L)
+
+print(type(W), type(C_samp))
+
+plt.imshow(W)
+plt.show()

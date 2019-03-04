@@ -13,8 +13,6 @@
 
   
   
-  
-  
 
   
 
@@ -24,19 +22,27 @@
 
   
 
-  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="index" title="Index" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" /> 
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="Scola 0.0.0 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
 
   
   <script src="../../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav">
+<body class="wy-body-for-nav" role="document">
 
-   
   <div class="wy-grid-for-nav">
 
     
@@ -73,10 +79,7 @@
           
             
             
-              
-            
-            
-              <p class="caption"><span class="caption-text">Table of contents:</span></p>
+                <p class="caption"><span class="caption-text">Table of contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">A Python package for the Scola algorithm</a></li>
 </ul>
@@ -90,52 +93,34 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">Scola</a>
-        
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">Scola</a>
       </nav>
 
 
+      
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
           
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
 <div role="navigation" aria-label="breadcrumbs navigation">
-
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../../index.html">Docs</a> &raquo;</li>
-        
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
           <li><a href="../index.html">Module code</a> &raquo;</li>
-        
-      <li>scola.generate_network</li>
-    
-    
+      
+    <li>scola.generate_network</li>
       <li class="wy-breadcrumbs-aside">
         
+          
+        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -211,7 +196,9 @@
     <span class="n">lam_lower</span> <span class="o">=</span> <span class="mf">0.0</span>
     <span class="n">lam_upper</span> <span class="o">=</span> <span class="mf">1.0</span>
     <span class="n">invphi</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
-    <span class="n">num_pbar_updates</span> <span class="o">=</span> <span class="mi">3</span> <span class="o">*</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">0.01</span> <span class="o">/</span> <span class="p">(</span><span class="n">lam_upper</span> <span class="o">-</span> <span class="n">lam_lower</span><span class="p">))</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">invphi</span><span class="p">)))</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">num_pbar_updates</span> <span class="o">=</span> <span class="mi">3</span> <span class="o">*</span> <span class="p">(</span>
+        <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">0.01</span> <span class="o">/</span> <span class="p">(</span><span class="n">lam_upper</span> <span class="o">-</span> <span class="n">lam_lower</span><span class="p">))</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">invphi</span><span class="p">)))</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="p">)</span>
     <span class="n">pbar</span> <span class="o">=</span> <span class="n">tqdm</span><span class="o">.</span><span class="n">tqdm</span><span class="p">(</span><span class="n">disable</span><span class="o">=</span><span class="p">(</span><span class="n">disp</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">),</span> <span class="n">total</span><span class="o">=</span><span class="n">num_pbar_updates</span><span class="p">)</span>
     <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">null_model</span> <span class="ow">in</span> <span class="n">_null_models</span><span class="p">:</span>
@@ -392,10 +379,11 @@
     <span class="n">W</span> <span class="o">=</span> <span class="n">W_base</span>
     <span class="n">Lambda</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">C_samp</span> <span class="o">-</span> <span class="n">C_null</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1e-20</span><span class="p">)</span>
     <span class="n">inv_C_base</span> <span class="o">=</span> <span class="n">_fast_inv_mat_lapack</span><span class="p">(</span><span class="n">C_null</span> <span class="o">+</span> <span class="n">W_base</span><span class="p">)</span>
-    <span class="k">while</span> <span class="p">(</span><span class="n">t</span> <span class="o">&lt;</span> <span class="n">maxIteration</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">t</span> <span class="o">&lt;=</span> <span class="p">(</span><span class="n">t_best</span> <span class="o">+</span> <span class="n">maxLocalSearch</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)):</span>
+    <span class="n">_diff_min</span> <span class="o">=</span> <span class="mf">1e300</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">t</span> <span class="o">&lt;</span> <span class="n">maxIteration</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">((</span><span class="n">t</span> <span class="o">-</span> <span class="n">t_best</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">maxLocalSearch</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">_diff_min</span> <span class="o">&gt;</span> <span class="mf">1e-5</span><span class="p">):</span>
         <span class="n">t</span> <span class="o">=</span> <span class="n">t</span> <span class="o">+</span> <span class="mi">1</span>
         <span class="n">inv_C</span> <span class="o">=</span> <span class="n">_fast_inv_mat_lapack</span><span class="p">(</span><span class="n">C_null</span> <span class="o">+</span> <span class="n">W</span><span class="p">)</span>
-        <span class="n">gt</span> <span class="o">=</span> <span class="n">inv_C_base</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">inv_C</span><span class="p">,</span> <span class="n">C_samp</span><span class="p">),</span><span class="n">inv_C</span><span class="p">)</span>
+        <span class="n">gt</span> <span class="o">=</span> <span class="n">inv_C_base</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">inv_C</span><span class="p">,</span> <span class="n">C_samp</span><span class="p">),</span> <span class="n">inv_C</span><span class="p">)</span>
         <span class="n">gt</span> <span class="o">=</span> <span class="p">(</span><span class="n">gt</span> <span class="o">+</span> <span class="n">gt</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
         <span class="n">gt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">gt</span><span class="p">)</span>
         <span class="n">np</span><span class="o">.</span><span class="n">fill_diagonal</span><span class="p">(</span><span class="n">gt</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
@@ -405,17 +393,16 @@
         <span class="n">vthat</span> <span class="o">=</span> <span class="n">vt</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">b2</span><span class="p">,</span> <span class="n">t</span><span class="p">))</span>
         <span class="n">dtheta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">mthat</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">vthat</span><span class="p">)</span> <span class="o">+</span> <span class="n">eps</span><span class="p">))</span>
 
+        <span class="n">W_prev</span> <span class="o">=</span> <span class="n">W</span>
         <span class="n">W</span> <span class="o">=</span> <span class="n">_prox</span><span class="p">(</span><span class="n">W</span> <span class="o">-</span> <span class="n">eta</span> <span class="o">*</span> <span class="n">dtheta</span><span class="p">,</span> <span class="n">eta</span> <span class="o">*</span> <span class="n">lam</span> <span class="o">*</span> <span class="n">Lambda</span><span class="p">)</span>
+        <span class="n">_diff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">W</span> <span class="o">-</span> <span class="n">W_prev</span><span class="p">))</span>
         <span class="n">np</span><span class="o">.</span><span class="n">fill_diagonal</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="n">t</span> <span class="o">%</span> <span class="n">quality_assessment_interval</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">s</span> <span class="o">=</span> <span class="n">_penalized_likelihood</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">C_samp</span><span class="p">,</span> <span class="n">C_null</span><span class="p">,</span> <span class="n">lam</span><span class="p">,</span> <span class="n">Lambda</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">s</span> <span class="o">&gt;</span> <span class="n">maxscore</span><span class="p">:</span>
-                <span class="n">W_best</span> <span class="o">=</span> <span class="n">W</span>
-                <span class="n">maxscore</span> <span class="o">=</span> <span class="n">s</span>
-                <span class="n">t_best</span> <span class="o">=</span> <span class="n">t</span>
+        <span class="k">if</span> <span class="n">_diff</span> <span class="o">&lt;</span> <span class="n">_diff_min</span><span class="p">:</span>
+            <span class="n">_diff_min</span> <span class="o">=</span> <span class="n">_diff</span>
+            <span class="n">t_best</span> <span class="o">=</span> <span class="n">t</span>
 
-    <span class="k">return</span> <span class="n">W_best</span>
+    <span class="k">return</span> <span class="n">W</span>
 
 
 <span class="k">def</span> <span class="nf">_fast_inv_mat_lapack</span><span class="p">(</span><span class="n">M</span><span class="p">):</span>
@@ -436,7 +423,7 @@
     <span class="n">iCov</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">w</span><span class="p">)),</span> <span class="n">v</span><span class="o">.</span><span class="n">T</span><span class="p">))</span>
     <span class="n">l</span> <span class="o">=</span> <span class="p">(</span>
         <span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">w</span><span class="p">))</span>
-        <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">C_samp</span><span class="p">,</span><span class="n">iCov</span><span class="p">))</span>
+        <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">C_samp</span><span class="p">,</span> <span class="n">iCov</span><span class="p">))</span>
         <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">Cov</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
     <span class="p">)</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
@@ -455,20 +442,17 @@
 
 <span class="k">def</span> <span class="nf">_prox</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">lam</span><span class="p">):</span>
 
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">-</span> <span class="n">lam</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
-    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">-</span> <span class="n">lam</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">)))</span>
 
 
 <span class="k">def</span> <span class="nf">_penalized_likelihood</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">C_samp</span><span class="p">,</span> <span class="n">C_null</span><span class="p">,</span> <span class="n">lam</span><span class="p">,</span> <span class="n">Lambda</span><span class="p">):</span>
     <span class="k">return</span> <span class="p">(</span>
         <span class="n">_loglikelihood</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">C_samp</span><span class="p">,</span> <span class="n">C_null</span><span class="p">)</span>
-        <span class="o">-</span> <span class="n">lam</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">Lambda</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">W</span><span class="p">)))</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="o">-</span> <span class="n">lam</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">Lambda</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">W</span><span class="p">)))</span> <span class="o">/</span> <span class="mi">4</span>
     <span class="p">)</span>
 </pre></div>
 
            </div>
-           
           </div>
           <footer>
   
@@ -481,7 +465,7 @@
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -500,11 +484,9 @@
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
             VERSION:'0.0.0',
-            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
+            HAS_SOURCE:  true
         };
     </script>
       <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -513,13 +495,19 @@
 
   
 
-  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
 
+  
+  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
+          SphinxRtdTheme.StickyNav.enable();
       });
-  </script> 
+  </script>
+   
 
 </body>
 </html>

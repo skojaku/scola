@@ -13,11 +13,11 @@ import cvxpy as cv
 def generate_network(C_samp, L, null_model="all", disp=True):
     """
     Generate a network from a correlation matrix
-    using the Scola algorithm
+    using the Scola algorithm.
 
     Parameters
     ----------
-    C_samp : 2D numpy.matrix, shape (N, N)
+    C_samp : 2D numpy.ndarray, shape (N, N)
         Sample correlation matrix. N is the number of nodes.
     L : int
         Number of samples
@@ -26,7 +26,7 @@ def generate_network(C_samp, L, null_model="all", disp=True):
         Available null models are
         the white noise model (null_model='white-noise'),
         the Hirschberger-Qu-Steuer model (null_model='hqs')
-        and the configuration model (null_model='config')
+        and the configuration model (null_model='config').
         If null_model='all', then the Scola selects the best one among the three null models in terms of the extended BIC.
     disp : bool, default True
         Set disp=True to disply the progress.
@@ -34,9 +34,9 @@ def generate_network(C_samp, L, null_model="all", disp=True):
 
     Returns
     -------
-    W : 2D numpy.matrix, shape (N, N)
+    W : 2D numpy.ndarray, shape (N, N)
         Weighted adjacency matrix of the generated network.
-    C_null : 2D numpy.matrix, shape (N, N)
+    C_null : 2D numpy.ndarray, shape (N, N)
         Null correlation matrix.
     null_model : str
         Name of the null model.
@@ -67,7 +67,9 @@ def generate_network(C_samp, L, null_model="all", disp=True):
     lam_lower = 0.0
     lam_upper = 1.0
     invphi = (np.sqrt(5) - 1) / 2
-    num_pbar_updates = 3 * (int(np.ceil(np.log(0.01 / (lam_upper - lam_lower)) / np.log(invphi))) + 1)
+    num_pbar_updates = 3 * (
+        int(np.ceil(np.log(0.01 / (lam_upper - lam_lower)) / np.log(invphi))) + 1
+    )
     pbar = tqdm.tqdm(disable=(disp is False), total=num_pbar_updates)
     res = []
     for null_model in _null_models:
@@ -248,10 +250,11 @@ def _maximisation_step(C_samp, C_null, W_base, lam):
     W = W_base
     Lambda = 1 / (np.power(np.abs(C_samp - C_null), 2) + 1e-20)
     inv_C_base = _fast_inv_mat_lapack(C_null + W_base)
-    while (t < maxIteration) & (t <= (t_best + maxLocalSearch + 1)):
+    _diff_min = 1e300
+    while (t < maxIteration) & ((t - t_best) <= maxLocalSearch) & (_diff_min > 1e-5):
         t = t + 1
         inv_C = _fast_inv_mat_lapack(C_null + W)
-        gt = inv_C_base - np.matmul(np.matmul(inv_C, C_samp),inv_C)
+        gt = inv_C_base - np.matmul(np.matmul(inv_C, C_samp), inv_C)
         gt = (gt + gt.T) / 2
         gt = np.nan_to_num(gt)
         np.fill_diagonal(gt, 0)
@@ -261,17 +264,16 @@ def _maximisation_step(C_samp, C_null, W_base, lam):
         vthat = vt / (1 - np.power(b2, t))
         dtheta = np.divide(mthat, (np.sqrt(vthat) + eps))
 
+        W_prev = W
         W = _prox(W - eta * dtheta, eta * lam * Lambda)
+        _diff = np.max(np.abs(W - W_prev))
         np.fill_diagonal(W, 0)
 
-        if (t % quality_assessment_interval) == 0:
-            s = _penalized_likelihood(W, C_samp, C_null, lam, Lambda)
-            if s > maxscore:
-                W_best = W
-                maxscore = s
-                t_best = t
+        if _diff < _diff_min:
+            _diff_min = _diff
+            t_best = t
 
-    return W_best
+    return W
 
 
 def _fast_inv_mat_lapack(M):
@@ -292,7 +294,7 @@ def _loglikelihood(W, C_samp, C_null):
     iCov = np.real(np.matmul(np.matmul(v, np.diag(1 / w)), v.T))
     l = (
         -0.5 * np.sum(np.log(w))
-        - 0.5 * np.trace(np.matmul(C_samp,iCov))
+        - 0.5 * np.trace(np.matmul(C_samp, iCov))
         - 0.5 * Cov.shape[0] * np.log(2 * np.pi)
     )
     return np.real(l)
@@ -311,13 +313,11 @@ def _calc_EBIC(W, C_samp, C_null, L, gamma, Knull):
 
 def _prox(y, lam):
 
-    return np.multiply(
-        np.sign(y), np.maximum(np.abs(y) - lam, np.zeros(y.shape))
-    )
+    return np.multiply(np.sign(y), np.maximum(np.abs(y) - lam, np.zeros(y.shape)))
 
 
 def _penalized_likelihood(W, C_samp, C_null, lam, Lambda):
     return (
         _loglikelihood(W, C_samp, C_null)
-        - lam * np.sum(np.multiply(Lambda, np.abs(W))) / 2
+        - lam * np.sum(np.multiply(Lambda, np.abs(W))) / 4
     )

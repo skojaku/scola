@@ -1,6 +1,0 @@
-Collecting ecos
-  Downloading https://files.pythonhosted.org/packages/69/56/e66d3dc602dc317e87e712992997c9a0745a4ddb01714ed6820c1bc2519f/ecos-2.0.7.post1-cp35-cp35m-manylinux1_x86_64.whl (147kB)
-Requirement already satisfied: scipy>=0.9 in /usr/local/lib/python3.5/dist-packages (from ecos) (1.1.0)
-Requirement already satisfied: numpy>=1.6 in /usr/local/lib/python3.5/dist-packages (from ecos) (1.15.4)
-Installing collected packages: ecos
-Successfully installed ecos-2.0.7.post1
