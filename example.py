@@ -12,7 +12,7 @@ C_samp = np.corrcoef(X.T)
 import scola
 W, EBIC, C_null, selected_model = scola.generate_network(C_samp, L)
 
-print(type(W), type(C_samp))
+print(type(W), type(C_samp), selected_model)
 
 plt.imshow(W)
 plt.show()
