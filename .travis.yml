@@ -89,13 +89,20 @@ matrix:
 
         - os: osx
           language: sh
+          env: PYTHON=2.7
+          install: pip install -e numpy pytest scs ecos cvxpy && pip --no-cache-dir install --index-url https://test.pypi.org/simple scola 
+        - os: osx
+          language: sh
+          env: PYTHON=3.4
           install: pip3 install -e numpy pytest scs ecos cvxpy && pip3 --no-cache-dir install --index-url https://test.pypi.org/simple scola 
         - os: osx
           language: generic
           env: PYTHON=3.5
+          install: pip3 install -e numpy pytest scs ecos cvxpy && pip3 --no-cache-dir install --index-url https://test.pypi.org/simple scola 
         - os: osx
           language: generic
           env: PYTHON=3.6
+          install: pip3 install -e numpy pytest scs ecos cvxpy && pip3 --no-cache-dir install --index-url https://test.pypi.org/simple scola 
         - os: windows
           language: sh
           before_install:
