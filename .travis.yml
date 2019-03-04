@@ -1,12 +1,5 @@
 language: python
 
-python:
-- 3.6
-- 3.5
-- 3.4
-- 2.7
-
-
 matrix:
     include:
         - os: linux
@@ -103,6 +96,11 @@ matrix:
         - os: osx
           language: generic
           env: PYTHON=3.6
+        - os: windows
+          language: sh
+          before_install:
+          - choco install python3
+          - export PATH="/c/Python37:/c/Python37/Scripts:$PATH"
 
 before_install: |
   if [ "$TRAVIS_OS_NAME" == "osx" ]; then
