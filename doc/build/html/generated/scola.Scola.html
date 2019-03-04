@@ -1,0 +1,203 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>scola.Scola &#8212; scola 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within scola 0.0.1 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Reference" href="../Reference.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="scola-scola">
+<h1>scola.Scola<a class="headerlink" href="#scola-scola" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="scola.Scola">
+<em class="property">class </em><code class="descname">Scola</code><span class="sig-paren">(</span><em>path_to_working_directory</em><span class="sig-paren">)</span><a class="headerlink" href="#scola.Scola" title="Permalink to this definition">¶</a></dt>
+<dd><p>Scola algorithm</p>
+<p>An algorithm to construct networks from correlaton matrices</p>
+<dl class="method">
+<dt id="scola.Scola.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>path_to_working_directory</em><span class="sig-paren">)</span><a class="headerlink" href="#scola.Scola.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path_to_working_directory</strong> (<em>string</em>) – Path to the working directory.
+All results will be saved in this directory.
+If the directory does not exist, the program will create the directory.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code>(path_to_working_directory)</td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path_to_working_directory</strong> (<em>string</em>) – Path to the working directory.</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">construct_network</span></code>(C_samp,&nbsp;L[,&nbsp;null_model,&nbsp;…])</td>
+<td>Construct a network from a correlation matrix</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_network</span></code>()</td>
+<td>Get the generated network</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_null_corr_matrix</span></code>()</td>
+<td>Get the null correlation matrix</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="scola.Scola.construct_network">
+<code class="descname">construct_network</code><span class="sig-paren">(</span><em>C_samp</em>, <em>L</em>, <em>null_model='config'</em>, <em>lambda_list=array([1.00000000e+00</em>, <em>4.52035366e-01</em>, <em>2.04335972e-01</em>, <em>9.23670857e-02</em>, <em>4.17531894e-02</em>, <em>1.88739182e-02</em>, <em>8.53167852e-03</em>, <em>3.85662042e-03</em>, <em>1.74332882e-03</em>, <em>7.88046282e-04</em>, <em>3.56224789e-04</em>, <em>1.61026203e-04</em>, <em>7.27895384e-05</em>, <em>3.29034456e-05</em>, <em>1.48735211e-05</em>, <em>6.72335754e-06</em>, <em>3.03919538e-06</em>, <em>1.37382380e-06</em>, <em>6.21016942e-07</em>, <em>2.80721620e-07</em>, <em>1.26896100e-07</em>, <em>5.73615251e-08</em>, <em>2.59294380e-08</em>, <em>1.17210230e-08</em>, <em>5.29831691e-09</em>, <em>2.39502662e-09</em>, <em>1.08263673e-09</em>, <em>4.89390092e-10</em>, <em>2.21221629e-10</em>, <em>1.00000000e-10])</em>, <em>beta=0.5</em>, <em>disp=True</em><span class="sig-paren">)</span><a class="headerlink" href="#scola.Scola.construct_network" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct a network from a correlation matrix</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>C_samp (numpy.matrix)</strong> (<em>Pearson correlation matrix for the input data.</em>)</li>
+<li><strong>L (int)</strong> (<em>Number of samples.</em>)</li>
+<li><strong>null_model (string; Optional; Default = “config”)</strong> (<em>Name of null model. See the Readme for the available null models.</em>)</li>
+<li><strong>lambda_list (numpy.array; Optinal; Default = numpy.logspace(-10, 0, 30)[::-1])</strong> – The lasso penalties. The algorithm will generate networks with the given lasso penalties.
+Then, it outputs the network that minimises the extended BIC.</li>
+<li><strong>beta (float. Optional. Default = 0.5. 0 &lt;= beta &lt;=1)</strong> (<em>Parameter of the extended BIC. Larger beta would yield a sparser network.</em>)</li>
+<li><strong>disp (boolean; Optional; Default=True)</strong> (<em>Set to True to print the progress.</em>)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><ul class="simple">
+<li><strong>W (numpy.matrix)</strong> (<em>Weighted adjacency matrix of the constructed network.</em>)</li>
+<li><strong>EBIC (float)</strong> (<em>The value of the extended Bayesian Information Criterion.</em>)</li>
+<li><strong>lam (float)</strong> (<em>The vaue of the lasso penalty that yields the minimum EBIC value among those in lambda_list.</em>)</li>
+</ul>
+</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="scola.Scola.get_network">
+<code class="descname">get_network</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#scola.Scola.get_network" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the generated network</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>W</strong> – Weighted adjacency matrix of the constructed network.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">NxN numpy.matrix</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="scola.Scola.get_null_corr_matrix">
+<code class="descname">get_null_corr_matrix</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#scola.Scola.get_null_corr_matrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the null correlation matrix</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>Cnull</strong> – Null correlation matrix.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">NxN numpy.matrix</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="../Reference.html">Reference</a><ul>
+      <li>Previous: <a href="../Reference.html" title="previous chapter">Reference</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018-2019, Sadamori Kojaku.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.11</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

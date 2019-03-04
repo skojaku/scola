@@ -37,30 +37,41 @@ class Scola():
 	def construct_network(self, C_samp, L, null_model = "config", lambda_list = np.logspace(-10, 0, 30)[::-1], beta = 0.5, disp=True):	
 		""" Construct a network from a correlation matrix
 		
-		Args	
-		----	
- 		   C_samp (numpy.matrix): Pearson correlation matrix for the input data.
- 		
- 		   L (int): Number of samples.
- 		
- 		   null_model (string; Optional; Default = "config"): Name of null model. See the Readme for the available null models.
- 
- 		   lambda_list (numpy.array; Optinal; Default = numpy.logspace(-10, 0, 30)[::-1]): 
- 			The lasso penalties. The algorithm will generate networks with the given lasso penalties. 
- 			Then, it outputs the network that minimises the extended BIC.  
- 			
- 		   beta (float. Optional. Default = 0.5. 0 <= beta <=1): Parameter of the extended BIC. Larger beta would yield a sparser network. 
- 	
- 		   disp (boolean; Optional; Default=True): Set to True to print the progress.
-	
+		Parameters	
+		----------
+		C_samp: NxN numpy.matrix 
+			Pearson correlation matrix for the input data. 
+			N is the number of nodes.  
+		
+		L: int
+			Number of samples.
+		
+		null_model: string; Optional; Default = "config"
+			Name of null model. See the Readme for the available null models.
 
-		Returns
-		-------	
-         	   W (numpy.matrix): Weighted adjacency matrix of the constructed network.
-         		
-         	   EBIC (float): The value of the extended Bayesian Information Criterion. 
-         	
-         	   lam (float): The vaue of the lasso penalty that yields the minimum EBIC value among those in lambda_list.
+		lambda_list: float numpy.array (Optinal; Default = numpy.logspace(-10, 0, 30)[::-1])
+			The lasso penalties.
+			The algorithm will generate networks with the given lasso penalties. 
+			Then, it outputs the network that minimises the extended BIC.  
+			
+		beta: float (Optional; Default = 0.5; float; 0 <= beta <=1)
+			Parameter of the extended BIC.
+			Larger beta would yield a sparser network. 
+	
+		disp: boolean (Optional; Default=True)
+			Set to True to print the progress.
+	
+	
+		Return	
+		------
+		W: NxN numpy.matrix
+			Weighted adjacency matrix of the constructed network.
+			
+		EBIC: float
+			The value of the extended Bayesian Information Criterion. 
+		
+		lam: float
+			The lasso penalty that yields the minimum EBIC value among those in lambda_list.
 		"""
 
 		self.disp = disp
