@@ -117,10 +117,10 @@ before_install: |
 install:
    - python -m pip install -U pip
    - python -m easy_install -U setuptools
-   - pip install numpy --user
-   - pip install pytest --user 
-   - pip install cvxpy scs ecos --user 
-   - pip --no-cache-dir install --user --index-url https://test.pypi.org/simple scola
+   - pip install numpy
+   - pip install pytest 
+   - pip install cvxpy scs ecos 
+   - pip --no-cache-dir install --index-url https://test.pypi.org/simple scola
 
 # command to run tests
 script:
