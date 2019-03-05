@@ -95,10 +95,10 @@ matrix:
           env: PYTHON=3.4.4
         - os: osx
           language: generic
-          env: PYTHON=3.5
+          env: PYTHON=3.5.4
         - os: osx
           language: generic
-          env: PYTHON=3.6
+          env: PYTHON=3.6.4
 
 before_install: |
   if [ "$TRAVIS_OS_NAME" == "osx" ]; then
@@ -115,9 +115,8 @@ before_install: |
   fi
 
 install:
-   - python -m pip install -U pip
    - python -m easy_install -U setuptools
-   - pip install numpy
+   - python -m pip install numpy
    - pip install pytest 
    - pip install cvxpy scs ecos 
    - pip --no-cache-dir install --index-url https://test.pypi.org/simple scola

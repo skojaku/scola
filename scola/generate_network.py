@@ -64,7 +64,7 @@ def generate_network(C_samp, L, null_model="all", disp=True):
     else:
         _null_models = [null_model]
 
-    pbar = tqdm.tqdm(disable=(disp is False), total=300)
+    pbar = tqdm.tqdm(disable=(disp is False), total=(13 * 3))
     res = []
     for null_model in _null_models:
         W_best, C_null, EBIC_min = _gen_net_(
@@ -75,15 +75,17 @@ def generate_network(C_samp, L, null_model="all", disp=True):
     pbar.close()
     return res[idx]
 
+
 def _calc_upper_lam(C_samp, C_null):
-    abC_samp = np.abs(C_samp-C_null)
+    abC_samp = np.abs(C_samp - C_null)
     iCov = linalg.inv(C_null)
-    D = iCov - np.matmul(np.matmul(iCov,C_samp),iCov)
+    D = iCov - np.matmul(np.matmul(iCov, C_samp), iCov)
     b = np.max(np.multiply(np.abs(D), np.power(abC_samp, 2)))
-    return b 
+    return b
+
 
 def _gen_net_(C_samp, L, null_model, pbar, disp, gamma):
-    
+
     if type(null_model) is str:
         C_null, K_null = _compute_null_correlation_matrix(C_samp, null_model)
     else:
@@ -92,13 +94,13 @@ def _gen_net_(C_samp, L, null_model, pbar, disp, gamma):
         K_null = null_model[1]
 
     lam_upper = _calc_upper_lam(C_samp, C_null)
-    lam_lower=0.0
+    lam_lower = 0.0
     invphi = (np.sqrt(5) - 1) / 2
     invphi2 = (3 - np.sqrt(5)) / 2
     h = lam_upper - lam_lower
     lam_1 = lam_lower + invphi2 * h
     lam_2 = lam_lower + invphi * h
-    n = int(np.ceil(np.log(0.01 / h) / np.log(invphi)))
+    n = int(np.ceil(np.log(0.01) / np.log(invphi)))
     N = C_samp.shape[0]
     W_best = []
     lam_best = 0
@@ -106,15 +108,18 @@ def _gen_net_(C_samp, L, null_model, pbar, disp, gamma):
 
     ns = pbar.n
     nf = ns + n
-    r = 100
+
     for k in range(n):
         if k == 0:
 
             W_l = C_samp - C_null
-            W_l = _MM_algorithm(C_samp, C_null, lam_lower)
+            pbar.update()
             W_u = _MM_algorithm(C_samp, C_null, lam_upper)
+            pbar.update()
             W_1 = _MM_algorithm(C_samp, C_null, lam_1)
+            pbar.update()
             W_2 = _MM_algorithm(C_samp, C_null, lam_2)
+            pbar.update()
 
             EBIC_l = _calc_EBIC(W_l, C_samp, C_null, L, gamma, K_null)
             EBIC_u = _calc_EBIC(W_u, C_samp, C_null, L, gamma, K_null)
@@ -125,7 +130,6 @@ def _gen_net_(C_samp, L, null_model, pbar, disp, gamma):
             W_best = [W_l, W_u, W_1, W_2][mid]
             lam_best = [lam_lower, lam_upper, lam_1, lam_2][mid]
             EBIC_min = [EBIC_l, EBIC_u, EBIC_1, EBIC_2][mid]
-            pbar.update(np.round((k+1)/n*r + ns).astype(int) -pbar.n)
             continue
 
         if (EBIC_1 < EBIC_2) | ((EBIC_1 == EBIC_2) & (np.random.rand() > 0.5)):
@@ -137,6 +141,7 @@ def _gen_net_(C_samp, L, null_model, pbar, disp, gamma):
             lam_1 = lam_lower + invphi2 * h
 
             W_1 = _MM_algorithm(C_samp, C_null, lam_1)
+            pbar.update()
             EBIC_1 = _calc_EBIC(W_1, C_samp, C_null, L, gamma, K_null)
 
             if EBIC_1 < EBIC_min:
@@ -153,15 +158,13 @@ def _gen_net_(C_samp, L, null_model, pbar, disp, gamma):
             lam_2 = lam_lower + invphi * h
 
             W_2 = _MM_algorithm(C_samp, C_null, lam_2)
+            pbar.update()
             EBIC_2 = _calc_EBIC(W_2, C_samp, C_null, L, gamma, K_null)
 
             if EBIC_2 < EBIC_min:
                 EBIC_min = EBIC_2
                 W_best = W_2
                 lam_best = lam_2
-
-        pbar.update(np.round((k+1)/n*r + ns).astype(int) -pbar.n)
-        pbar.refresh()
 
     pbar.refresh()
     return W_best, C_null, EBIC_min
