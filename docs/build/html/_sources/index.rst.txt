@@ -17,6 +17,8 @@ The details are described in our paper:
 
 Installing Scola
 ================
+``scola`` supports both Python 2.x and 3.x.
+We recommend installing ``scola`` on Ubuntu, CentOS and macOS.
 
 #. You need to install ``cvxpy`` prior to install ``scola``.
    We recommend to follow `the instructions for installing cvxpy <https://ajfriendcvxpy.readthedocs.io/en/latest/install/>`_.
@@ -33,7 +35,7 @@ Installing Scola
    
       pip install pytest && python -m pytest
 
-   If you fail to pass the test, please double check ``cvxpy`` is correctly installed (``cvxpy`` has dependencies with some external software. See `dependencies <https://ajfriendcvxpy.readthedocs.io/en/latest/install/#other-platforms>`_).
+   If you fail to pass the test, please double check ``cvxpy`` is correctly installed (``cvxpy`` has dependencies with some external software such as LAPACK and BLAS which need to be installed priori. See `dependencies <https://ajfriendcvxpy.readthedocs.io/en/latest/install/#other-platforms>`_). 
 
 
 Getting Started

@@ -147,20 +147,22 @@ The details are described in our paper:</p>
 </div>
 <div class="section" id="installing-scola">
 <h2>Installing Scola<a class="headerlink" href="#installing-scola" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">scola</span></code> supports both Python 2.x and 3.x.
+We recommend installing <code class="docutils literal notranslate"><span class="pre">scola</span></code> on Ubuntu, CentOS and macOS.</p>
 <ol class="arabic">
 <li><p class="first">You need to install <code class="docutils literal notranslate"><span class="pre">cvxpy</span></code> prior to install <code class="docutils literal notranslate"><span class="pre">scola</span></code>.
 We recommend to follow <a class="reference external" href="https://ajfriendcvxpy.readthedocs.io/en/latest/install/">the instructions for installing cvxpy</a>.</p>
 </li>
 <li><p class="first">Install <code class="docutils literal notranslate"><span class="pre">scola</span></code> using <strong>pip</strong>, i.e.,</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install scola
+<div class="highlight-bash notranslate"><div class="highlight"><pre>pip install scola
 </pre></div>
 </div>
 </li>
 <li><p class="first">Test the installation with pytest</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install pytest <span class="o">&amp;&amp;</span> python -m pytest
+<div class="highlight-bash notranslate"><div class="highlight"><pre>pip install pytest <span class="o">&amp;&amp;</span> python -m pytest
 </pre></div>
 </div>
-<p>If you fail to pass the test, please double check <code class="docutils literal notranslate"><span class="pre">cvxpy</span></code> is correctly installed (<code class="docutils literal notranslate"><span class="pre">cvxpy</span></code> has dependencies with some external software. See <a class="reference external" href="https://ajfriendcvxpy.readthedocs.io/en/latest/install/#other-platforms">dependencies</a>).</p>
+<p>If you fail to pass the test, please double check <code class="docutils literal notranslate"><span class="pre">cvxpy</span></code> is correctly installed (<code class="docutils literal notranslate"><span class="pre">cvxpy</span></code> has dependencies with some external software such as LAPACK and BLAS which need to be installed priori. See <a class="reference external" href="https://ajfriendcvxpy.readthedocs.io/en/latest/install/#other-platforms">dependencies</a>).</p>
 </li>
 </ol>
 </div>
@@ -168,7 +170,7 @@ We recommend to follow <a class="reference external" href="https://ajfriendcvxpy
 <h2>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
 <p>We demonstrate how to generate a network with <code class="docutils literal notranslate"><span class="pre">scola</span></code>.</p>
 <p>Our example data is located in <a class="reference external" href="https://raw.githubusercontent.com/skojaku/scola/master/data/sample.txt">GitHub</a>, which is composed of L=300 rows and N=25 columns (space separated), where L is the number of samples and N is the number of variables (i.e., nodes). Download the data in your working directory.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
 
 <span class="n">X</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;https://raw.githubusercontent.com/skojaku/scola/master/data/sample.txt&quot;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
@@ -178,12 +180,12 @@ We recommend to follow <a class="reference external" href="https://ajfriendcvxpy
 </div>
 <p>The Scola requires the sample correlation matrix and the number of samples, L.
 The sample correlation matrix can be computed using numpy.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate NxN correlation matrix</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span class="c1"># Generate NxN correlation matrix</span>
 <span class="n">C_samp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Then, provide <code class="docutils literal notranslate"><span class="pre">C_samp</span></code> and <code class="docutils literal notranslate"><span class="pre">L</span></code> to the Scola.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">scola</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">scola</span>
 <span class="n">W</span><span class="p">,</span> <span class="n">EBIC</span><span class="p">,</span> <span class="n">C_null</span><span class="p">,</span> <span class="n">selected_model</span> <span class="o">=</span> <span class="n">scola</span><span class="o">.</span><span class="n">generate_network</span><span class="p">(</span><span class="n">C_samp</span><span class="p">,</span> <span class="n">L</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -289,6 +291,7 @@ Otherwise set disp=False.</li>
       <script type="text/javascript" src="_static/jquery.js"></script>
       <script type="text/javascript" src="_static/underscore.js"></script>
       <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="_static/language_data.js"></script>
 
   
 
