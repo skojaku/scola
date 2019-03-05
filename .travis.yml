@@ -88,27 +88,21 @@ matrix:
                 - libboost-all-dev
 
         - os: osx
-          language: sh
+          language: generic
           env: PYTHON=2.7
         - os: osx
-          language: sh
-          env: PYTHON=3.4
+          language: generic
+          env: PYTHON=3.4.4
         - os: osx
           language: generic
-          env: PYTHON=3.5
+          env: PYTHON=3.5.1
         - os: osx
           language: generic
           env: PYTHON=3.6
-        - os: windows
-          language: sh
-          before_install:
-          - choco install python3
-          - export PATH="/c/Python37:/c/Python37/Scripts:$PATH"
 
 before_install: |
   if [ "$TRAVIS_OS_NAME" == "osx" ]; then
     brew update
-    brew install cmake boost python gcc open-mpi homebrew/science/openblas
     brew install openssl readline
     brew outdated pyenv || brew upgrade pyenv
     brew install pyenv-virtualenv
@@ -121,11 +115,13 @@ before_install: |
   fi
 
 install:
-   - pip install numpy
-   - pip install pytest 
-   - pip install cvxpy scs ecos 
-   - pip --no-cache-dir install --index-url https://test.pypi.org/simple scola 
+   - python -m pip install -U pip
+   - python -m easy_install -U setuptools
+   - pip install numpy --user
+   - pip install pytest --user 
+   - pip install cvxpy scs ecos --user 
+   - pip --no-cache-dir install --user --index-url https://test.pypi.org/simple scola
 
 # command to run tests
 script:
-  - python -m pytest
+  - python -m pytest ./tests
