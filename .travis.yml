@@ -115,11 +115,12 @@ before_install: |
   fi
 
 install:
+   - python -m pip install --upgrade pip
    - python -m easy_install -U setuptools
    - python -m pip install numpy
-   - pip install pytest 
-   - pip install cvxpy scs ecos 
-   - pip --no-cache-dir install --index-url https://test.pypi.org/simple scola
+   - python -m pip install pytest 
+   - python -m pip install cvxpy scs ecos 
+   - python -m pip --no-cache-dir install --index-url https://test.pypi.org/simple scola
 
 # command to run tests
 script:
