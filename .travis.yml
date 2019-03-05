@@ -95,7 +95,7 @@ matrix:
           env: PYTHON=3.4.4
         - os: osx
           language: generic
-          env: PYTHON=3.5.1
+          env: PYTHON=3.5
         - os: osx
           language: generic
           env: PYTHON=3.6
