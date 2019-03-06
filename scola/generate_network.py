@@ -67,10 +67,10 @@ def generate_network(C_samp, L, null_model="all", disp=True):
     pbar = tqdm.tqdm(disable=(disp is False), total=(13 * 3))
     res = []
     for null_model in _null_models:
-        W_best, C_null, EBIC_min = _gen_net_(
+        W, C_null, EBIC_min = _gen_net_(
             C_samp, L, null_model, pbar, disp=disp, gamma=0.5
         )
-        res += [[W_best, C_null, EBIC_min, null_model]]
+        res += [[W, C_null, EBIC_min, null_model]]
     idx = np.argmin(np.array([r[2] for r in res]))
     pbar.close()
     return res[idx]
@@ -102,7 +102,7 @@ def _gen_net_(C_samp, L, null_model, pbar, disp, gamma):
     lam_2 = lam_lower + invphi * h
     n = int(np.ceil(np.log(0.01) / np.log(invphi)))
     N = C_samp.shape[0]
-    W_best = []
+    W_best = None
     lam_best = 0
     EBIC_min = 0
 
@@ -248,16 +248,14 @@ def _maximisation_step(C_samp, C_null, W_base, lam):
     b2 = 0.99
     maxscore = -1e300
     t_best = 0
-    eta = 0.001
+    eta = 0.01
     maxIteration = 1e7
-    maxLocalSearch = 300
-    quality_assessment_interval = 100
-    W_best = W_base
+    maxLocalSearch = 30
     W = W_base
     Lambda = 1 / (np.power(np.abs(C_samp - C_null), 2) + 1e-20)
     inv_C_base = _fast_inv_mat_lapack(C_null + W_base)
     _diff_min = 1e300
-    while (t < maxIteration) & ((t - t_best) <= maxLocalSearch) & (_diff_min > 1e-5):
+    while (t < maxIteration) & ((t - t_best) <= maxLocalSearch) & (_diff_min > 5e-5):
         t = t + 1
         inv_C = _fast_inv_mat_lapack(C_null + W)
         gt = inv_C_base - np.matmul(np.matmul(inv_C, C_samp), inv_C)
