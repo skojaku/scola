@@ -171,7 +171,8 @@ Then, under /scola directory, type</p>
 <div class="section" id="getting-started">
 <h2>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
 <p>We demonstrate how to generate a network with <code class="docutils literal notranslate"><span class="pre">scola</span></code>.</p>
-<p>Our example data is located in <a class="reference external" href="https://raw.githubusercontent.com/skojaku/scola/master/data/sample.txt">GitHub</a>, which is composed of L=300 rows and N=25 columns (space separated), where L is the number of samples and N is the number of variables (i.e., nodes). Download the data in your working directory.</p>
+<p>Our example data is located in <a class="reference external" href="https://raw.githubusercontent.com/skojaku/scola/master/data/sample.txt">GitHub</a>, which is composed of L=300 rows and N=25 columns (space separated), where L is the number of samples and N is the number of variables (i.e., nodes).
+The code below loads the data.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
 
@@ -180,13 +181,11 @@ Then, under /scola directory, type</p>
 <span class="n">N</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="c1"># Number of nodes</span>
 </pre></div>
 </div>
-<p>The Scola requires the sample correlation matrix and the number of samples, L.
-The sample correlation matrix can be computed using numpy.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span class="c1"># Generate NxN correlation matrix</span>
-<span class="n">C_samp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+<p>Then, compute the sample correlation matrix by</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span class="n">C_samp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="c1"># NxN correlation matrix</span>
 </pre></div>
 </div>
-<p>Then, provide <code class="docutils literal notranslate"><span class="pre">C_samp</span></code> and <code class="docutils literal notranslate"><span class="pre">L</span></code> to the Scola.</p>
+<p>Finally, provide <code class="docutils literal notranslate"><span class="pre">C_samp</span></code> and <code class="docutils literal notranslate"><span class="pre">L</span></code> to the Scola as follows.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">scola</span>
 <span class="n">W</span><span class="p">,</span> <span class="n">EBIC</span><span class="p">,</span> <span class="n">C_null</span><span class="p">,</span> <span class="n">selected_model</span> <span class="o">=</span> <span class="n">scola</span><span class="o">.</span><span class="n">generate_network</span><span class="p">(</span><span class="n">C_samp</span><span class="p">,</span> <span class="n">L</span><span class="p">)</span>
 </pre></div>
@@ -222,7 +221,7 @@ Otherwise set disp=False.</li>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><ul class="simple">
 <li><strong>W</strong> (<em>2D numpy.ndarray, shape (N, N)</em>) – Weighted adjacency matrix of the generated network.</li>
-<li><strong>C_null</strong> (<em>2D numpy.ndarray, shape (N, N)</em>) – Null correlation matrix.</li>
+<li><strong>C_null</strong> (<em>2D numpy.ndarray, shape (N, N)</em>) – Null correlation matrix used to construct the network.</li>
 <li><strong>null_model</strong> (<em>str</em>) – Name of the null model.</li>
 <li><strong>EBIC</strong> (<em>float</em>) – The extended BIC for the generated network.</li>
 </ul>
@@ -241,7 +240,6 @@ Otherwise set disp=False.</li>
 <li>NumPy</li>
 <li>SciPy</li>
 <li>tqdm</li>
-<li>cvxpy</li>
 </ul>
 </div>
 <div class="section" id="licence">

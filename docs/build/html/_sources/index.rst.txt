@@ -39,7 +39,8 @@ Getting Started
 
 We demonstrate how to generate a network with ``scola``.
 
-Our example data is located in `GitHub <https://raw.githubusercontent.com/skojaku/scola/master/data/sample.txt>`_, which is composed of L=300 rows and N=25 columns (space separated), where L is the number of samples and N is the number of variables (i.e., nodes). Download the data in your working directory. 
+Our example data is located in `GitHub <https://raw.githubusercontent.com/skojaku/scola/master/data/sample.txt>`_, which is composed of L=300 rows and N=25 columns (space separated), where L is the number of samples and N is the number of variables (i.e., nodes). 
+The code below loads the data. 
 
 .. code-block:: python
 
@@ -50,15 +51,13 @@ Our example data is located in `GitHub <https://raw.githubusercontent.com/skojak
    L = X.shape[0] # Number of samples
    N = X.shape[1] # Number of nodes
 
-The Scola requires the sample correlation matrix and the number of samples, L.
-The sample correlation matrix can be computed using numpy.  
+Then, compute the sample correlation matrix by 
 
 .. code-block:: python
 
-   # Generate NxN correlation matrix
-   C_samp = np.corrcoef(X.T)
+   C_samp = np.corrcoef(X.T) # NxN correlation matrix
 
-Then, provide ``C_samp`` and ``L`` to the Scola.  
+Finally, provide ``C_samp`` and ``L`` to the Scola as follows. 
 
 .. code-block:: python
 
@@ -82,7 +81,6 @@ Dependencies
 * NumPy
 * SciPy
 * tqdm
-* cvxpy
 
 Licence
 =======

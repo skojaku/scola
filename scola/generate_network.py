@@ -36,7 +36,7 @@ def generate_network(C_samp, L, null_model="all", disp=True):
     W : 2D numpy.ndarray, shape (N, N)
         Weighted adjacency matrix of the generated network.
     C_null : 2D numpy.ndarray, shape (N, N)
-        Null correlation matrix.
+        Null correlation matrix used to construct the network.
     null_model : str
         Name of the null model.
     EBIC : float
