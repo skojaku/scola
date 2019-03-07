@@ -57,7 +57,7 @@ Then, compute the sample correlation matrix by
 
    C_samp = np.corrcoef(X.T) # NxN correlation matrix
 
-Finally, provide ``C_samp`` and ``L`` to the Scola as follows. 
+Finally, provide ``C_samp`` and ``L`` to the Scola as follows: 
 
 .. code-block:: python
 
