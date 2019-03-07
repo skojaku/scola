@@ -1,13 +1,7 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 from scipy import linalg
-from scipy import sparse
-from scipy import stats
-import os
 import tqdm
-import sys
-from functools import partial
-
 
 def generate_network(C_samp, L, null_model="all", disp=True):
     """
@@ -76,6 +70,7 @@ def generate_network(C_samp, L, null_model="all", disp=True):
 
 
 def _calc_upper_lam(C_samp, C_null):
+
     abC_samp = np.abs(C_samp - C_null)
     iCov = linalg.inv(C_null)
     D = iCov - np.matmul(np.matmul(iCov, C_samp), iCov)
@@ -170,6 +165,7 @@ def _gen_net_(C_samp, L, null_model, pbar, disp, gamma):
 
 
 def _compute_null_correlation_matrix(C_samp, null_model):
+
     C_null = []
     K_null = -1
     if null_model == "white-noise":
