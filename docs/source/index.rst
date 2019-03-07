@@ -14,10 +14,10 @@ Please cite the paper if you use this algorithm:
 
 **(referenece will be here)**.
 
-Installing Scola
+Installing the Scola
 ================
-``scola`` is a pure Python package that supports both Python 2.x and 3.x.
-We test ``scola`` on Ubuntu, CentOS, macOS and Windows.
+``scola`` supports both Python 2.x and 3.x and can be installed on Ubuntu, CentOS, macOS and Windows.
+We recommend using **pip** for installation. 
 
 Install with pip
 ----------------
@@ -65,7 +65,7 @@ Finally, provide ``C_samp`` and ``L`` to the Scola as follows:
    W, EBIC, C_null, selected_model = scola.generate_network(C_samp, L)
 
 ``W`` is the weighted adjacency matrix of the generated network, where 
-W[i][j] indicates the weight of the edge betwee nodes i and j.
+W[i][j] indicates the weight of the edge between nodes i and j.
 See `API <#module-scola.generate_network>`_ for other return values.
 
 API
