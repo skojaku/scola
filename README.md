@@ -7,5 +7,5 @@ Please cite:
 
 `Sadamori Kojaku and Naoki Masuda. xxx Preprint arXiv: xxx. 
 
-See [docs](https://scola.readthedocs.io/en/latest/) for installation and usage.
+See [this documentation](https://scola.readthedocs.io/en/latest/) for the installation and usage.
  
