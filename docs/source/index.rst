@@ -9,7 +9,7 @@ Introduction
 
 The Scola is an algorithm that takes a correlation matrix as input and outputs a network of the variables. 
 In the generated network, edges between nodes indicate correlations that are not accounted for by some trivial properties (e.g., noise and global trends affecting all variables).
-The details are described in our paper: 
+Please cite the paper if you use this algorithm: 
 
 
 **(referenece will be here)**.
