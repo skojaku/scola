@@ -86,14 +86,36 @@ matrix:
                 - libopenmpi-dev
                 - libpython2.7
                 - libboost-all-dev
-
+        - os: osx
+          language: generic
+          env:  PYTHON=3.3.6
+        - os: osx
+          language: generic
+          env:  PYTHON=3.4.4
+        - os: osx
+          language: generic
+          env:  PYTHON=3.5.1
+        - os: osx
+          language: generic
+          env:  PYTHON=3.6.1
+before_install: |
+  if [ "$TRAVIS_OS_NAME" == "osx" ]; then
+    brew update
+    brew install openssl readline
+    brew outdated pyenv || brew upgrade pyenv
+    brew install pyenv-virtualenv
+    pyenv install $PYTHON
+    export PYENV_VERSION=$PYTHON
+    export PATH="/Users/travis/.pyenv/shims:${PATH}"
+    pyenv-virtualenv venv
+    source venv/bin/activate
+    python --version
+  fi
 install:
-   - python -m pip install --upgrade pip
-   - python -m easy_install -U setuptools
+   - python -m pip install -U pip
    - python -m pip install numpy
    - python -m pip install pytest 
-   - python -m pip install cvxpy scs ecos 
-   - python -m pip --no-cache-dir install --index-url https://test.pypi.org/simple scola
+   - python -m pip install scola
 
 # command to run tests
 script:

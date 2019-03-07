@@ -7,17 +7,16 @@ import os
 import tqdm
 import sys
 from functools import partial
-import cvxpy as cv
 
 
 def generate_network(C_samp, L, null_model="all", disp=True):
     """
     Generate a network from a correlation matrix
-    using the Scola algorithm
+    using the Scola algorithm.
 
     Parameters
     ----------
-    C_samp : 2D numpy.matrix, shape (N, N)
+    C_samp : 2D numpy.ndarray, shape (N, N)
         Sample correlation matrix. N is the number of nodes.
     L : int
         Number of samples
@@ -26,7 +25,7 @@ def generate_network(C_samp, L, null_model="all", disp=True):
         Available null models are
         the white noise model (null_model='white-noise'),
         the Hirschberger-Qu-Steuer model (null_model='hqs')
-        and the configuration model (null_model='config')
+        and the configuration model (null_model='config').
         If null_model='all', then the Scola selects the best one among the three null models in terms of the extended BIC.
     disp : bool, default True
         Set disp=True to disply the progress.
@@ -34,9 +33,9 @@ def generate_network(C_samp, L, null_model="all", disp=True):
 
     Returns
     -------
-    W : 2D numpy.matrix, shape (N, N)
+    W : 2D numpy.ndarray, shape (N, N)
         Weighted adjacency matrix of the generated network.
-    C_null : 2D numpy.matrix, shape (N, N)
+    C_null : 2D numpy.ndarray, shape (N, N)
         Null correlation matrix.
     null_model : str
         Name of the null model.
@@ -44,11 +43,11 @@ def generate_network(C_samp, L, null_model="all", disp=True):
         The extended BIC for the generated network.
     """
 
-    if type(C_samp) is np.ndarray:
-        C_samp = np.matrix(C_samp)
+    if type(C_samp) is np.matrix:
+        C_samp = np.array(C_samp)
 
-    if type(C_samp) is not np.matrix:
-        raise TypeError("C_samp must be a numpy.matrix")
+    if type(C_samp) is not np.ndarray:
+        raise TypeError("C_samp must be a numpy.ndarray")
 
     if (type(L) is not int) and (type(L) is not float):
         raise TypeError("L must be an integer")
@@ -64,34 +63,27 @@ def generate_network(C_samp, L, null_model="all", disp=True):
     else:
         _null_models = [null_model]
 
-    lam_lower = 0.0
-    lam_upper = 1.0
-    invphi = (np.sqrt(5) - 1) / 2
-    num_pbar_updates = 3 * (int(np.ceil(np.log(0.01 / (lam_upper - lam_lower)) / np.log(invphi))) + 1)
-    pbar = tqdm.tqdm(disable=(disp is False), total=num_pbar_updates)
+    pbar = tqdm.tqdm(disable=(disp is False), total=(13 * len(_null_models)))
     res = []
     for null_model in _null_models:
-        W_best, C_null, EBIC_min = _gen_net_(
+        W, C_null, EBIC_min = _gen_net_(
             C_samp, L, null_model, pbar, disp=disp, gamma=0.5
         )
-        res += [[W_best, C_null, EBIC_min, null_model]]
+        res += [[W, C_null, EBIC_min, null_model]]
     idx = np.argmin(np.array([r[2] for r in res]))
     pbar.close()
     return res[idx]
 
 
-def _gen_net_(C_samp, L, null_model, pbar, disp, gamma, lam_lower=0.0, lam_upper=1.0):
+def _calc_upper_lam(C_samp, C_null):
+    abC_samp = np.abs(C_samp - C_null)
+    iCov = linalg.inv(C_null)
+    D = iCov - np.matmul(np.matmul(iCov, C_samp), iCov)
+    b = np.max(np.multiply(np.abs(D), np.power(abC_samp, 2)))
+    return b
 
-    invphi = (np.sqrt(5) - 1) / 2
-    invphi2 = (3 - np.sqrt(5)) / 2
-    h = lam_upper - lam_lower
-    lam_1 = lam_lower + invphi2 * h
-    lam_2 = lam_lower + invphi * h
-    n = int(np.ceil(np.log(0.01 / h) / np.log(invphi)))
-    N = C_samp.shape[0]
-    W_best = []
-    lam_best = 0
-    EBIC_min = 0
+
+def _gen_net_(C_samp, L, null_model, pbar, disp, gamma):
 
     if type(null_model) is str:
         C_null, K_null = _compute_null_correlation_matrix(C_samp, null_model)
@@ -100,16 +92,33 @@ def _gen_net_(C_samp, L, null_model, pbar, disp, gamma, lam_lower=0.0, lam_upper
         C_null = null_model[0]
         K_null = null_model[1]
 
-    pbar.update()
+    lam_upper = _calc_upper_lam(C_samp, C_null)
+    lam_lower = 0.0
+    invphi = (np.sqrt(5) - 1.0) / 2.0
+    invphi2 = (3.0 - np.sqrt(5.0)) / 2.0
+    h = lam_upper - lam_lower
+    lam_1 = lam_lower + invphi2 * h
+    lam_2 = lam_lower + invphi * h
+    n = int(np.ceil(np.log(0.01) / np.log(invphi)))
+    N = C_samp.shape[0]
+    W_best = None
+    lam_best = 0
+    EBIC_min = 0
+
+    ns = pbar.n
+    nf = ns + n
 
     for k in range(n):
         if k == 0:
 
             W_l = C_samp - C_null
-            W_l = _MM_algorithm(C_samp, C_null, lam_lower)
+            pbar.update()
             W_u = _MM_algorithm(C_samp, C_null, lam_upper)
+            pbar.update()
             W_1 = _MM_algorithm(C_samp, C_null, lam_1)
+            pbar.update()
             W_2 = _MM_algorithm(C_samp, C_null, lam_2)
+            pbar.update()
 
             EBIC_l = _calc_EBIC(W_l, C_samp, C_null, L, gamma, K_null)
             EBIC_u = _calc_EBIC(W_u, C_samp, C_null, L, gamma, K_null)
@@ -120,7 +129,6 @@ def _gen_net_(C_samp, L, null_model, pbar, disp, gamma, lam_lower=0.0, lam_upper
             W_best = [W_l, W_u, W_1, W_2][mid]
             lam_best = [lam_lower, lam_upper, lam_1, lam_2][mid]
             EBIC_min = [EBIC_l, EBIC_u, EBIC_1, EBIC_2][mid]
-            pbar.update()
             continue
 
         if (EBIC_1 < EBIC_2) | ((EBIC_1 == EBIC_2) & (np.random.rand() > 0.5)):
@@ -132,6 +140,7 @@ def _gen_net_(C_samp, L, null_model, pbar, disp, gamma, lam_lower=0.0, lam_upper
             lam_1 = lam_lower + invphi2 * h
 
             W_1 = _MM_algorithm(C_samp, C_null, lam_1)
+            pbar.update()
             EBIC_1 = _calc_EBIC(W_1, C_samp, C_null, L, gamma, K_null)
 
             if EBIC_1 < EBIC_min:
@@ -148,6 +157,7 @@ def _gen_net_(C_samp, L, null_model, pbar, disp, gamma, lam_lower=0.0, lam_upper
             lam_2 = lam_lower + invphi * h
 
             W_2 = _MM_algorithm(C_samp, C_null, lam_2)
+            pbar.update()
             EBIC_2 = _calc_EBIC(W_2, C_samp, C_null, L, gamma, K_null)
 
             if EBIC_2 < EBIC_min:
@@ -155,44 +165,15 @@ def _gen_net_(C_samp, L, null_model, pbar, disp, gamma, lam_lower=0.0, lam_upper
                 W_best = W_2
                 lam_best = lam_2
 
-        pbar.update()
-        pbar.refresh()
-
     pbar.refresh()
     return W_best, C_null, EBIC_min
-
-
-def _generate_configuration_model(C, tolerance=1e-5, transform_to_corr_mat=True):
-
-    if transform_to_corr_mat == True:
-        cov = np.asanyarray(C)
-        std_ = np.sqrt(np.diag(cov))
-        _C = cov / np.outer(std_, std_)
-    else:
-        _C = C
-
-    N = _C.shape[0]
-
-    C_con = cv.Variable((N, N), PSD=True)
-
-    objective = cv.Minimize(-cv.log_det(C_con))
-
-    constraints = [
-        cv.sum(C_con, axis=0) == _C.sum(axis=0),
-        cv.diag(C_con) == np.diag(_C),
-    ]
-
-    prob = cv.Problem(objective, constraints)
-    prob.solve(verbose=True, eps=tolerance)
-
-    return C_con.value
 
 
 def _compute_null_correlation_matrix(C_samp, null_model):
     C_null = []
     K_null = -1
     if null_model == "white-noise":
-        C_null = np.matrix(np.eye(C_samp.shape[0]))
+        C_null = np.eye(C_samp.shape[0])
         K_null = 0
     elif null_model == "hqs":
         C_null = np.mean(np.triu(C_samp, 1)) * np.ones(C_samp.shape)
@@ -214,7 +195,7 @@ def _compute_null_correlation_matrix(C_samp, null_model):
 def _MM_algorithm(C_samp, C_null, lam):
 
     N = C_samp.shape[0]
-    Lambda = 1 / (np.power(np.abs(C_samp - C_null), 2) + 1e-20)
+    Lambda = 1.0 / (np.power(np.abs(C_samp - C_null), 2) + 1e-20)
     W = _prox(C_samp - C_null, lam * Lambda)
 
     score_prev = -1e300
@@ -232,46 +213,44 @@ def _MM_algorithm(C_samp, C_null, lam):
 def _maximisation_step(C_samp, C_null, W_base, lam):
 
     N = C_samp.shape[0]
-    mt = np.matrix(np.zeros((N, N)))
-    vt = np.matrix(np.zeros((N, N)))
+    mt = np.zeros((N, N))
+    vt = np.zeros((N, N))
     t = 0
     eps = 1e-8
     b1 = 0.9
-    b2 = 0.99
+    b2 = 0.999
     maxscore = -1e300
     t_best = 0
-    eta = 0.001
+    eta = 0.01
     maxIteration = 1e7
-    maxLocalSearch = 300
-    quality_assessment_interval = 100
-    W_best = W_base
+    maxLocalSearch = 30
     W = W_base
     Lambda = 1 / (np.power(np.abs(C_samp - C_null), 2) + 1e-20)
     inv_C_base = _fast_inv_mat_lapack(C_null + W_base)
-    while (t < maxIteration) & (t <= (t_best + maxLocalSearch + 1)):
+    _diff_min = 1e300
+    while (t < maxIteration) & ((t - t_best) <= maxLocalSearch) & (_diff_min > 5e-5):
         t = t + 1
         inv_C = _fast_inv_mat_lapack(C_null + W)
-        gt = inv_C_base - inv_C @ C_samp @ inv_C
-        gt = (gt + gt.T) / 2
+        gt = inv_C_base - np.matmul(np.matmul(inv_C, C_samp), inv_C)
+        gt = (gt + gt.T) / 2.0
         gt = np.nan_to_num(gt)
         np.fill_diagonal(gt, 0)
-        mt = b1 * mt + (1 - b1) * gt
-        vt = b2 * vt + (1 - b2) * np.power(gt, 2)
-        mthat = mt / (1 - np.power(b1, t))
-        vthat = vt / (1 - np.power(b2, t))
+        mt = b1 * mt + (1.0 - b1) * gt
+        vt = b2 * vt + (1.0 - b2) * np.power(gt, 2)
+        mthat = mt / (1.0 - np.power(b1, t))
+        vthat = vt / (1.0 - np.power(b2, t))
         dtheta = np.divide(mthat, (np.sqrt(vthat) + eps))
 
+        W_prev = W
         W = _prox(W - eta * dtheta, eta * lam * Lambda)
-        np.fill_diagonal(W, 0)
+        _diff = np.max(np.abs(W - W_prev))
+        np.fill_diagonal(W, 0.0)
 
-        if (t % quality_assessment_interval) == 0:
-            s = _penalized_likelihood(W, C_samp, C_null, lam, Lambda)
-            if s > maxscore:
-                W_best = W
-                maxscore = s
-                t_best = t
+        if _diff < _diff_min:
+            _diff_min = _diff
+            t_best = t
 
-    return W_best
+    return W
 
 
 def _fast_inv_mat_lapack(M):
@@ -289,10 +268,10 @@ def _loglikelihood(W, C_samp, C_null):
     if np.min(w) < 0:
         v = v[w > 0]
         w = w[w > 0]
-    iCov = np.real(v @ np.diag(1 / w) @ v.T)
+    iCov = np.real(np.matmul(np.matmul(v, np.diag(1 / w)), v.T))
     l = (
         -0.5 * np.sum(np.log(w))
-        - 0.5 * np.trace(C_samp @ iCov)
+        - 0.5 * np.trace(np.matmul(C_samp, iCov))
         - 0.5 * Cov.shape[0] * np.log(2 * np.pi)
     )
     return np.real(l)
@@ -311,13 +290,59 @@ def _calc_EBIC(W, C_samp, C_null, L, gamma, Knull):
 
 def _prox(y, lam):
 
-    return np.multiply(
-        np.sign(y), np.maximum(np.abs(y) - lam, np.matrix(np.zeros(y.shape)))
-    )
+    return np.multiply(np.sign(y), np.maximum(np.abs(y) - lam, np.zeros(y.shape)))
 
 
 def _penalized_likelihood(W, C_samp, C_null, lam, Lambda):
     return (
         _loglikelihood(W, C_samp, C_null)
-        - lam * np.sum(np.multiply(Lambda, np.abs(W))) / 2
+        - lam * np.sum(np.multiply(Lambda, np.abs(W))) / 4
     )
+
+
+def _generate_configuration_model(C, tolerance=1e-5, transform_to_corr_mat=True):
+
+    if transform_to_corr_mat == True:
+        cov = np.asanyarray(C)
+        std_ = np.sqrt(np.diag(cov))
+        _C = cov / np.outer(std_, std_)
+    else:
+        _C = C
+
+    N = _C.shape[0]
+    s = np.sum(_C, axis=1)
+    K = np.linalg.pinv(_C)
+
+    theta = np.concatenate([np.diag(K), np.zeros(N)])
+    mt = np.zeros(2 * N)
+    vt = np.zeros(2 * N)
+    t = 0
+    eps = 1e-8
+    b1 = 0.9
+    b2 = 0.999
+    t_best = 0
+    eta = 0.001
+    maxIteration = 1e7
+    while t < maxIteration:
+        t = t + 1
+
+        K_est = np.add.outer(theta[N : 2 * N], theta[N : 2 * N]) + np.diag(theta[0:N])
+        C_con = _fast_inv_mat_lapack(K_est)
+
+        _diff = np.mean(np.abs(np.sum(C_con, 1) - s))
+        if _diff < tolerance:
+            break
+
+        dalpha = np.diag(C_con) - np.diag(_C)
+        dbeta = (2.0 / N) * (np.sum(C_con, axis=1) - s)
+
+        gt = np.concatenate([dalpha, dbeta])
+        mt = b1 * mt + (1.0 - b1) * gt
+        vt = b2 * vt + (1.0 - b2) * np.power(gt, 2.0)
+        mthat = mt / (1.0 - np.power(b1, t))
+        vthat = vt / (1.0 - np.power(b2, t))
+        dtheta = np.divide(mthat, (np.sqrt(vthat) + eps))
+
+        theta = theta + eta * dtheta
+
+    return C_con

@@ -3,7 +3,7 @@ from codecs import open
 
 setup(
     name='scola',
-    version='0.0.8',
+    version='0.0.9',
     description='Python code for the Scola algorithm',
     long_description='Python code for the Scola algorithm',
     url='https://github.com/skojaku/scola',
@@ -22,5 +22,5 @@ setup(
     ],
     keywords='correlation matrix network lasso',
     packages=find_packages(),
-    install_requires=['numpy', 'cvxpy', 'scipy', 'tqdm'],
+    install_requires=['numpy', 'scipy', 'tqdm'],
 )

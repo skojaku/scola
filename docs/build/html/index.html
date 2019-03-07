@@ -82,10 +82,14 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">A Python package for the Scola algorithm</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#installing-scola">Installing Scola</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installing-scola">Installing Scola</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#install-with-pip">Install with pip</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#install-from-source">Install from source</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#getting-started">Getting Started</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#id1">API</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id2">Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#dependencies">Dependencies</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#licence">Licence</a><ul class="simple">
 </ul>
 </li>
@@ -147,24 +151,22 @@ The details are described in our paper:</p>
 </div>
 <div class="section" id="installing-scola">
 <h2>Installing Scola<a class="headerlink" href="#installing-scola" title="Permalink to this headline">¶</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">scola</span></code> supports both Python 2.x and 3.x.
-We recommend installing <code class="docutils literal notranslate"><span class="pre">scola</span></code> on Ubuntu, CentOS and macOS.</p>
-<ol class="arabic">
-<li><p class="first">You need to install <code class="docutils literal notranslate"><span class="pre">cvxpy</span></code> prior to install <code class="docutils literal notranslate"><span class="pre">scola</span></code>.
-We recommend to follow <a class="reference external" href="https://ajfriendcvxpy.readthedocs.io/en/latest/install/">the instructions for installing cvxpy</a>.</p>
-</li>
-<li><p class="first">Install <code class="docutils literal notranslate"><span class="pre">scola</span></code> using <strong>pip</strong>, i.e.,</p>
+<p><code class="docutils literal notranslate"><span class="pre">scola</span></code> is a pure Python package that supports both Python 2.x and 3.x.
+We test <code class="docutils literal notranslate"><span class="pre">scola</span></code> on Ubuntu, CentOS, macOS and Windows.</p>
+<div class="section" id="install-with-pip">
+<h3>Install with pip<a class="headerlink" href="#install-with-pip" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre>pip install scola
 </pre></div>
 </div>
-</li>
-<li><p class="first">Test the installation with pytest</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre>pip install pytest <span class="o">&amp;&amp;</span> python -m pytest
+</div>
+<div class="section" id="install-from-source">
+<h3>Install from source<a class="headerlink" href="#install-from-source" title="Permalink to this headline">¶</a></h3>
+<p>Download <a class="reference external" href="https://github.com/skojaku/scola">the source file</a> from GitHub.
+Then, under /scola directory, type</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre>python setup.py install
 </pre></div>
 </div>
-<p>If you fail to pass the test, please double check <code class="docutils literal notranslate"><span class="pre">cvxpy</span></code> is correctly installed (<code class="docutils literal notranslate"><span class="pre">cvxpy</span></code> has dependencies with some external software such as LAPACK and BLAS which need to be installed priori. See <a class="reference external" href="https://ajfriendcvxpy.readthedocs.io/en/latest/install/#other-platforms">dependencies</a>).</p>
-</li>
-</ol>
+</div>
 </div>
 <div class="section" id="getting-started">
 <h2>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
@@ -232,8 +234,8 @@ Otherwise set disp=False.</li>
 </dd></dl>
 
 </div>
-<div class="section" id="id2">
-<h2>Dependencies<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="dependencies">
+<h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">scola</span></code> has dependencies with the following packages:</p>
 <ul class="simple">
 <li>NumPy</li>

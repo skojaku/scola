@@ -1,0 +1,25 @@
+Metadata-Version: 2.0
+Name: scola
+Version: 0.0.9
+Summary: Python code for the Scola algorithm
+Home-page: https://github.com/skojaku/scola
+Author: Naoki Masuda
+Author-email: sadamori.koujaku@bristol.ac.uk
+License: MIT
+Keywords: correlation matrix network lasso
+Platform: UNKNOWN
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Science/Research
+Classifier: Topic :: Software Development
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Requires-Dist: numpy
+Requires-Dist: scipy
+Requires-Dist: tqdm
+
+Python code for the Scola algorithm
+
+
