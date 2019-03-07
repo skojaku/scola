@@ -105,7 +105,6 @@ def _gen_net_(C_samp, L, null_model, pbar, disp, gamma):
 
     for k in range(n):
         if k == 0:
-
             W_l = C_samp - C_null
             pbar.update()
             W_u = _MM_algorithm(C_samp, C_null, lam_upper)
@@ -142,7 +141,6 @@ def _gen_net_(C_samp, L, null_model, pbar, disp, gamma):
                 EBIC_min = EBIC_1
                 W_best = W_1
                 lam_best = lam_1
-
         else:
             lam_lower = lam_1
             lam_1 = lam_2
@@ -193,7 +191,6 @@ def _MM_algorithm(C_samp, C_null, lam):
     N = C_samp.shape[0]
     Lambda = 1.0 / (np.power(np.abs(C_samp - C_null), 2) + 1e-20)
     W = _prox(C_samp - C_null, lam * Lambda)
-
     score_prev = -1e300
     while True:
         _W = _maximisation_step(C_samp, C_null, W, lam)
@@ -290,6 +287,7 @@ def _prox(y, lam):
 
 
 def _penalized_likelihood(W, C_samp, C_null, lam, Lambda):
+
     return (
         _loglikelihood(W, C_samp, C_null)
         - lam * np.sum(np.multiply(Lambda, np.abs(W))) / 4
