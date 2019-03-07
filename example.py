@@ -10,9 +10,13 @@ N = X.shape[1] # Number of nodes
 # Generate NxN correlation matrix
 C_samp = np.corrcoef(X.T)
 import scola
-W, EBIC, C_null, selected_model = scola.generate_network(C_samp, L)
 
-print(type(W), type(C_samp), selected_model)
+Crand = scola._generate_configuration_model(C_samp)
 
-plt.imshow(W)
-plt.show()
+print(np.abs(np.sum(C_samp - Crand,1)))
+#W, EBIC, C_null, selected_model = scola.generate_network(C_samp, L)
+
+#print(type(W), type(C_samp), selected_model)
+
+#plt.imshow(W)
+#plt.show()

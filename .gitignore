@@ -1,4 +1,5 @@
 .pypirc
 dist
+build
 *.egg-info
 makefile

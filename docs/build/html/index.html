@@ -13,6 +13,8 @@
 
   
   
+  
+  
 
   
 
@@ -22,26 +24,19 @@
 
   
 
-  
-  
-    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="index" title="Index"
-              href="genindex.html"/>
-        <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="Scola 0.0.0 documentation" href="#"/> 
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -78,7 +73,10 @@
           
             
             
-                <p class="caption"><span class="caption-text">Table of contents:</span></p>
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">A Python package for the Scola algorithm</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
@@ -106,34 +104,54 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="#">Scola</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">Scola</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="#">Docs</a> &raquo;</li>
-      
-    <li>A Python package for the Scola algorithm</li>
+    
+      <li><a href="#">Docs</a> &raquo;</li>
+        
+      <li>A Python package for the Scola algorithm</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
+            
             <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -155,7 +173,7 @@ The details are described in our paper:</p>
 We test <code class="docutils literal notranslate"><span class="pre">scola</span></code> on Ubuntu, CentOS, macOS and Windows.</p>
 <div class="section" id="install-with-pip">
 <h3>Install with pip<a class="headerlink" href="#install-with-pip" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre>pip install scola
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install scola
 </pre></div>
 </div>
 </div>
@@ -163,7 +181,7 @@ We test <code class="docutils literal notranslate"><span class="pre">scola</span
 <h3>Install from source<a class="headerlink" href="#install-from-source" title="Permalink to this headline">¶</a></h3>
 <p>Download <a class="reference external" href="https://github.com/skojaku/scola">the source file</a> from GitHub.
 Then, under /scola directory, type</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre>python setup.py install
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python setup.py install
 </pre></div>
 </div>
 </div>
@@ -173,7 +191,7 @@ Then, under /scola directory, type</p>
 <p>We demonstrate how to generate a network with <code class="docutils literal notranslate"><span class="pre">scola</span></code>.</p>
 <p>Our example data is located in <a class="reference external" href="https://raw.githubusercontent.com/skojaku/scola/master/data/sample.txt">GitHub</a>, which is composed of L=300 rows and N=25 columns (space separated), where L is the number of samples and N is the number of variables (i.e., nodes).
 The code below loads the data.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
 
 <span class="n">X</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;https://raw.githubusercontent.com/skojaku/scola/master/data/sample.txt&quot;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
@@ -182,11 +200,11 @@ The code below loads the data.</p>
 </pre></div>
 </div>
 <p>Then, compute the sample correlation matrix by</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span class="n">C_samp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="c1"># NxN correlation matrix</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">C_samp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="c1"># NxN correlation matrix</span>
 </pre></div>
 </div>
 <p>Finally, provide <code class="docutils literal notranslate"><span class="pre">C_samp</span></code> and <code class="docutils literal notranslate"><span class="pre">L</span></code> to the Scola as follows.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">scola</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">scola</span>
 <span class="n">W</span><span class="p">,</span> <span class="n">EBIC</span><span class="p">,</span> <span class="n">C_null</span><span class="p">,</span> <span class="n">selected_model</span> <span class="o">=</span> <span class="n">scola</span><span class="o">.</span><span class="n">generate_network</span><span class="p">(</span><span class="n">C_samp</span><span class="p">,</span> <span class="n">L</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -252,6 +270,7 @@ Otherwise set disp=False.</li>
 
 
            </div>
+           
           </div>
           <footer>
   
@@ -264,7 +283,7 @@ Otherwise set disp=False.</li>
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -283,31 +302,26 @@ Otherwise set disp=False.</li>
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
             VERSION:'0.0.0',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="_static/jquery.js"></script>
       <script type="text/javascript" src="_static/underscore.js"></script>
       <script type="text/javascript" src="_static/doctools.js"></script>
-      <script type="text/javascript" src="_static/language_data.js"></script>
 
   
 
-  
-  
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-  
+  <script type="text/javascript" src="_static/js/theme.js"></script>
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

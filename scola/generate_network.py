@@ -329,7 +329,7 @@ def _generate_configuration_model(C, tolerance=1e-5, transform_to_corr_mat=True)
         K_est = np.add.outer(theta[N : 2 * N], theta[N : 2 * N]) + np.diag(theta[0:N])
         C_con = _fast_inv_mat_lapack(K_est)
 
-        _diff = np.mean(np.abs(np.sum(C_con, 1) - s))
+        _diff = np.max(np.abs(np.sum(C_con, 1) - s) / s)
         if _diff < tolerance:
             break
 
