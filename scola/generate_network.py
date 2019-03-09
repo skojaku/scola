@@ -1,7 +1,13 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 from scipy import linalg
+from scipy import sparse
+from scipy import stats
+import os
 import tqdm
+import sys
+from functools import partial
+
 
 def generate_network(C_samp, L, null_model="all", disp=True):
     """
@@ -63,14 +69,13 @@ def generate_network(C_samp, L, null_model="all", disp=True):
         W, C_null, EBIC_min = _gen_net_(
             C_samp, L, null_model, pbar, disp=disp, gamma=0.5
         )
-        res += [[W, C_null, EBIC_min, null_model]]
+        res += [[W, C_null, null_model, EBIC_min]]
     idx = np.argmin(np.array([r[2] for r in res]))
     pbar.close()
     return res[idx]
 
 
 def _calc_upper_lam(C_samp, C_null):
-
     abC_samp = np.abs(C_samp - C_null)
     iCov = linalg.inv(C_null)
     D = iCov - np.matmul(np.matmul(iCov, C_samp), iCov)
@@ -105,6 +110,7 @@ def _gen_net_(C_samp, L, null_model, pbar, disp, gamma):
 
     for k in range(n):
         if k == 0:
+
             W_l = C_samp - C_null
             pbar.update()
             W_u = _MM_algorithm(C_samp, C_null, lam_upper)
@@ -141,6 +147,7 @@ def _gen_net_(C_samp, L, null_model, pbar, disp, gamma):
                 EBIC_min = EBIC_1
                 W_best = W_1
                 lam_best = lam_1
+
         else:
             lam_lower = lam_1
             lam_1 = lam_2
@@ -163,7 +170,6 @@ def _gen_net_(C_samp, L, null_model, pbar, disp, gamma):
 
 
 def _compute_null_correlation_matrix(C_samp, null_model):
-
     C_null = []
     K_null = -1
     if null_model == "white-noise":
@@ -191,6 +197,7 @@ def _MM_algorithm(C_samp, C_null, lam):
     N = C_samp.shape[0]
     Lambda = 1.0 / (np.power(np.abs(C_samp - C_null), 2) + 1e-20)
     W = _prox(C_samp - C_null, lam * Lambda)
+
     score_prev = -1e300
     while True:
         _W = _maximisation_step(C_samp, C_null, W, lam)
@@ -259,7 +266,7 @@ def _loglikelihood(W, C_samp, C_null):
     Cov = W + C_null
     w, v = np.linalg.eig(Cov)
     if np.min(w) < 0:
-        v = v[w > 0]
+        v = v[:, w > 0]
         w = w[w > 0]
     iCov = np.real(np.matmul(np.matmul(v, np.diag(1 / w)), v.T))
     l = (
@@ -287,7 +294,6 @@ def _prox(y, lam):
 
 
 def _penalized_likelihood(W, C_samp, C_null, lam, Lambda):
-
     return (
         _loglikelihood(W, C_samp, C_null)
         - lam * np.sum(np.multiply(Lambda, np.abs(W))) / 4

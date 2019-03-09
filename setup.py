@@ -3,7 +3,7 @@ from codecs import open
 
 setup(
     name='scola',
-    version='0.0.12',
+    version='0.0.13',
     description='Python code for the Scola algorithm',
     long_description='Python code for the Scola algorithm',
     url='https://github.com/skojaku/scola',
