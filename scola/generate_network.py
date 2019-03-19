@@ -21,26 +21,28 @@ def generate_network(C_samp, L, null_model="all", disp=True):
     L : int
         Number of samples
     null_model : str, default 'all'
-        Name of the null model to be used for constructing the network.
-        Available null models are
-        the white noise model (null_model='white-noise'),
-        the Hirschberger-Qu-Steuer model (null_model='hqs')
-        and the configuration model (null_model='config').
-        If null_model='all', then the Scola selects the best one among the three null models in terms of the extended BIC.
+        Null model to be used for constructing the network.
+        One can use the white noise model 
+        (null_model='white-noise'), the Hirschberger-Qu-Steuer 
+        model (null_model='hqs') or the configuration model 
+        (null_model='config'). If null_model='all', then the 
+        best one among the three null models in terms of the 
+        extended Bayesian Information Criterion (BIC) is 
+        selected.
     disp : bool, default True
-        Set disp=True to disply the progress.
-        Otherwise set disp=False.
+        Set disp=True to display the progress of computation.
+        Otherwise, set disp=False.
 
     Returns
     -------
     W : 2D numpy.ndarray, shape (N, N)
         Weighted adjacency matrix of the generated network.
     C_null : 2D numpy.ndarray, shape (N, N)
-        Null correlation matrix used to construct the network.
-    null_model : str
-        Name of the null model.
+        Estimated null correlation matrix used for constructing the network.
+    selected_null_model : str
+        The null model selected by the Scola.
     EBIC : float
-        The extended BIC for the generated network.
+        The extended BIC value for the generated network.
     """
 
     if type(C_samp) is np.matrix:
@@ -63,34 +65,53 @@ def generate_network(C_samp, L, null_model="all", disp=True):
     else:
         _null_models = [null_model]
 
+    # pbar is used for computing and displaying the progress of computation.
     pbar = tqdm.tqdm(disable=(disp is False), total=(13 * len(_null_models)))
     res = []
     for null_model in _null_models:
-        W, C_null, EBIC_min = _gen_net_(
-            C_samp, L, null_model, pbar, disp=disp, gamma=0.5
+        W, C_null, EBIC_min = _golden_section_search(
+            C_samp, L, null_model, beta=0.5, pbar, disp=disp
         )
         res += [[W, C_null, null_model, EBIC_min]]
-    idx = np.argmin(np.array([r[2] for r in res]))
+    idx = np.argmin(np.array([r[3] for r in res]))
     pbar.close()
     return res[idx]
 
 
-def _calc_upper_lam(C_samp, C_null):
-    abC_samp = np.abs(C_samp - C_null)
-    iCov = linalg.inv(C_null)
-    D = iCov - np.matmul(np.matmul(iCov, C_samp), iCov)
-    b = np.max(np.multiply(np.abs(D), np.power(abC_samp, 2)))
-    return b
+def _golden_section_search(C_samp, L, null_model, beta, pbar, disp):
+    """
+    Generate a network from a correlation matrix with 
+    a golden-section search method
 
+    Parameters
+    ----------
+    C_samp : 2D numpy.ndarray, shape (N, N)
+        Sample correlation matrix.
+    L : int
+        Number of samples
+    null_model : str
+        Name of the null model.
+    beta : float
+        hyperparameter for the extended BIC.
+    pbar : tqdm
+        tqdm instance, which is used for computing and displaying 
+        the progress of computation.
+    disp : bool, default True
+        Set disp=True to display the progress of computation.
+        Otherwise, set disp=False.
 
-def _gen_net_(C_samp, L, null_model, pbar, disp, gamma):
+    Returns
+    -------
+    W : 2D numpy.ndarray, shape (N, N)
+        Weighted adjacency matrix of the generated network.
+    C_null : 2D numpy.ndarray, shape (N, N)
+        Estimated null correlation matrix used for constructing the 
+        network.
+    EBIC : float
+        The extended BIC value for the generated network.
+    """
 
-    if type(null_model) is str:
-        C_null, K_null = _compute_null_correlation_matrix(C_samp, null_model)
-    else:
-        null_model = "user-defined"
-        C_null = null_model[0]
-        K_null = null_model[1]
+    C_null, K_null = _compute_null_correlation_matrix(C_samp, null_model)
 
     lam_upper = _calc_upper_lam(C_samp, C_null)
     lam_lower = 0.0
@@ -120,10 +141,10 @@ def _gen_net_(C_samp, L, null_model, pbar, disp, gamma):
             W_2 = _MM_algorithm(C_samp, C_null, lam_2)
             pbar.update()
 
-            EBIC_l = _calc_EBIC(W_l, C_samp, C_null, L, gamma, K_null)
-            EBIC_u = _calc_EBIC(W_u, C_samp, C_null, L, gamma, K_null)
-            EBIC_1 = _calc_EBIC(W_1, C_samp, C_null, L, gamma, K_null)
-            EBIC_2 = _calc_EBIC(W_2, C_samp, C_null, L, gamma, K_null)
+            EBIC_l = _calc_EBIC(W_l, C_samp, C_null, L, beta, K_null)
+            EBIC_u = _calc_EBIC(W_u, C_samp, C_null, L, beta, K_null)
+            EBIC_1 = _calc_EBIC(W_1, C_samp, C_null, L, beta, K_null)
+            EBIC_2 = _calc_EBIC(W_2, C_samp, C_null, L, beta, K_null)
 
             mid = np.argmin([EBIC_l, EBIC_u, EBIC_1, EBIC_2])
             W_best = [W_l, W_u, W_1, W_2][mid]
@@ -141,7 +162,7 @@ def _gen_net_(C_samp, L, null_model, pbar, disp, gamma):
 
             W_1 = _MM_algorithm(C_samp, C_null, lam_1)
             pbar.update()
-            EBIC_1 = _calc_EBIC(W_1, C_samp, C_null, L, gamma, K_null)
+            EBIC_1 = _calc_EBIC(W_1, C_samp, C_null, L, beta, K_null)
 
             if EBIC_1 < EBIC_min:
                 EBIC_min = EBIC_1
@@ -158,7 +179,7 @@ def _gen_net_(C_samp, L, null_model, pbar, disp, gamma):
 
             W_2 = _MM_algorithm(C_samp, C_null, lam_2)
             pbar.update()
-            EBIC_2 = _calc_EBIC(W_2, C_samp, C_null, L, gamma, K_null)
+            EBIC_2 = _calc_EBIC(W_2, C_samp, C_null, L, beta, K_null)
 
             if EBIC_2 < EBIC_min:
                 EBIC_min = EBIC_2
@@ -166,10 +187,53 @@ def _gen_net_(C_samp, L, null_model, pbar, disp, gamma):
                 lam_best = lam_2
 
     pbar.refresh()
-    return W_best, C_null, EBIC_min
+    EBIC = EBIC_min
+    return W_best, C_null, EBIC
+
+
+def _calc_upper_lam(C_samp, C_null):
+    """
+    Compute the upper bound of the Lasso penalty.
+
+    Parameters
+    ----------
+    C_samp : 2D numpy.ndarray, shape (N, N)
+        Sample correlation matrix. 
+    C_null : 2D numpy.ndarray, shape (N, N)
+        Null correlation matrix used for constructing the network.
+
+    Returns
+    -------
+    lam_upper : float
+        Upper bound of the Lasso penalty. 
+    """
+
+    abC_samp = np.abs(C_samp - C_null)
+    iCov = _fast_mat_inv_lapack(C_null)
+    D = iCov - np.matmul(np.matmul(iCov, C_samp), iCov)
+    lam_upper = np.max(np.multiply(np.abs(D), np.power(abC_samp, 2)))
+    return lam_upper
 
 
 def _compute_null_correlation_matrix(C_samp, null_model):
+    """
+    Compute a null correlation matrix for a sample correlation matrix.
+        
+    Parameters
+    ----------
+    C_samp : 2D numpy.ndarray, shape (N, N)
+        Sample correlation matrix.
+    null_model : str
+        Name of the null model.
+
+    Returns
+    -------
+    C_null : 2D numpy.ndarray, shape (N, N)
+        Estimated null correlation matrix used for constructing the network.
+    K_null : int
+        Number of parameters for the null model. 
+    """
+
     C_null = []
     K_null = -1
     if null_model == "white-noise":
@@ -186,13 +250,30 @@ def _compute_null_correlation_matrix(C_samp, null_model):
         K_null = C_samp.shape[0]
     else:
         raise ValueError(
-            "Null model %s is unknown. See the Readme for the available null models"
+            "Null model %s is unknown. See the Readme for the available null models."
             % null_model
         )
     return C_null, K_null
 
 
 def _MM_algorithm(C_samp, C_null, lam):
+    """
+    Minorisation and maximisation algorithm. 
+        
+    Parameters
+    ----------
+    C_samp : 2D numpy.ndarray, shape (N, N)
+        Sample correlation matrix. 
+    C_null : 2D numpy.ndarray, shape (N, N)
+        Null correlation matrix.
+    lam : float
+        Lasso penalty.
+
+    Returns
+    -------
+    W : 2D numpy.ndarray, shape (N, N)
+        Weighted adjacency matrix of the generated network.
+    """
 
     N = C_samp.shape[0]
     Lambda = 1.0 / (np.power(np.abs(C_samp - C_null), 2) + 1e-20)
@@ -201,7 +282,7 @@ def _MM_algorithm(C_samp, C_null, lam):
     score_prev = -1e300
     while True:
         _W = _maximisation_step(C_samp, C_null, W, lam)
-        score = _penalized_likelihood(_W, C_samp, C_null, lam, Lambda)
+        score = _calc_penalized_loglikelihood(_W, C_samp, C_null, lam * Lambda)
         if score <= score_prev:
             break
         W = _W
@@ -211,6 +292,26 @@ def _MM_algorithm(C_samp, C_null, lam):
 
 
 def _maximisation_step(C_samp, C_null, W_base, lam):
+    """
+    Maximisation step of the MM algorithm. 
+    (A subroutine for _MM_algorithm). 
+        
+    Parameters
+    ----------
+    C_samp : 2D numpy.ndarray, shape (N, N)
+        Sample correlation matrix. 
+    C_null : 2D numpy.ndarray, shape (N, N)
+        Null correlation matrix.
+    W_base : 2D numpy.ndarray, shape (N, N)
+        W at which the minorisation is performed.  
+    lam : float
+        Lasso penalty.
+
+    Returns
+    -------
+    W : 2D numpy.ndarray, shape (N, N)
+        Weighted adjacency matrix of the generated network.
+    """
 
     N = C_samp.shape[0]
     mt = np.zeros((N, N))
@@ -221,20 +322,21 @@ def _maximisation_step(C_samp, C_null, W_base, lam):
     b2 = 0.999
     maxscore = -1e300
     t_best = 0
-    eta = 0.01
+    eta = 0.001
     maxIteration = 1e7
-    maxLocalSearch = 30
+    maxLocalSearch = 300
     W = W_base
     Lambda = 1 / (np.power(np.abs(C_samp - C_null), 2) + 1e-20)
-    inv_C_base = _fast_inv_mat_lapack(C_null + W_base)
+    inv_C_base = _fast_mat_inv_lapack(C_null + W_base)
     _diff_min = 1e300
     while (t < maxIteration) & ((t - t_best) <= maxLocalSearch) & (_diff_min > 5e-5):
         t = t + 1
-        inv_C = _fast_inv_mat_lapack(C_null + W)
+        inv_C = _fast_mat_inv_lapack(C_null + W)
         gt = inv_C_base - np.matmul(np.matmul(inv_C, C_samp), inv_C)
         gt = (gt + gt.T) / 2.0
         gt = np.nan_to_num(gt)
         np.fill_diagonal(gt, 0)
+
         mt = b1 * mt + (1.0 - b1) * gt
         vt = b2 * vt + (1.0 - b2) * np.power(gt, 2)
         mthat = mt / (1.0 - np.power(b1, t))
@@ -253,15 +355,48 @@ def _maximisation_step(C_samp, C_null, W_base, lam):
     return W
 
 
-def _fast_inv_mat_lapack(M):
+def _fast_mat_inv_lapack(Mat):
+    """
+    Compute the inverse of a positive semidefinite matrix.
 
-    zz, _ = linalg.lapack.dpotrf(M, False, False)
-    inv_M, info = linalg.lapack.dpotri(zz)
-    inv_M = np.triu(inv_M) + np.triu(inv_M, k=1).T
-    return inv_M
+    This function exploits the positive semidefiniteness to speed up
+    the computation of matrix inversion.
+        
+    Parameters
+    ----------
+    Mat : 2D numpy.ndarray, shape (N, N)
+        A positive semidefinite matrix.
+
+    Returns
+    -------
+    inv_Mat : 2D numpy.ndarray, shape (N, N)
+        Inverse of Mat.
+    """
+
+    zz, _ = linalg.lapack.dpotrf(Mat, False, False)
+    inv_Mat, info = linalg.lapack.dpotri(zz)
+    inv_Mat = np.triu(inv_Mat) + np.triu(inv_Mat, k=1).T
+    return inv_Mat
 
 
-def _loglikelihood(W, C_samp, C_null):
+def _calc_loglikelihood(W, C_samp, C_null):
+    """
+    Compute the log likelihood for a network. 
+    
+    Parameters
+    ----------
+    W : 2D numpy.ndarray, shape (N, N)
+        Weighted adjacency matrix of a network.
+    C_samp : 2D numpy.ndarray, shape (N, N)
+        Sample correlation matrix. 
+    C_null : 2D numpy.ndarray, shape (N, N)
+        Estimated null correlation matrix used for constructing the network.
+
+    Returns
+    -------
+    l : float
+        Log likelihood for the generated network. 
+    """
 
     Cov = W + C_null
     w, v = np.linalg.eig(Cov)
@@ -277,41 +412,112 @@ def _loglikelihood(W, C_samp, C_null):
     return np.real(l)
 
 
-def _calc_EBIC(W, C_samp, C_null, L, gamma, Knull):
+def _calc_penalized_loglikelihood(W, C_samp, C_null, Lambda):
+    """
+    Compute the penalized log likelihood for a network. 
+    
+    Parameters
+    ----------
+    W : 2D numpy.ndarray, shape (N, N)
+        Weighted adjacency matrix of a network.
+    C_samp : 2D numpy.ndarray, shape (N, N)
+        Sample correlation matrix. 
+    C_null : 2D numpy.ndarray, shape (N, N)
+        Estimated null correlation matrix used for constructing the network.
+    Lambda : 2D numpy.ndarray, shape (N, N)
+        Lambda[i,j] is the Lasso penalty for W[i,j]. 
+
+    Returns
+    -------
+    l : float
+        Log likelihood for the generated network. 
+    """
+    return (
+        _calc_loglikelihood(W, C_samp, C_null)
+        - np.sum(np.multiply(Lambda, np.abs(W))) / 4
+    )
+
+
+def _calc_EBIC(W, C_samp, C_null, L, beta, Knull):
+    """
+    Compute the extended Bayesian Information Criterion (BIC) for a network. 
+    
+    Parameters
+    ----------
+    W : 2D numpy.ndarray, shape (N, N)
+        Weighted adjacency matrix of a network.
+    C_samp : 2D numpy.ndarray, shape (N, N)
+        Sample correlation matrix.
+    C_null : 2D numpy.ndarray, shape (N, N)
+        Estimated null correlation matrix used for constructing the network.
+    L : int
+        Number of samples
+    beta : float
+        Parameter for the extended BIC. 
+    K_null: int
+        Number of parameters of the null correlation matrix.
+
+    Returns
+    -------
+    EBIC : float
+        The extended BIC value for the generated network.
+    """
 
     k = Knull + np.count_nonzero(W) / 2
     EBIC = (
         np.log(L) * k
-        - 2 * L * _loglikelihood(W, C_samp, C_null)
-        + 4 * gamma * k * np.log(W.shape[0])
+        - 2 * L * _calc_loglikelihood(W, C_samp, C_null)
+        + 4 * beta * k * np.log(W.shape[0])
     )
     return EBIC
 
 
-def _prox(y, lam):
+def _prox(x, lam):
+    """
+    Soft thresholding operator.
+    
+    Parameters
+    ----------
+    x : float
+        Variable.
+    lam : float
+        Lasso penalty.
 
-    return np.multiply(np.sign(y), np.maximum(np.abs(y) - lam, np.zeros(y.shape)))
+    Returns
+    -------
+    y : float
+        Thresholded value of x. 
+    """
+
+    return np.multiply(np.sign(x), np.maximum(np.abs(x) - lam, np.zeros(x.shape)))
 
 
-def _penalized_likelihood(W, C_samp, C_null, lam, Lambda):
-    return (
-        _loglikelihood(W, C_samp, C_null)
-        - lam * np.sum(np.multiply(Lambda, np.abs(W))) / 4
-    )
+def _generate_configuration_model(C_samp, tolerance=1e-5):
+    """
+    Compute the configuration model for correlation matrices
+    using the gradient descent algorithm.
+    
+    Parameters
+    ----------
+    C_samp : 2D numpy.ndarray, shape (N, N)
+        Sample correlation matrix.
+    tolerance: float
+        Tolerance in relative error
 
+    Returns
+    -------
+    C_con : 2D numpy.ndarray, shape (N, N)
+        The correlation matrix under the configuration model that
+        preserves the row sum (and column sum) of C_samp.
+    """
 
-def _generate_configuration_model(C, tolerance=1e-5, transform_to_corr_mat=True):
+    cov = np.asanyarray(C_samp)
+    std_ = np.sqrt(np.diag(cov))
+    _C_samp = cov / np.outer(std_, std_)
 
-    if transform_to_corr_mat == True:
-        cov = np.asanyarray(C)
-        std_ = np.sqrt(np.diag(cov))
-        _C = cov / np.outer(std_, std_)
-    else:
-        _C = C
-
-    N = _C.shape[0]
-    s = np.sum(_C, axis=1)
-    K = np.linalg.pinv(_C)
+    N = _C_samp.shape[0]
+    s = np.sum(_C_samp, axis=1)
+    K = np.linalg.pinv(_C_samp)
 
     theta = np.concatenate([np.diag(K), np.zeros(N)])
     mt = np.zeros(2 * N)
@@ -327,13 +533,13 @@ def _generate_configuration_model(C, tolerance=1e-5, transform_to_corr_mat=True)
         t = t + 1
 
         K_est = np.add.outer(theta[N : 2 * N], theta[N : 2 * N]) + np.diag(theta[0:N])
-        C_con = _fast_inv_mat_lapack(K_est)
+        C_con = _fast_mat_inv_lapack(K_est)
 
-        _diff = np.max(np.abs(np.sum(C_con, 1) - s) / s)
-        if _diff < tolerance:
+        error = np.max(np.abs(np.sum(C_con, 1) - s) / s)
+        if error < tolerance:
             break
 
-        dalpha = np.diag(C_con) - np.diag(_C)
+        dalpha = np.diag(C_con) - np.diag(_C_samp)
         dbeta = (2.0 / N) * (np.sum(C_con, axis=1) - s)
 
         gt = np.concatenate([dalpha, dbeta])
