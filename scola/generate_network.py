@@ -19,7 +19,7 @@ def generate_network(C_samp, L, null_model="all", disp=True):
     C_samp : 2D numpy.ndarray, shape (N, N)
         Sample correlation matrix. N is the number of nodes.
     L : int
-        Number of samples
+        Number of samples.
     null_model : str, default 'all'
         Null model to be used for constructing the network.
         One can use the white noise model 
@@ -88,13 +88,13 @@ def _golden_section_search(C_samp, L, null_model, beta, pbar, disp):
     C_samp : 2D numpy.ndarray, shape (N, N)
         Sample correlation matrix.
     L : int
-        Number of samples
+        Number of samples.
     null_model : str
         Name of the null model.
     beta : float
-        hyperparameter for the extended BIC.
-    pbar : tqdm
-        tqdm instance, which is used for computing and displaying 
+        Hyperparameter for the extended BIC.
+    pbar : tqdm instance
+        This instance is used for computing and displaying 
         the progress of computation.
     disp : bool, default True
         Set disp=True to display the progress of computation.
@@ -229,9 +229,9 @@ def _compute_null_correlation_matrix(C_samp, null_model):
     Returns
     -------
     C_null : 2D numpy.ndarray, shape (N, N)
-        Estimated null correlation matrix used for constructing the network.
+        Estimated null correlation matrix.
     K_null : int
-        Number of parameters for the null model. 
+        Number of parameters of the null model. 
     """
 
     C_null = []
@@ -258,7 +258,7 @@ def _compute_null_correlation_matrix(C_samp, null_model):
 
 def _MM_algorithm(C_samp, C_null, lam):
     """
-    Minorisation and maximisation algorithm. 
+    Minorisation-maximisation algorithm. 
         
     Parameters
     ----------
@@ -360,7 +360,7 @@ def _fast_mat_inv_lapack(Mat):
     Compute the inverse of a positive semidefinite matrix.
 
     This function exploits the positive semidefiniteness to speed up
-    the computation of matrix inversion.
+    the matrix inversion.
         
     Parameters
     ----------
@@ -390,7 +390,7 @@ def _calc_loglikelihood(W, C_samp, C_null):
     C_samp : 2D numpy.ndarray, shape (N, N)
         Sample correlation matrix. 
     C_null : 2D numpy.ndarray, shape (N, N)
-        Estimated null correlation matrix used for constructing the network.
+        Null correlation matrix used for constructing the network.
 
     Returns
     -------
@@ -423,14 +423,14 @@ def _calc_penalized_loglikelihood(W, C_samp, C_null, Lambda):
     C_samp : 2D numpy.ndarray, shape (N, N)
         Sample correlation matrix. 
     C_null : 2D numpy.ndarray, shape (N, N)
-        Estimated null correlation matrix used for constructing the network.
+        Null correlation matrix used for constructing the network.
     Lambda : 2D numpy.ndarray, shape (N, N)
         Lambda[i,j] is the Lasso penalty for W[i,j]. 
 
     Returns
     -------
     l : float
-        Log likelihood for the generated network. 
+        Penalized log likelihood for the generated network. 
     """
     return (
         _calc_loglikelihood(W, C_samp, C_null)
@@ -449,9 +449,9 @@ def _calc_EBIC(W, C_samp, C_null, L, beta, Knull):
     C_samp : 2D numpy.ndarray, shape (N, N)
         Sample correlation matrix.
     C_null : 2D numpy.ndarray, shape (N, N)
-        Estimated null correlation matrix used for constructing the network.
+        Null correlation matrix used for constructing the network.
     L : int
-        Number of samples
+        Number of samples.
     beta : float
         Parameter for the extended BIC. 
     K_null: int
@@ -502,13 +502,13 @@ def _generate_configuration_model(C_samp, tolerance=1e-5):
     C_samp : 2D numpy.ndarray, shape (N, N)
         Sample correlation matrix.
     tolerance: float
-        Tolerance in relative error
+        Tolerance in relative error.
 
     Returns
     -------
     C_con : 2D numpy.ndarray, shape (N, N)
         The correlation matrix under the configuration model that
-        preserves the row sum (and column sum) of C_samp.
+        preserves the row sum (and column sum) of C_samp as expectation.
     """
 
     cov = np.asanyarray(C_samp)
