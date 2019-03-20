@@ -23,6 +23,6 @@ def test_2():
     L = int(X.shape[0])
     N = int(X.shape[1])
     C_samp = np.corrcoef(X.T)
-    Crand = scola._generate_configuration_model(C_samp)
+    Crand = scola._estimate_configuration_model(C_samp)
     relative_error = np.max(np.abs(np.sum(C_samp - Crand, 1)) / np.sum(C_samp, 1))
     assert relative_error <= 1e-5

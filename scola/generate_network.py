@@ -241,7 +241,7 @@ def _compute_null_correlation_matrix(C_samp, null_model):
         np.fill_diagonal(C_null, 1)
         K_null = 1
     elif null_model == "config":
-        C_null = _generate_configuration_model(np.array(C_samp), 1e-4, True)
+        C_null = _estimate_configuration_model(np.array(C_samp), 1e-4)
         std_ = np.sqrt(np.diag(C_null))
         C_null = C_null / np.outer(std_, std_)
         K_null = C_samp.shape[0]
@@ -489,7 +489,7 @@ def _prox(x, lam):
     return np.multiply(np.sign(x), np.maximum(np.abs(x) - lam, np.zeros(x.shape)))
 
 
-def _generate_configuration_model(C_samp, tolerance=1e-5):
+def _estimate_configuration_model(C_samp, tolerance=1e-5):
     """
     Compute the configuration model for correlation matrices
     using the gradient descent algorithm.
