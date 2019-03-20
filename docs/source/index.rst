@@ -39,7 +39,7 @@ Getting Started
 
 We demonstrate how to generate a network with ``scola``.
 
-An example data, `sample.txt <https://raw.githubusercontent.com/skojaku/scola/master/data/sample.txt>`_, are available on  `GitHub <https://github.com/skojaku/scola>`_, which is composed of L=300 rows and N=25 columns (space separated), where L is the number of samples and N is the number of variables (i.e., nodes). 
+An example data, `sample.txt <https://raw.githubusercontent.com/skojaku/scola/master/data/sample.txt>`_, is available on  `GitHub <https://github.com/skojaku/scola>`_, which is composed of L=300 rows and N=25 columns (space separated), where L is the number of samples and N is the number of variables (i.e., nodes). 
 The following code loads the data. 
 
 .. code-block:: python
@@ -57,7 +57,7 @@ Then, compute the sample correlation matrix by
 
    C_samp = np.corrcoef(X.T) # NxN correlation matrix
 
-Finally, provide ``C_samp`` and ``L`` to estimate network and associated null model: 
+Finally, provide ``C_samp`` and ``L`` to estimate the network and associated null model: 
 
 .. code-block:: python
 
@@ -65,7 +65,7 @@ Finally, provide ``C_samp`` and ``L`` to estimate network and associated null mo
    W, EBIC, C_null, selected_model = scola.generate_network(C_samp, L)
 
 ``W`` is the weighted adjacency matrix of the generated network, where 
-W[i][j] indicates the weight of the edge between nodes i and j.
+W[i,j] indicates the weight of the edge between nodes i and j.
 See `API <#module-scola.generate_network>`_ for other return values.
 
 API

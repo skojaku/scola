@@ -24,11 +24,9 @@ def generate_network(C_samp, L, null_model="all", disp=True):
         Null model to be used for constructing the network.
         One can use the white noise model 
         (null_model='white-noise'), the Hirschberger-Qu-Steuer 
-        model (null_model='hqs') or the configuration model 
-        (null_model='config'). If null_model='all', then the 
-        best one among the three null models in terms of the 
-        extended Bayesian Information Criterion (BIC) is 
-        selected.
+        model (null_model='hqs') or the configuration model (null_model='config'). 
+        If null_model='all', then the best one among the three null models in 
+        terms of the extended Bayesian Information Criterion (BIC) is selected.
     disp : bool, default True
         Set disp=True to display the progress of computation.
         Otherwise, set disp=False.
