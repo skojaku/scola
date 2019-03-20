@@ -7,9 +7,9 @@ A Python package for the Scola algorithm
 Introduction
 ============
 
-The Scola is an algorithm that takes a correlation matrix as input and outputs a network of the variables. 
-In the generated network, edges between nodes indicate correlations that are not accounted for by some trivial properties (e.g., noise and global trends affecting all variables).
-Please cite the paper if you use this algorithm: 
+The Scola is an algorithm that takes a correlation matrix as input and outputs a network. 
+In the generated network, edges between nodes indicate correlations that are not accounted for by some expected properties (e.g., noise independent for different variables or a global trend).
+Please cite the paper if you use this package: 
 
 
 **(referenece will be here)**.
@@ -39,8 +39,8 @@ Getting Started
 
 We demonstrate how to generate a network with ``scola``.
 
-Our example data is located in `GitHub <https://raw.githubusercontent.com/skojaku/scola/master/data/sample.txt>`_, which is composed of L=300 rows and N=25 columns (space separated), where L is the number of samples and N is the number of variables (i.e., nodes). 
-The code below loads the data. 
+An example data, `sample.txt <https://raw.githubusercontent.com/skojaku/scola/master/data/sample.txt>`_, are available on  `GitHub <https://github.com/skojaku/scola>`_, which is composed of L=300 rows and N=25 columns (space separated), where L is the number of samples and N is the number of variables (i.e., nodes). 
+The following code loads the data. 
 
 .. code-block:: python
 
@@ -57,7 +57,7 @@ Then, compute the sample correlation matrix by
 
    C_samp = np.corrcoef(X.T) # NxN correlation matrix
 
-Finally, provide ``C_samp`` and ``L`` to the Scola as follows: 
+Finally, provide ``C_samp`` and ``L`` to estimate network and associated null model: 
 
 .. code-block:: python
 
@@ -76,7 +76,7 @@ API
 
 Dependencies
 ============
-``scola`` has dependencies with the following packages:
+``scola`` has dependencies on the following packages:
 
 * NumPy
 * SciPy

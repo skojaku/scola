@@ -45,9 +45,6 @@ def generate_network(C_samp, L, null_model="all", disp=True):
         The extended BIC value for the generated network.
     """
 
-    if type(C_samp) is np.matrix:
-        C_samp = np.array(C_samp)
-
     if type(C_samp) is not np.ndarray:
         raise TypeError("C_samp must be a numpy.ndarray")
 
@@ -70,7 +67,7 @@ def generate_network(C_samp, L, null_model="all", disp=True):
     res = []
     for null_model in _null_models:
         W, C_null, EBIC_min = _golden_section_search(
-            C_samp, L, null_model, beta=0.5, pbar, disp=disp
+            C_samp, L, null_model, 0.5, pbar, disp
         )
         res += [[W, C_null, null_model, EBIC_min]]
     idx = np.argmin(np.array([r[3] for r in res]))
