@@ -9,13 +9,14 @@ Introduction
 
 The Scola is an algorithm that takes a correlation matrix as input and outputs a network. 
 In the generated network, edges between nodes indicate correlations that are not accounted for by some expected properties (e.g., noise independent for different variables or a global trend).
+
 Please cite the paper if you use this package: 
 
 
 **(referenece will be here)**.
 
 Installing the Scola
-================
+====================
 ``scola`` supports both Python 2.x and 3.x and can be installed on Ubuntu, CentOS, macOS and Windows.
 We recommend using **pip** for installation. 
 

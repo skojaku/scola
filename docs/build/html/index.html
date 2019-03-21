@@ -13,8 +13,6 @@
 
   
   
-  
-  
 
   
 
@@ -24,19 +22,26 @@
 
   
 
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" /> 
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="Scola 0.0.0 documentation" href="#"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav">
+<body class="wy-body-for-nav" role="document">
 
-   
   <div class="wy-grid-for-nav">
 
     
@@ -73,14 +78,11 @@
           
             
             
-              
-            
-            
-              <p class="caption"><span class="caption-text">Table of contents:</span></p>
+                <p class="caption"><span class="caption-text">Table of contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">A Python package for the Scola algorithm</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#installing-scola">Installing Scola</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#installing-the-scola">Installing the Scola</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#install-with-pip">Install with pip</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#install-from-source">Install from source</a></li>
 </ul>
@@ -104,54 +106,34 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="#">Scola</a>
-        
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="#">Scola</a>
       </nav>
 
 
+      
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
           
 
-
-
-
-
-
-
-
-
-
-
-
+ 
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
-
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="#">Docs</a> &raquo;</li>
-        
-      <li>A Python package for the Scola algorithm</li>
-    
-    
+    <li><a href="#">Docs</a> &raquo;</li>
+      
+    <li>A Python package for the Scola algorithm</li>
       <li class="wy-breadcrumbs-aside">
         
-            
+          
             <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -162,18 +144,18 @@
 <img alt="https://travis-ci.org/skojaku/scola.svg?branch=master" src="https://travis-ci.org/skojaku/scola.svg?branch=master" />
 <div class="section" id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
-<p>The Scola is an algorithm that takes a correlation matrix as input and outputs a network of the variables.
-In the generated network, edges between nodes indicate correlations that are not accounted for by some trivial properties (e.g., noise and global trends affecting all variables).
-The details are described in our paper:</p>
+<p>The Scola is an algorithm that takes a correlation matrix as input and outputs a network.
+In the generated network, edges between nodes indicate correlations that are not accounted for by some expected properties (e.g., noise independent for different variables or a global trend).</p>
+<p>Please cite the paper if you use this package:</p>
 <p><strong>(referenece will be here)</strong>.</p>
 </div>
-<div class="section" id="installing-scola">
-<h2>Installing Scola<a class="headerlink" href="#installing-scola" title="Permalink to this headline">¶</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">scola</span></code> is a pure Python package that supports both Python 2.x and 3.x.
-We test <code class="docutils literal notranslate"><span class="pre">scola</span></code> on Ubuntu, CentOS, macOS and Windows.</p>
+<div class="section" id="installing-the-scola">
+<h2>Installing the Scola<a class="headerlink" href="#installing-the-scola" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">scola</span></code> supports both Python 2.x and 3.x and can be installed on Ubuntu, CentOS, macOS and Windows.
+We recommend using <strong>pip</strong> for installation.</p>
 <div class="section" id="install-with-pip">
 <h3>Install with pip<a class="headerlink" href="#install-with-pip" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install scola
+<div class="highlight-bash notranslate"><div class="highlight"><pre>pip install scola
 </pre></div>
 </div>
 </div>
@@ -181,7 +163,7 @@ We test <code class="docutils literal notranslate"><span class="pre">scola</span
 <h3>Install from source<a class="headerlink" href="#install-from-source" title="Permalink to this headline">¶</a></h3>
 <p>Download <a class="reference external" href="https://github.com/skojaku/scola">the source file</a> from GitHub.
 Then, under /scola directory, type</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python setup.py install
+<div class="highlight-bash notranslate"><div class="highlight"><pre>python setup.py install
 </pre></div>
 </div>
 </div>
@@ -189,9 +171,9 @@ Then, under /scola directory, type</p>
 <div class="section" id="getting-started">
 <h2>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
 <p>We demonstrate how to generate a network with <code class="docutils literal notranslate"><span class="pre">scola</span></code>.</p>
-<p>Our example data is located in <a class="reference external" href="https://raw.githubusercontent.com/skojaku/scola/master/data/sample.txt">GitHub</a>, which is composed of L=300 rows and N=25 columns (space separated), where L is the number of samples and N is the number of variables (i.e., nodes).
-The code below loads the data.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<p>An example data, <a class="reference external" href="https://raw.githubusercontent.com/skojaku/scola/master/data/sample.txt">sample.txt</a>, is available on  <a class="reference external" href="https://github.com/skojaku/scola">GitHub</a>, which is composed of L=300 rows and N=25 columns (space separated), where L is the number of samples and N is the number of variables (i.e., nodes).
+The following code loads the data.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
 
 <span class="n">X</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;https://raw.githubusercontent.com/skojaku/scola/master/data/sample.txt&quot;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
@@ -200,16 +182,16 @@ The code below loads the data.</p>
 </pre></div>
 </div>
 <p>Then, compute the sample correlation matrix by</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">C_samp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="c1"># NxN correlation matrix</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span class="n">C_samp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="c1"># NxN correlation matrix</span>
 </pre></div>
 </div>
-<p>Finally, provide <code class="docutils literal notranslate"><span class="pre">C_samp</span></code> and <code class="docutils literal notranslate"><span class="pre">L</span></code> to the Scola as follows.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">scola</span>
+<p>Finally, provide <code class="docutils literal notranslate"><span class="pre">C_samp</span></code> and <code class="docutils literal notranslate"><span class="pre">L</span></code> to estimate the network and associated null model:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">scola</span>
 <span class="n">W</span><span class="p">,</span> <span class="n">EBIC</span><span class="p">,</span> <span class="n">C_null</span><span class="p">,</span> <span class="n">selected_model</span> <span class="o">=</span> <span class="n">scola</span><span class="o">.</span><span class="n">generate_network</span><span class="p">(</span><span class="n">C_samp</span><span class="p">,</span> <span class="n">L</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">W</span></code> is the weighted adjacency matrix of the generated network, where
-W[i][j] indicates the weight of the edge betwee nodes i and j.
+W[i,j] indicates the weight of the edge between nodes i and j.
 See <a class="reference external" href="#module-scola.generate_network">API</a> for other return values.</p>
 </div>
 <div class="section" id="id1">
@@ -224,24 +206,24 @@ using the Scola algorithm.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>C_samp</strong> (<em>2D numpy.ndarray</em><em>, </em><em>shape</em><em> (</em><em>N</em><em>, </em><em>N</em><em>)</em>) – Sample correlation matrix. N is the number of nodes.</li>
-<li><strong>L</strong> (<em>int</em>) – Number of samples</li>
-<li><strong>null_model</strong> (<em>str</em><em>, </em><em>default 'all'</em>) – Name of the null model to be used for constructing the network.
-Available null models are
-the white noise model (null_model=’white-noise’),
-the Hirschberger-Qu-Steuer model (null_model=’hqs’)
-and the configuration model (null_model=’config’).
-If null_model=’all’, then the Scola selects the best one among the three null models in terms of the extended BIC.</li>
-<li><strong>disp</strong> (<em>bool</em><em>, </em><em>default True</em>) – Set disp=True to disply the progress.
-Otherwise set disp=False.</li>
+<li><strong>C_samp</strong> (<em>2D numpy.ndarray</em><em>, </em><em>shape</em><em> (</em><em>N</em><em>, </em><em>N</em><em>)</em>) – Sample correlation matrix. <em>N</em> is the number of nodes.</li>
+<li><strong>L</strong> (<em>int</em>) – Number of samples.</li>
+<li><strong>null_model</strong> (<em>str</em><em>, </em><em>default 'all'</em>) – Null model to be used for constructing the network.
+One can use the white noise model
+(null_model=’white-noise’), the Hirschberger-Qi-Steuer
+model (null_model=’hqs’) or the configuration model (null_model=’config’).
+If null_model=’all’, then the best one among the three null models in
+terms of the extended Bayesian information criterion (BIC) is selected.</li>
+<li><strong>disp</strong> (<em>bool</em><em>, </em><em>default True</em>) – Set disp=True to display the progress of computation.
+Otherwise, set disp=False.</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><ul class="simple">
 <li><strong>W</strong> (<em>2D numpy.ndarray, shape (N, N)</em>) – Weighted adjacency matrix of the generated network.</li>
-<li><strong>C_null</strong> (<em>2D numpy.ndarray, shape (N, N)</em>) – Null correlation matrix used to construct the network.</li>
-<li><strong>null_model</strong> (<em>str</em>) – Name of the null model.</li>
-<li><strong>EBIC</strong> (<em>float</em>) – The extended BIC for the generated network.</li>
+<li><strong>C_null</strong> (<em>2D numpy.ndarray, shape (N, N)</em>) – Estimated null correlation matrix used for constructing the network.</li>
+<li><strong>selected_null_model</strong> (<em>str</em>) – The null model selected by the Scola.</li>
+<li><strong>EBIC</strong> (<em>float</em>) – The extended BIC value for the generated network.</li>
 </ul>
 </p>
 </td>
@@ -253,7 +235,7 @@ Otherwise set disp=False.</li>
 </div>
 <div class="section" id="dependencies">
 <h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">scola</span></code> has dependencies with the following packages:</p>
+<p><code class="docutils literal notranslate"><span class="pre">scola</span></code> has dependencies on the following packages:</p>
 <ul class="simple">
 <li>NumPy</li>
 <li>SciPy</li>
@@ -270,7 +252,6 @@ Otherwise set disp=False.</li>
 
 
            </div>
-           
           </div>
           <footer>
   
@@ -283,7 +264,7 @@ Otherwise set disp=False.</li>
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -302,26 +283,31 @@ Otherwise set disp=False.</li>
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
             VERSION:'0.0.0',
-            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
+            HAS_SOURCE:  true
         };
     </script>
       <script type="text/javascript" src="_static/jquery.js"></script>
       <script type="text/javascript" src="_static/underscore.js"></script>
       <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="_static/language_data.js"></script>
 
   
 
-  <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
 
+  
+  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
+          SphinxRtdTheme.StickyNav.enable();
       });
-  </script> 
+  </script>
+   
 
 </body>
 </html>

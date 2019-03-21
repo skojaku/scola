@@ -17,16 +17,16 @@ def generate_network(C_samp, L, null_model="all", disp=True):
     Parameters
     ----------
     C_samp : 2D numpy.ndarray, shape (N, N)
-        Sample correlation matrix. N is the number of nodes.
+        Sample correlation matrix. *N* is the number of nodes.
     L : int
         Number of samples.
     null_model : str, default 'all'
         Null model to be used for constructing the network.
         One can use the white noise model 
-        (null_model='white-noise'), the Hirschberger-Qu-Steuer 
+        (null_model='white-noise'), the Hirschberger-Qi-Steuer 
         model (null_model='hqs') or the configuration model (null_model='config'). 
         If null_model='all', then the best one among the three null models in 
-        terms of the extended Bayesian Information Criterion (BIC) is selected.
+        terms of the extended Bayesian information criterion (BIC) is selected.
     disp : bool, default True
         Set disp=True to display the progress of computation.
         Otherwise, set disp=False.
@@ -75,8 +75,8 @@ def generate_network(C_samp, L, null_model="all", disp=True):
 
 def _golden_section_search(C_samp, L, null_model, beta, pbar, disp):
     """
-    Generate a network from a correlation matrix with 
-    a golden-section search method
+    Find the Lasso penalty that minimises the extended BIC using
+    the golden-section search method.
 
     Parameters
     ----------
@@ -108,7 +108,7 @@ def _golden_section_search(C_samp, L, null_model, beta, pbar, disp):
 
     C_null, K_null = _compute_null_correlation_matrix(C_samp, null_model)
 
-    lam_upper = _calc_upper_lam(C_samp, C_null)
+    lam_upper = _comp_upper_lam(C_samp, C_null)
     lam_lower = 0.0
     invphi = (np.sqrt(5) - 1.0) / 2.0
     invphi2 = (3.0 - np.sqrt(5.0)) / 2.0
@@ -136,10 +136,10 @@ def _golden_section_search(C_samp, L, null_model, beta, pbar, disp):
             W_2 = _MM_algorithm(C_samp, C_null, lam_2)
             pbar.update()
 
-            EBIC_l = _calc_EBIC(W_l, C_samp, C_null, L, beta, K_null)
-            EBIC_u = _calc_EBIC(W_u, C_samp, C_null, L, beta, K_null)
-            EBIC_1 = _calc_EBIC(W_1, C_samp, C_null, L, beta, K_null)
-            EBIC_2 = _calc_EBIC(W_2, C_samp, C_null, L, beta, K_null)
+            EBIC_l = _comp_EBIC(W_l, C_samp, C_null, L, beta, K_null)
+            EBIC_u = _comp_EBIC(W_u, C_samp, C_null, L, beta, K_null)
+            EBIC_1 = _comp_EBIC(W_1, C_samp, C_null, L, beta, K_null)
+            EBIC_2 = _comp_EBIC(W_2, C_samp, C_null, L, beta, K_null)
 
             mid = np.argmin([EBIC_l, EBIC_u, EBIC_1, EBIC_2])
             W_best = [W_l, W_u, W_1, W_2][mid]
@@ -157,7 +157,7 @@ def _golden_section_search(C_samp, L, null_model, beta, pbar, disp):
 
             W_1 = _MM_algorithm(C_samp, C_null, lam_1)
             pbar.update()
-            EBIC_1 = _calc_EBIC(W_1, C_samp, C_null, L, beta, K_null)
+            EBIC_1 = _comp_EBIC(W_1, C_samp, C_null, L, beta, K_null)
 
             if EBIC_1 < EBIC_min:
                 EBIC_min = EBIC_1
@@ -174,7 +174,7 @@ def _golden_section_search(C_samp, L, null_model, beta, pbar, disp):
 
             W_2 = _MM_algorithm(C_samp, C_null, lam_2)
             pbar.update()
-            EBIC_2 = _calc_EBIC(W_2, C_samp, C_null, L, beta, K_null)
+            EBIC_2 = _comp_EBIC(W_2, C_samp, C_null, L, beta, K_null)
 
             if EBIC_2 < EBIC_min:
                 EBIC_min = EBIC_2
@@ -186,7 +186,7 @@ def _golden_section_search(C_samp, L, null_model, beta, pbar, disp):
     return W_best, C_null, EBIC
 
 
-def _calc_upper_lam(C_samp, C_null):
+def _comp_upper_lam(C_samp, C_null):
     """
     Compute the upper bound of the Lasso penalty.
 
@@ -277,7 +277,7 @@ def _MM_algorithm(C_samp, C_null, lam):
     score_prev = -1e300
     while True:
         _W = _maximisation_step(C_samp, C_null, W, lam)
-        score = _calc_penalized_loglikelihood(_W, C_samp, C_null, lam * Lambda)
+        score = _comp_penalized_loglikelihood(_W, C_samp, C_null, lam * Lambda)
         if score <= score_prev:
             break
         W = _W
@@ -374,7 +374,7 @@ def _fast_mat_inv_lapack(Mat):
     return inv_Mat
 
 
-def _calc_loglikelihood(W, C_samp, C_null):
+def _comp_loglikelihood(W, C_samp, C_null):
     """
     Compute the log likelihood for a network. 
     
@@ -407,7 +407,7 @@ def _calc_loglikelihood(W, C_samp, C_null):
     return np.real(l)
 
 
-def _calc_penalized_loglikelihood(W, C_samp, C_null, Lambda):
+def _comp_penalized_loglikelihood(W, C_samp, C_null, Lambda):
     """
     Compute the penalized log likelihood for a network. 
     
@@ -428,12 +428,12 @@ def _calc_penalized_loglikelihood(W, C_samp, C_null, Lambda):
         Penalized log likelihood for the generated network. 
     """
     return (
-        _calc_loglikelihood(W, C_samp, C_null)
+        _comp_loglikelihood(W, C_samp, C_null)
         - np.sum(np.multiply(Lambda, np.abs(W))) / 4
     )
 
 
-def _calc_EBIC(W, C_samp, C_null, L, beta, Knull):
+def _comp_EBIC(W, C_samp, C_null, L, beta, Knull):
     """
     Compute the extended Bayesian Information Criterion (BIC) for a network. 
     
@@ -461,7 +461,7 @@ def _calc_EBIC(W, C_samp, C_null, L, beta, Knull):
     k = Knull + np.count_nonzero(W) / 2
     EBIC = (
         np.log(L) * k
-        - 2 * L * _calc_loglikelihood(W, C_samp, C_null)
+        - 2 * L * _comp_loglikelihood(W, C_samp, C_null)
         + 4 * beta * k * np.log(W.shape[0])
     )
     return EBIC

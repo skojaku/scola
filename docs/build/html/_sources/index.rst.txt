@@ -7,17 +7,18 @@ A Python package for the Scola algorithm
 Introduction
 ============
 
-The Scola is an algorithm that takes a correlation matrix as input and outputs a network of the variables. 
-In the generated network, edges between nodes indicate correlations that are not accounted for by some trivial properties (e.g., noise and global trends affecting all variables).
-The details are described in our paper: 
+The Scola is an algorithm that takes a correlation matrix as input and outputs a network. 
+In the generated network, edges between nodes indicate correlations that are not accounted for by some expected properties (e.g., noise independent for different variables or a global trend).
+
+Please cite the paper if you use this package: 
 
 
 **(referenece will be here)**.
 
-Installing Scola
-================
-``scola`` is a pure Python package that supports both Python 2.x and 3.x.
-We test ``scola`` on Ubuntu, CentOS, macOS and Windows.
+Installing the Scola
+====================
+``scola`` supports both Python 2.x and 3.x and can be installed on Ubuntu, CentOS, macOS and Windows.
+We recommend using **pip** for installation. 
 
 Install with pip
 ----------------
@@ -39,8 +40,8 @@ Getting Started
 
 We demonstrate how to generate a network with ``scola``.
 
-Our example data is located in `GitHub <https://raw.githubusercontent.com/skojaku/scola/master/data/sample.txt>`_, which is composed of L=300 rows and N=25 columns (space separated), where L is the number of samples and N is the number of variables (i.e., nodes). 
-The code below loads the data. 
+An example data, `sample.txt <https://raw.githubusercontent.com/skojaku/scola/master/data/sample.txt>`_, is available on  `GitHub <https://github.com/skojaku/scola>`_, which is composed of L=300 rows and N=25 columns (space separated), where L is the number of samples and N is the number of variables (i.e., nodes). 
+The following code loads the data. 
 
 .. code-block:: python
 
@@ -57,7 +58,7 @@ Then, compute the sample correlation matrix by
 
    C_samp = np.corrcoef(X.T) # NxN correlation matrix
 
-Finally, provide ``C_samp`` and ``L`` to the Scola as follows. 
+Finally, provide ``C_samp`` and ``L`` to estimate the network and associated null model: 
 
 .. code-block:: python
 
@@ -65,7 +66,7 @@ Finally, provide ``C_samp`` and ``L`` to the Scola as follows.
    W, EBIC, C_null, selected_model = scola.generate_network(C_samp, L)
 
 ``W`` is the weighted adjacency matrix of the generated network, where 
-W[i][j] indicates the weight of the edge betwee nodes i and j.
+W[i,j] indicates the weight of the edge between nodes i and j.
 See `API <#module-scola.generate_network>`_ for other return values.
 
 API
@@ -76,7 +77,7 @@ API
 
 Dependencies
 ============
-``scola`` has dependencies with the following packages:
+``scola`` has dependencies on the following packages:
 
 * NumPy
 * SciPy
