@@ -272,7 +272,7 @@ def _MM_algorithm(C_samp, C_null, lam):
 
     N = C_samp.shape[0]
     Lambda = 1.0 / (np.power(np.abs(C_samp - C_null), 2) + 1e-20)
-    W = _prox(C_samp - C_null, lam * Lambda)
+    W = np.zeros_like(C_samp)
 
     score_prev = -1e300
     while True:
