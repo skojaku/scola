@@ -63,7 +63,7 @@ Finally, provide ``C_samp`` and ``L`` to estimate the network and associated nul
 .. code-block:: python
 
    import scola
-   W, EBIC, C_null, selected_model = scola.generate_network(C_samp, L)
+   W, C_null, selected_null_model, EBIC = scola.generate_network(C_samp, L)
 
 ``W`` is the weighted adjacency matrix of the generated network, where 
 W[i,j] indicates the weight of the edge between nodes i and j.

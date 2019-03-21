@@ -187,7 +187,7 @@ The following code loads the data.</p>
 </div>
 <p>Finally, provide <code class="docutils literal notranslate"><span class="pre">C_samp</span></code> and <code class="docutils literal notranslate"><span class="pre">L</span></code> to estimate the network and associated null model:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">scola</span>
-<span class="n">W</span><span class="p">,</span> <span class="n">EBIC</span><span class="p">,</span> <span class="n">C_null</span><span class="p">,</span> <span class="n">selected_model</span> <span class="o">=</span> <span class="n">scola</span><span class="o">.</span><span class="n">generate_network</span><span class="p">(</span><span class="n">C_samp</span><span class="p">,</span> <span class="n">L</span><span class="p">)</span>
+<span class="n">W</span><span class="p">,</span> <span class="n">C_null</span><span class="p">,</span> <span class="n">selected_null_model</span><span class="p">,</span> <span class="n">EBIC</span> <span class="o">=</span> <span class="n">scola</span><span class="o">.</span><span class="n">generate_network</span><span class="p">(</span><span class="n">C_samp</span><span class="p">,</span> <span class="n">L</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">W</span></code> is the weighted adjacency matrix of the generated network, where
