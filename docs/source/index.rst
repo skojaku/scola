@@ -12,7 +12,7 @@ In the generated network, edges between nodes indicate correlations that are not
 
 Please cite the paper if you use this package: 
 
-`Sadamori Kojaku and Naoki Masuda Preprint. arXiv:1903.10805 <https://arxiv.org/abs/1903.10805>`_.
+`Sadamori Kojaku and Naoki Masuda. Preprint arXiv:1903.10805 <https://arxiv.org/abs/1903.10805>`_.
 
 Installing the Scola
 ====================
