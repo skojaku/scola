@@ -34,7 +34,7 @@ class iScola:
             Weighted adjacency matrix of the generated network.
         """
 
-        iC_samp = np.linalg.pinv(C_samp)
+        iC_samp = self._ridge(C_samp, 0.0001)
         iC_null = np.linalg.pinv(C_null)
 
         N = C_samp.shape[0]
