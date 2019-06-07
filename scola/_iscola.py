@@ -74,6 +74,13 @@ class iScola:
 
         return W
 
+    def _ridge(self, cov, rho):
+
+        w,v = np.linalg.eigh(cov)
+        lambda_hat = 2/(w+np.sqrt(w**2+8*rho))
+        precision = np.matmul(np.matmul(v, np.diag(lambda_hat)), v.T)
+        return precision
+
     def comp_upper_lam(self, C_samp, C_null):
         """
         Compute the upper bound of the Lasso penalty.
@@ -90,11 +97,12 @@ class iScola:
         lam_upper : float
             Upper bound of the Lasso penalty. 
         """
-    
-        abC_samp = np.abs(C_samp - C_null)
-        iCov = _fast_mat_inv_lapack(C_null)
-        D = iCov - np.matmul(np.matmul(iCov, C_samp), iCov)
-        lam_upper = np.max(np.multiply(np.abs(D), np.power(abC_samp, 2)))
+        iC_samp = self._ridge(C_samp, 0.0001)
+        iC_null = np.linalg.pinv(C_null)
+
+        absCov = np.abs(iC_samp - iC_null)
+        D = iC_null - iC_samp
+        lam_upper = np.max(np.triu(np.multiply(np.abs(D), np.power(absCov, 2)),1))
         return lam_upper
 
     def _comp_penalized_loglikelihood(self, W, C_samp, C_null, Lambda):
