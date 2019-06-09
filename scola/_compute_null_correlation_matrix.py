@@ -90,6 +90,7 @@ def _estimate_configuration_model(C_samp, tolerance=1e-5):
         C_con = _fast_mat_inv_lapack(K_est)
 
         error = np.max(np.abs(np.sum(C_con, 1) - s) / s)
+	
         if error < tolerance:
             break
 

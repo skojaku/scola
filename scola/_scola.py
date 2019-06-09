@@ -12,9 +12,12 @@ from ._common import _comp_EBIC
 from ._common import _comp_loglikelihood 
 
 class Scola:
+
     def __init__(self):
         pass
 
+    input_matrix_type = "cov"
+    
     def detect(self, C_samp, C_null, lam):
         """
 	    Minorisation-maximisation algorithm. 
@@ -93,7 +96,7 @@ class Scola:
 	        Penalized log likelihood for the generated network. 
 	    """
         return (
-            _comp_loglikelihood(W, C_samp, C_null)
+            _comp_loglikelihood(W, C_samp, C_null, "cov")
             - np.sum(np.multiply(Lambda, np.abs(W))) / 4
         )
 

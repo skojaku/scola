@@ -73,6 +73,13 @@ def generate_network(C_samp, L, null_model="all", disp=True, input_matrix="all")
     else:
         mat_types = [input_matrix]
 
+
+
+    # Remove inactive nodes
+    active_nodes = np.where(np.abs(np.sum(C_samp, axis=1))>0)[0]
+    R = sparse.csc_matrix( (np.ones(len(active_nodes)), (list(range(len(active_nodes))), active_nodes) ), shape=(len(active_nodes), C_samp.shape[0]) ).toarray()
+    C_samp = np.matmul(np.matmul(R, C_samp),R.T)
+	
     # pbar is used for computing and displaying the progress of computation.
     pbar = tqdm.tqdm(disable=(disp is False), total=(13 * len(_null_models) * len(mat_types)))
     res = []
@@ -81,21 +88,31 @@ def generate_network(C_samp, L, null_model="all", disp=True, input_matrix="all")
         # Estimate null correlation matrix
         C_null, K_null = _compute_null_correlation_matrix(C_samp, null_model)
 
+        iC_null = np.linalg.pinv(C_null)
+
         for mat_type in mat_types:
     
             if mat_type == "corr":
                 estimator = Scola()
+                W, C_null, EBIC_min = _golden_section_search(
+                    C_samp, L, C_null, K_null, estimator, 0.5, pbar, disp
+                )
+                W = np.matmul(np.matmul(R.T, W), R)
+                
+                res += [{"W":W, "C_null":C_null, "null_model":null_model, "EBIC_min":EBIC_min, "mat_type":mat_type}]
+
             elif mat_type == "pres":
                 estimator = iScola()
-    
-            W, C_null, EBIC_min = _golden_section_search(
-                C_samp, L, C_null, K_null, estimator, 0.5, pbar, disp
-            )
-            res += [{"W":W, "C_null":C_null, "null_model":null_model, "EBIC_min":EBIC_min, "mat_type":mat_type}]
+                W, C_null, EBIC_min = _golden_section_search(
+                    C_samp, L, iC_null, K_null, estimator, 0.5, pbar, disp
+                )
+                W = np.matmul(np.matmul(R.T, W), R)
+                
+                res += [{"W":W, "C_null":iC_null, "null_model":null_model, "EBIC_min":EBIC_min, "mat_type":mat_type}]
+            #print(res[len(res)-1]["null_model"], res[len(res)-1]["EBIC_min"], res[len(res)-1]["mat_type"])
+	    
     pbar.close()
 
     idx = np.argmin(np.array([r["EBIC_min"] for r in res]))
         
     return res[idx], res
-
-

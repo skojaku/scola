@@ -15,7 +15,10 @@ class iScola:
     def __init__(self):
         pass
 
-    def detect(self, C_samp, C_null, lam):
+    input_matrix_type = "pres"
+
+    def detect(self, C_samp, iC_null, lam):
+
         """
         Minorisation-maximisation algorithm. 
             
@@ -23,8 +26,8 @@ class iScola:
         ----------
         C_samp : 2D numpy.ndarray, shape (N, N)
             Sample correlation matrix. 
-        C_null : 2D numpy.ndarray, shape (N, N)
-            Null correlation matrix.
+        iC_null : 2D numpy.ndarray, shape (N, N)
+            Null precision matrix.
         lam : float
             Lasso penalty.
     
@@ -33,9 +36,11 @@ class iScola:
         W : 2D numpy.ndarray, shape (N, N)
             Weighted adjacency matrix of the generated network.
         """
+	
 
         iC_samp = self._ridge(C_samp, 0.0001)
-        iC_null = np.linalg.pinv(C_null)
+        #iC_samp = np.linalg.pinv(C_samp)
+        #iC_null = np.linalg.pinv(C_null)
 
         N = C_samp.shape[0]
         mt = np.zeros((N, N))
@@ -50,6 +55,7 @@ class iScola:
         maxIteration = 1e7
         maxLocalSearch = 300
         Lambda = 1 / (np.power(np.abs(iC_samp-iC_null), 2)+1e-20)
+	np.fill_diagonal(Lambda, 0)
         W = np.zeros_like(C_samp)
         _diff_min = 1e300
         while (
@@ -67,7 +73,7 @@ class iScola:
             W_prev = W
             W = self._prox(W - eta * dtheta, eta * lam * Lambda)
             _diff = np.max(np.abs(W - W_prev))
-            np.fill_diagonal(W, 0.0)
+            #np.fill_diagonal(W, 0.0)
             if _diff < _diff_min:
                 _diff_min = _diff
                 t_best = t
@@ -77,11 +83,11 @@ class iScola:
     def _ridge(self, cov, rho):
 
         w,v = np.linalg.eigh(cov)
-        lambda_hat = 2/(w+np.sqrt(w**2+8*rho))
+        lambda_hat = 2/(np.sqrt(w**2)+np.sqrt(w**2+8*rho))
         precision = np.matmul(np.matmul(v, np.diag(lambda_hat)), v.T)
         return precision
 
-    def comp_upper_lam(self, C_samp, C_null):
+    def comp_upper_lam(self, C_samp, iC_null):
         """
         Compute the upper bound of the Lasso penalty.
     
@@ -98,38 +104,11 @@ class iScola:
             Upper bound of the Lasso penalty. 
         """
         iC_samp = self._ridge(C_samp, 0.0001)
-        iC_null = np.linalg.pinv(C_null)
-
         absCov = np.abs(iC_samp - iC_null)
         D = iC_null - iC_samp
-        lam_upper = np.max(np.triu(np.multiply(np.abs(D), np.power(absCov, 2)),1))
+        lam_upper = np.quantile(np.triu(np.multiply(np.abs(D), np.power(absCov, 2)),1), 0.95)
+        #lam_upper = np.max(np.triu(np.multiply(np.abs(D), np.power(absCov, 2)),1))
         return lam_upper
-
-    def _comp_penalized_loglikelihood(self, W, C_samp, C_null, Lambda):
-        """
-        Compute the penalized log likelihood for a network. 
-        
-        Parameters
-        ----------
-        W : 2D numpy.ndarray, shape (N, N)
-            Weighted adjacency matrix of a network.
-        C_samp : 2D numpy.ndarray, shape (N, N)
-            Sample correlation matrix. 
-        C_null : 2D numpy.ndarray, shape (N, N)
-            Null correlation matrix used for constructing the network.
-        Lambda : 2D numpy.ndarray, shape (N, N)
-            Lambda[i,j] is the Lasso penalty for W[i,j]. 
-    
-        Returns
-        -------
-        l : float
-            Penalized log likelihood for the generated network. 
-        """
-        return (
-            _comp_loglikelihood(W, C_samp, C_null)
-            - np.sum(np.multiply(Lambda, np.abs(W))) / 4
-        )
-
 
     def _prox(self, x, lam):
         """

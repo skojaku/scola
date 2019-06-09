@@ -22,8 +22,8 @@ def _golden_section_search(C_samp, L, C_null, K_null, estimator, beta, pbar, dis
         Sample correlation matrix.
     L : int
         Number of samples.
-    null_model : str
-        Name of the null model.
+    C_null : str
+       Null model (set correlation matrix for scola and precision matrix for iscola) 
     beta : float
         Hyperparameter for the extended BIC.
     pbar : tqdm instance
@@ -72,10 +72,10 @@ def _golden_section_search(C_samp, L, C_null, K_null, estimator, beta, pbar, dis
             W_2 = estimator.detect(C_samp, C_null, lam_2)
             pbar.update()
 
-            EBIC_l = _comp_EBIC(W_l, C_samp, C_null, L, beta, K_null)
-            EBIC_u = _comp_EBIC(W_u, C_samp, C_null, L, beta, K_null)
-            EBIC_1 = _comp_EBIC(W_1, C_samp, C_null, L, beta, K_null)
-            EBIC_2 = _comp_EBIC(W_2, C_samp, C_null, L, beta, K_null)
+            EBIC_l = _comp_EBIC(W_l, C_samp, C_null, L, beta, K_null, estimator.input_matrix_type)
+            EBIC_u = _comp_EBIC(W_u, C_samp, C_null, L, beta, K_null, estimator.input_matrix_type)
+            EBIC_1 = _comp_EBIC(W_1, C_samp, C_null, L, beta, K_null, estimator.input_matrix_type)
+            EBIC_2 = _comp_EBIC(W_2, C_samp, C_null, L, beta, K_null, estimator.input_matrix_type)
 
             mid = np.argmin([EBIC_l, EBIC_u, EBIC_1, EBIC_2])
             W_best = [W_l, W_u, W_1, W_2][mid]
@@ -93,7 +93,7 @@ def _golden_section_search(C_samp, L, C_null, K_null, estimator, beta, pbar, dis
 
             W_1 = estimator.detect(C_samp, C_null, lam_1)
             pbar.update()
-            EBIC_1 = _comp_EBIC(W_1, C_samp, C_null, L, beta, K_null)
+            EBIC_1 = _comp_EBIC(W_1, C_samp, C_null, L, beta, K_null, estimator.input_matrix_type)
 
             if EBIC_1 < EBIC_min:
                 EBIC_min = EBIC_1
@@ -110,48 +110,12 @@ def _golden_section_search(C_samp, L, C_null, K_null, estimator, beta, pbar, dis
 
             W_2 =  estimator.detect(C_samp, C_null, lam_2)
             pbar.update()
-            EBIC_2 = _comp_EBIC(W_2, C_samp, C_null, L, beta, K_null)
+            EBIC_2 = _comp_EBIC(W_2, C_samp, C_null, L, beta, K_null, estimator.input_matrix_type)
 
             if EBIC_2 < EBIC_min:
                 EBIC_min = EBIC_2
                 W_best = W_2
                 lam_best = lam_2
-
     pbar.refresh()
     EBIC = EBIC_min
     return W_best, C_null, EBIC
-
-
-
-
-def _comp_loglikelihood(W, C_samp, C_null):
-    """
-        Compute the log likelihood for a network. 
-        
-        Parameters
-        ----------
-        W : 2D numpy.ndarray, shape (N, N)
-            Weighted adjacency matrix of a network.
-        C_samp : 2D numpy.ndarray, shape (N, N)
-            Sample correlation matrix. 
-        C_null : 2D numpy.ndarray, shape (N, N)
-            Null correlation matrix used for constructing the network.
-    
-        Returns
-        -------
-        l : float
-            Log likelihood for the generated network. 
-        """
-
-    Cov = W + C_null
-    w, v = np.linalg.eig(Cov)
-    if np.min(w) < 0:
-        v = v[:, w > 0]
-        w = w[w > 0]
-    iCov = np.real(np.matmul(np.matmul(v, np.diag(1 / w)), v.T))
-    l = (
-        -0.5 * np.sum(np.log(w))
-        - 0.5 * np.trace(np.matmul(C_samp, iCov))
-        - 0.5 * Cov.shape[0] * np.log(2 * np.pi)
-    )
-    return np.real(l)
