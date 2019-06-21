@@ -62,11 +62,23 @@ Finally, provide ``C_samp`` and ``L`` to estimate the network and associated nul
 .. code-block:: python
 
    import scola
-   W, C_null, selected_null_model, EBIC = scola.generate_network(C_samp, L)
+   W, C_null, selected_null_model, EBIC, mat_type = scola.generate_network(C_samp, L)
 
 ``W`` is the weighted adjacency matrix of the generated network, where 
 W[i,j] indicates the weight of the edge between nodes i and j.
 See `API <#module-scola.generate_network>`_ for other return values.
+
+Not only from correlation matrices, the Scola can construct a network from precision matrices, which are often different from that from correlation matrices. 
+To construct a network from precision matrix, give an extra parameter ``input_matrix``: 
+
+.. code-block:: python
+
+   import scola
+   W, C_null, selected_null_model, EBIC, mat_type  = scola.generate_network(C_samp, L, input_matrix="pres")
+
+If one sets ``input_matrix="all"``, the Scola chooses the one that best represents the given data. 
+The selected matrix type is given in ``mat_type``, which takes either ``corr`` or ``pres``.
+
 
 API
 ===
