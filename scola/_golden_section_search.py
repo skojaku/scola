@@ -9,7 +9,8 @@ import sys
 from functools import partial
 from ._scola import *
 from ._common import _fast_mat_inv_lapack
-from ._common import _comp_EBIC 
+from ._common import _comp_EBIC
+
 
 def _golden_section_search(C_samp, L, C_null, K_null, estimator, beta, pbar, disp):
     """
@@ -72,10 +73,18 @@ def _golden_section_search(C_samp, L, C_null, K_null, estimator, beta, pbar, dis
             W_2 = estimator.detect(C_samp, C_null, lam_2)
             pbar.update()
 
-            EBIC_l = _comp_EBIC(W_l, C_samp, C_null, L, beta, K_null, estimator.input_matrix_type)
-            EBIC_u = _comp_EBIC(W_u, C_samp, C_null, L, beta, K_null, estimator.input_matrix_type)
-            EBIC_1 = _comp_EBIC(W_1, C_samp, C_null, L, beta, K_null, estimator.input_matrix_type)
-            EBIC_2 = _comp_EBIC(W_2, C_samp, C_null, L, beta, K_null, estimator.input_matrix_type)
+            EBIC_l = _comp_EBIC(
+                W_l, C_samp, C_null, L, beta, K_null, estimator.input_matrix_type
+            )
+            EBIC_u = _comp_EBIC(
+                W_u, C_samp, C_null, L, beta, K_null, estimator.input_matrix_type
+            )
+            EBIC_1 = _comp_EBIC(
+                W_1, C_samp, C_null, L, beta, K_null, estimator.input_matrix_type
+            )
+            EBIC_2 = _comp_EBIC(
+                W_2, C_samp, C_null, L, beta, K_null, estimator.input_matrix_type
+            )
 
             mid = np.argmin([EBIC_l, EBIC_u, EBIC_1, EBIC_2])
             W_best = [W_l, W_u, W_1, W_2][mid]
@@ -93,7 +102,9 @@ def _golden_section_search(C_samp, L, C_null, K_null, estimator, beta, pbar, dis
 
             W_1 = estimator.detect(C_samp, C_null, lam_1)
             pbar.update()
-            EBIC_1 = _comp_EBIC(W_1, C_samp, C_null, L, beta, K_null, estimator.input_matrix_type)
+            EBIC_1 = _comp_EBIC(
+                W_1, C_samp, C_null, L, beta, K_null, estimator.input_matrix_type
+            )
 
             if EBIC_1 < EBIC_min:
                 EBIC_min = EBIC_1
@@ -108,9 +119,11 @@ def _golden_section_search(C_samp, L, C_null, K_null, estimator, beta, pbar, dis
             h = invphi * h
             lam_2 = lam_lower + invphi * h
 
-            W_2 =  estimator.detect(C_samp, C_null, lam_2)
+            W_2 = estimator.detect(C_samp, C_null, lam_2)
             pbar.update()
-            EBIC_2 = _comp_EBIC(W_2, C_samp, C_null, L, beta, K_null, estimator.input_matrix_type)
+            EBIC_2 = _comp_EBIC(
+                W_2, C_samp, C_null, L, beta, K_null, estimator.input_matrix_type
+            )
 
             if EBIC_2 < EBIC_min:
                 EBIC_min = EBIC_2

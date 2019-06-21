@@ -4,6 +4,7 @@ from scipy import sparse
 from scipy import stats
 import numpy as np
 
+
 def _fast_mat_inv_lapack(Mat):
     """
         Compute the inverse of a positive semidefinite matrix.
@@ -26,6 +27,7 @@ def _fast_mat_inv_lapack(Mat):
     inv_Mat, info = linalg.lapack.dpotri(zz)
     inv_Mat = np.triu(inv_Mat) + np.triu(inv_Mat, k=1).T
     return inv_Mat
+
 
 def _comp_EBIC(W, C_samp, C_null, L, beta, Knull, input_matrix_type):
     """
@@ -53,13 +55,14 @@ def _comp_EBIC(W, C_samp, C_null, L, beta, Knull, input_matrix_type):
         EBIC : float
             The extended BIC value for the generated network.
         """
-    k = Knull + np.count_nonzero(np.triu(W,1)) / 2 + np.count_nonzero(np.diag(W))
+    k = Knull + np.count_nonzero(np.triu(W, 1)) / 2 + np.count_nonzero(np.diag(W))
     EBIC = (
         np.log(L) * k
         - 2 * L * _comp_loglikelihood(W, C_samp, C_null, input_matrix_type)
         + 4 * beta * k * np.log(W.shape[0])
     )
     return EBIC
+
 
 def _comp_loglikelihood(W, C_samp, C_null, input_matrix_type):
     """
@@ -81,7 +84,7 @@ def _comp_loglikelihood(W, C_samp, C_null, input_matrix_type):
         l : float
             Log likelihood for the generated network. 
         """
-    if input_matrix_type=="cov":
+    if input_matrix_type == "cov":
         Cov = W + C_null
         w, v = np.linalg.eig(Cov)
         if np.min(w) < 0:
@@ -104,5 +107,5 @@ def _comp_loglikelihood(W, C_samp, C_null, input_matrix_type):
             - 0.5 * np.trace(np.matmul(C_samp, iCov))
             - 0.5 * iCov.shape[0] * np.log(2 * np.pi)
         )
-    
+
     return np.real(l)

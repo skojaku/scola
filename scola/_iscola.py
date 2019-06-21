@@ -8,19 +8,18 @@ import tqdm
 import sys
 from functools import partial
 from ._common import _fast_mat_inv_lapack
-from ._common import _comp_EBIC 
-from ._common import _comp_loglikelihood 
+from ._common import _comp_EBIC
+from ._common import _comp_loglikelihood
+
 
 class iScola:
+
     def __init__(self):
         pass
 
-    input_matrix_type = "pres"
-
     def detect(self, C_samp, iC_null, lam):
-
         """
-        Minorisation-maximisation algorithm. 
+        Scola algorithm for precision matrices. 
             
         Parameters
         ----------
@@ -37,11 +36,7 @@ class iScola:
             Weighted adjacency matrix of the generated network.
         """
 	
-
         iC_samp = self._ridge(C_samp, 0.0001)
-        #iC_samp = np.linalg.pinv(C_samp)
-        #iC_null = np.linalg.pinv(C_null)
-
         N = C_samp.shape[0]
         mt = np.zeros((N, N))
         vt = np.zeros((N, N))
@@ -54,8 +49,8 @@ class iScola:
         eta = 0.001
         maxIteration = 1e7
         maxLocalSearch = 300
-        Lambda = 1 / (np.power(np.abs(iC_samp-iC_null), 2)+1e-20)
-	np.fill_diagonal(Lambda, 0)
+        Lambda = 1 / (np.power(np.abs(iC_samp - iC_null), 2) + 1e-20)
+        np.fill_diagonal(Lambda, 0)
         W = np.zeros_like(C_samp)
         _diff_min = 1e300
         while (
@@ -73,19 +68,32 @@ class iScola:
             W_prev = W
             W = self._prox(W - eta * dtheta, eta * lam * Lambda)
             _diff = np.max(np.abs(W - W_prev))
-            #np.fill_diagonal(W, 0.0)
             if _diff < _diff_min:
                 _diff_min = _diff
                 t_best = t
 
         return W
 
-    def _ridge(self, cov, rho):
+    def _ridge(self, C_samp, rho):
+		"""
+		Compute the precision matrix from covariance matrix with a ridge regularization.
+		
+		Parameters
+		----------
+		C_samp : 2D numpy.ndarray, shape (N, N)
+            Sample covariance matrix
+        rho : float
+            Regularization parameter
 
-        w,v = np.linalg.eigh(cov)
-        lambda_hat = 2/(np.sqrt(w**2)+np.sqrt(w**2+8*rho))
-        precision = np.matmul(np.matmul(v, np.diag(lambda_hat)), v.T)
-        return precision
+        Returns
+        -------
+        iC : 2D numpy.ndarray, shape (N, N)
+            Precision matrix
+		"""
+        w, v = np.linalg.eigh(C_samp)
+        lambda_hat = 2 / (np.sqrt(w ** 2) + np.sqrt(w ** 2 + 8 * rho))
+        iC = np.matmul(np.matmul(v, np.diag(lambda_hat)), v.T)
+        return iC 
 
     def comp_upper_lam(self, C_samp, iC_null):
         """
@@ -106,8 +114,9 @@ class iScola:
         iC_samp = self._ridge(C_samp, 0.0001)
         absCov = np.abs(iC_samp - iC_null)
         D = iC_null - iC_samp
-        lam_upper = np.quantile(np.triu(np.multiply(np.abs(D), np.power(absCov, 2)),1), 0.95)
-        #lam_upper = np.max(np.triu(np.multiply(np.abs(D), np.power(absCov, 2)),1))
+        lam_upper = np.quantile(
+            np.triu(np.multiply(np.abs(D), np.power(absCov, 2)), 1), 0.95
+        )
         return lam_upper
 
     def _prox(self, x, lam):
@@ -129,10 +138,9 @@ class iScola:
 
         return np.multiply(np.sign(x), np.maximum(np.abs(x) - lam, np.zeros(x.shape)))
 
-
     def _calc_gradient(self, sCov, inv_nCov, dCov):
         Cov = _fast_mat_inv_lapack(inv_nCov + dCov)
         g = sCov - Cov
-        g = (g + g.T)/2
+        g = (g + g.T) / 2
         g = np.nan_to_num(g)
         return g

@@ -8,16 +8,16 @@ import tqdm
 import sys
 from functools import partial
 from ._common import _fast_mat_inv_lapack
-from ._common import _comp_EBIC 
-from ._common import _comp_loglikelihood 
+from ._common import _comp_EBIC
+from ._common import _comp_loglikelihood
+
 
 class Scola:
-
     def __init__(self):
         pass
 
     input_matrix_type = "cov"
-    
+
     def detect(self, C_samp, C_null, lam):
         """
 	    Minorisation-maximisation algorithm. 
@@ -68,7 +68,7 @@ class Scola:
         lam_upper : float
             Upper bound of the Lasso penalty. 
         """
-    
+
         abC_samp = np.abs(C_samp - C_null)
         iCov = _fast_mat_inv_lapack(C_null)
         D = iCov - np.matmul(np.matmul(iCov, C_samp), iCov)
@@ -100,7 +100,6 @@ class Scola:
             - np.sum(np.multiply(Lambda, np.abs(W))) / 4
         )
 
-
     def _prox(self, x, lam):
         """
 	    Soft thresholding operator.
@@ -119,7 +118,6 @@ class Scola:
 	    """
 
         return np.multiply(np.sign(x), np.maximum(np.abs(x) - lam, np.zeros(x.shape)))
-
 
     def _maximisation_step(self, C_samp, C_null, W_base, lam):
         """

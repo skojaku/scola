@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 import numpy as np
-from ._common import _comp_EBIC 
-from ._common import _comp_loglikelihood 
+from ._common import _comp_EBIC
+from ._common import _comp_loglikelihood
 from ._common import _fast_mat_inv_lapack
+
 
 def _compute_null_correlation_matrix(C_samp, null_model):
     """
@@ -44,6 +45,7 @@ def _compute_null_correlation_matrix(C_samp, null_model):
         )
     return C_null, K_null
 
+
 def _estimate_configuration_model(C_samp, tolerance=1e-5):
     """
         Compute the configuration model for correlation matrices
@@ -84,13 +86,11 @@ def _estimate_configuration_model(C_samp, tolerance=1e-5):
     while t < maxIteration:
         t = t + 1
 
-        K_est = np.add.outer(theta[N : 2 * N], theta[N : 2 * N]) + np.diag(
-            theta[0:N]
-        )
+        K_est = np.add.outer(theta[N : 2 * N], theta[N : 2 * N]) + np.diag(theta[0:N])
         C_con = _fast_mat_inv_lapack(K_est)
 
         error = np.max(np.abs(np.sum(C_con, 1) - s) / s)
-	
+
         if error < tolerance:
             break
 
