@@ -75,12 +75,12 @@ class iScola:
         return W
 
     def _ridge(self, C_samp, rho):
-		"""
-		Compute the precision matrix from covariance matrix with a ridge regularization.
-		
-		Parameters
-		----------
-		C_samp : 2D numpy.ndarray, shape (N, N)
+        """
+        Compute the precision matrix from covariance matrix with a ridge regularization.
+        
+        Parameters
+        ----------
+        C_samp : 2D numpy.ndarray, shape (N, N)
             Sample covariance matrix
         rho : float
             Regularization parameter
@@ -89,7 +89,7 @@ class iScola:
         -------
         iC : 2D numpy.ndarray, shape (N, N)
             Precision matrix
-		"""
+        """
         w, v = np.linalg.eigh(C_samp)
         lambda_hat = 2 / (np.sqrt(w ** 2) + np.sqrt(w ** 2 + 8 * rho))
         iC = np.matmul(np.matmul(v, np.diag(lambda_hat)), v.T)

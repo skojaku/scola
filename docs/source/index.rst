@@ -7,7 +7,7 @@ A Python package for the Scola algorithm
 Introduction
 ============
 
-The Scola is an algorithm that takes a correlation matrix as input and outputs a network. 
+The Scola is an algorithm that takes a correlation matrix or a precision matrix as input and outputs a network. 
 In the generated network, edges between nodes indicate correlations that are not accounted for by some expected properties (e.g., noise independent for different variables or a global trend).
 
 Please cite the paper if you use this package: 
@@ -62,22 +62,23 @@ Finally, provide ``C_samp`` and ``L`` to estimate the network and associated nul
 .. code-block:: python
 
    import scola
-   W, C_null, selected_null_model, EBIC, mat_type = scola.generate_network(C_samp, L)
+   W, C_null, selected_null_model, EBIC, input_mat_type = scola.generate_network(C_samp, L)
 
 ``W`` is the weighted adjacency matrix of the generated network, where 
 W[i,j] indicates the weight of the edge between nodes i and j.
 See `API <#module-scola.generate_network>`_ for other return values.
 
-Not only from correlation matrices, the Scola can construct a network from precision matrices, which are often different from that from correlation matrices. 
-To construct a network from precision matrix, give an extra parameter ``input_matrix``: 
+Scola can construct a network from precision matrices, which is often different from that constructed from correlation matrices. 
+To do this, give an extra parameter ``input_mat_type='pres'``: 
 
 .. code-block:: python
 
    import scola
-   W, C_null, selected_null_model, EBIC, mat_type  = scola.generate_network(C_samp, L, input_matrix="pres")
+   W, C_null, selected_null_model, EBIC, input_mat_type = scola.generate_network(C_samp, L, input_mat_type="pres")
 
-If one sets ``input_matrix="all"``, the Scola chooses the one that best represents the given data. 
-The selected matrix type is given in ``mat_type``, which takes either ``corr`` or ``pres``.
+If one sets ``input_mat_type='auto'``, the Scola constructs networks from correlation matrices and precision matrices. 
+Then, it chooses the one that best represents the given data in terms of the extended BIC.
+The selected type of the matrix is indicated by ``input_mat_type`` in the return variables. 
 
 
 API

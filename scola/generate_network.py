@@ -14,7 +14,7 @@ from ._golden_section_search import _golden_section_search
 from ._compute_null_correlation_matrix import _compute_null_correlation_matrix
 
 
-def generate_network(C_samp, L, null_model="all", disp=True, input_matrix="all"):
+def generate_network(C_samp, L, null_model="all", disp=True, input_mat_type="corr"):
     """
     Generate a network from a correlation matrix
     using the Scola algorithm.
@@ -35,9 +35,9 @@ def generate_network(C_samp, L, null_model="all", disp=True, input_matrix="all")
     disp : bool, default True
         Set disp=True to display the progress of computation.
         Otherwise, set disp=False.
-    input_matrix : str, default "all" 
+    input_mat_type : str, default 'corr' 
         Type of matrix to construct a network. Setting "corr" constructs based on the correlation matrix. 
-        Setting "pres" constructs based on the precision matrix.
+        Setting "pres" constructs based on the precision matrix. If input_mat_type='auto', the Scola constructs networks from the correlation matrix and precision matrix. Then, it chooses the best one in terms of the extended BIC. 
 
     Returns
     -------
@@ -49,6 +49,9 @@ def generate_network(C_samp, L, null_model="all", disp=True, input_matrix="all")
         The null model selected by the Scola.
     EBIC : float
         The extended BIC value for the generated network.
+    input_mat_type : str 
+        input_mat_type='corr' or input_mat_type='pres' indicates that the network is constructed from 
+        the correlation matrix or the precision matrix, respectively. 
     """
 
     if type(C_samp) is not np.ndarray:
@@ -68,10 +71,10 @@ def generate_network(C_samp, L, null_model="all", disp=True, input_matrix="all")
     else:
         _null_models = [null_model]
 
-    if input_matrix == "all":
+    if input_mat_type=='auto':
         mat_types = ["corr", "pres"]
     else:
-        mat_types = [input_matrix]
+        mat_types = [input_mat_type]
 
     # Remove inactive nodes
     active_nodes = np.where(np.abs(np.sum(C_samp, axis=1)) > 0)[0]
@@ -108,7 +111,7 @@ def generate_network(C_samp, L, null_model="all", disp=True, input_matrix="all")
                         "C_null": C_null,
                         "null_model": null_model,
                         "EBIC_min": EBIC_min,
-                        "mat_type": mat_type,
+                        "input_mat_type": mat_type,
                     }
                 ]
 
@@ -125,7 +128,7 @@ def generate_network(C_samp, L, null_model="all", disp=True, input_matrix="all")
                         "C_null": iC_null,
                         "null_model": null_model,
                         "EBIC_min": EBIC_min,
-                        "mat_type": mat_type,
+                        "input_mat_type": mat_type,
                     }
                 ]
             # print(res[len(res)-1]["null_model"], res[len(res)-1]["EBIC_min"], res[len(res)-1]["mat_type"])

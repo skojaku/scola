@@ -13,6 +13,8 @@
 
   
   
+  
+  
 
   
 
@@ -22,27 +24,19 @@
 
   
 
-  
-  
-    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="index" title="Index"
-              href="../../genindex.html"/>
-        <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="Scola 0.0.0 documentation" href="../../index.html"/>
-        <link rel="up" title="Module code" href="../index.html"/> 
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
 
   
   <script src="../../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -79,7 +73,10 @@
           
             
             
-                <p class="caption"><span class="caption-text">Table of contents:</span></p>
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">A Python package for the Scola algorithm</a></li>
 </ul>
@@ -93,52 +90,75 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../../index.html">Scola</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Scola</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
+
+
+
+
+
+
+
+
+
+
 
 
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="../index.html">Module code</a> &raquo;</li>
-      
-    <li>scola.generate_network</li>
+        
+      <li>scola.generate_network</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
-        
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
   <h1>Source code for scola.generate_network</h1><div class="highlight"><pre>
-<span class="c1"># -*- coding: utf-8 -*-</span>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">scipy</span> <span class="k">import</span> <span class="n">linalg</span>
 <span class="kn">from</span> <span class="nn">scipy</span> <span class="k">import</span> <span class="n">sparse</span>
 <span class="kn">from</span> <span class="nn">scipy</span> <span class="k">import</span> <span class="n">stats</span>
 <span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">tqdm</span>
 <span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">tqdm</span>
 <span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">partial</span>
+<span class="kn">from</span> <span class="nn">._scola</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">._iscola</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">._common</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">._golden_section_search</span> <span class="k">import</span> <span class="n">_golden_section_search</span>
+<span class="kn">from</span> <span class="nn">._compute_null_correlation_matrix</span> <span class="k">import</span> <span class="n">_compute_null_correlation_matrix</span>
 
 
-<div class="viewcode-block" id="generate_network"><a class="viewcode-back" href="../../index.html#scola.generate_network.generate_network">[docs]</a><span class="k">def</span> <span class="nf">generate_network</span><span class="p">(</span><span class="n">C_samp</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">null_model</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">disp</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="generate_network"><a class="viewcode-back" href="../../index.html#scola.generate_network.generate_network">[docs]</a><span class="k">def</span> <span class="nf">generate_network</span><span class="p">(</span><span class="n">C_samp</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">null_model</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">disp</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">input_mat_type</span><span class="o">=</span><span class="s2">&quot;corr&quot;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generate a network from a correlation matrix</span>
 <span class="sd">    using the Scola algorithm.</span>
@@ -159,6 +179,9 @@
 <span class="sd">    disp : bool, default True</span>
 <span class="sd">        Set disp=True to display the progress of computation.</span>
 <span class="sd">        Otherwise, set disp=False.</span>
+<span class="sd">    input_mat_type : str, default &#39;corr&#39; </span>
+<span class="sd">        Type of matrix to construct a network. Setting &quot;corr&quot; constructs based on the correlation matrix. </span>
+<span class="sd">        Setting &quot;pres&quot; constructs based on the precision matrix. If input_mat_type=&#39;auto&#39;, the Scola constructs networks from the correlation matrix and precision matrix. Then, it chooses the best one in terms of the extended BIC. </span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -170,6 +193,9 @@
 <span class="sd">        The null model selected by the Scola.</span>
 <span class="sd">    EBIC : float</span>
 <span class="sd">        The extended BIC value for the generated network.</span>
+<span class="sd">    input_mat_type : str </span>
+<span class="sd">        input_mat_type=&#39;corr&#39; or input_mat_type=&#39;pres&#39; indicates that the network is constructed from </span>
+<span class="sd">        the correlation matrix or the precision matrix, respectively. </span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">C_samp</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
@@ -189,496 +215,77 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">_null_models</span> <span class="o">=</span> <span class="p">[</span><span class="n">null_model</span><span class="p">]</span>
 
+    <span class="k">if</span> <span class="n">input_mat_type</span><span class="o">==</span><span class="s1">&#39;auto&#39;</span><span class="p">:</span>
+        <span class="n">mat_types</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;corr&quot;</span><span class="p">,</span> <span class="s2">&quot;pres&quot;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">mat_types</span> <span class="o">=</span> <span class="p">[</span><span class="n">input_mat_type</span><span class="p">]</span>
+
+    <span class="c1"># Remove inactive nodes</span>
+    <span class="n">active_nodes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">C_samp</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">R</span> <span class="o">=</span> <span class="n">sparse</span><span class="o">.</span><span class="n">csc_matrix</span><span class="p">(</span>
+        <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">active_nodes</span><span class="p">)),</span> <span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">active_nodes</span><span class="p">))),</span> <span class="n">active_nodes</span><span class="p">)),</span>
+        <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">active_nodes</span><span class="p">),</span> <span class="n">C_samp</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">toarray</span><span class="p">()</span>
+    <span class="n">C_samp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">C_samp</span><span class="p">),</span> <span class="n">R</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+
     <span class="c1"># pbar is used for computing and displaying the progress of computation.</span>
-    <span class="n">pbar</span> <span class="o">=</span> <span class="n">tqdm</span><span class="o">.</span><span class="n">tqdm</span><span class="p">(</span><span class="n">disable</span><span class="o">=</span><span class="p">(</span><span class="n">disp</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">),</span> <span class="n">total</span><span class="o">=</span><span class="p">(</span><span class="mi">13</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">_null_models</span><span class="p">)))</span>
+    <span class="n">pbar</span> <span class="o">=</span> <span class="n">tqdm</span><span class="o">.</span><span class="n">tqdm</span><span class="p">(</span>
+        <span class="n">disable</span><span class="o">=</span><span class="p">(</span><span class="n">disp</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">),</span> <span class="n">total</span><span class="o">=</span><span class="p">(</span><span class="mi">13</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">_null_models</span><span class="p">)</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">mat_types</span><span class="p">))</span>
+    <span class="p">)</span>
     <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">null_model</span> <span class="ow">in</span> <span class="n">_null_models</span><span class="p">:</span>
-        <span class="n">W</span><span class="p">,</span> <span class="n">C_null</span><span class="p">,</span> <span class="n">EBIC_min</span> <span class="o">=</span> <span class="n">_golden_section_search</span><span class="p">(</span>
-            <span class="n">C_samp</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">null_model</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">pbar</span><span class="p">,</span> <span class="n">disp</span>
-        <span class="p">)</span>
-        <span class="n">res</span> <span class="o">+=</span> <span class="p">[[</span><span class="n">W</span><span class="p">,</span> <span class="n">C_null</span><span class="p">,</span> <span class="n">null_model</span><span class="p">,</span> <span class="n">EBIC_min</span><span class="p">]]</span>
-    <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">r</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">res</span><span class="p">]))</span>
+
+        <span class="c1"># Estimate null correlation matrix</span>
+        <span class="n">C_null</span><span class="p">,</span> <span class="n">K_null</span> <span class="o">=</span> <span class="n">_compute_null_correlation_matrix</span><span class="p">(</span><span class="n">C_samp</span><span class="p">,</span> <span class="n">null_model</span><span class="p">)</span>
+
+        <span class="n">iC_null</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">pinv</span><span class="p">(</span><span class="n">C_null</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">mat_type</span> <span class="ow">in</span> <span class="n">mat_types</span><span class="p">:</span>
+
+            <span class="k">if</span> <span class="n">mat_type</span> <span class="o">==</span> <span class="s2">&quot;corr&quot;</span><span class="p">:</span>
+                <span class="n">estimator</span> <span class="o">=</span> <span class="n">Scola</span><span class="p">()</span>
+                <span class="n">W</span><span class="p">,</span> <span class="n">C_null</span><span class="p">,</span> <span class="n">EBIC_min</span> <span class="o">=</span> <span class="n">_golden_section_search</span><span class="p">(</span>
+                    <span class="n">C_samp</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">C_null</span><span class="p">,</span> <span class="n">K_null</span><span class="p">,</span> <span class="n">estimator</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">pbar</span><span class="p">,</span> <span class="n">disp</span>
+                <span class="p">)</span>
+                <span class="n">W</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">R</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">W</span><span class="p">),</span> <span class="n">R</span><span class="p">)</span>
+
+                <span class="n">res</span> <span class="o">+=</span> <span class="p">[</span>
+                    <span class="p">{</span>
+                        <span class="s2">&quot;W&quot;</span><span class="p">:</span> <span class="n">W</span><span class="p">,</span>
+                        <span class="s2">&quot;C_null&quot;</span><span class="p">:</span> <span class="n">C_null</span><span class="p">,</span>
+                        <span class="s2">&quot;null_model&quot;</span><span class="p">:</span> <span class="n">null_model</span><span class="p">,</span>
+                        <span class="s2">&quot;EBIC_min&quot;</span><span class="p">:</span> <span class="n">EBIC_min</span><span class="p">,</span>
+                        <span class="s2">&quot;input_mat_type&quot;</span><span class="p">:</span> <span class="n">mat_type</span><span class="p">,</span>
+                    <span class="p">}</span>
+                <span class="p">]</span>
+
+            <span class="k">elif</span> <span class="n">mat_type</span> <span class="o">==</span> <span class="s2">&quot;pres&quot;</span><span class="p">:</span>
+                <span class="n">estimator</span> <span class="o">=</span> <span class="n">iScola</span><span class="p">()</span>
+                <span class="n">W</span><span class="p">,</span> <span class="n">C_null</span><span class="p">,</span> <span class="n">EBIC_min</span> <span class="o">=</span> <span class="n">_golden_section_search</span><span class="p">(</span>
+                    <span class="n">C_samp</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">iC_null</span><span class="p">,</span> <span class="n">K_null</span><span class="p">,</span> <span class="n">estimator</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">pbar</span><span class="p">,</span> <span class="n">disp</span>
+                <span class="p">)</span>
+                <span class="n">W</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">R</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">W</span><span class="p">),</span> <span class="n">R</span><span class="p">)</span>
+
+                <span class="n">res</span> <span class="o">+=</span> <span class="p">[</span>
+                    <span class="p">{</span>
+                        <span class="s2">&quot;W&quot;</span><span class="p">:</span> <span class="n">W</span><span class="p">,</span>
+                        <span class="s2">&quot;C_null&quot;</span><span class="p">:</span> <span class="n">iC_null</span><span class="p">,</span>
+                        <span class="s2">&quot;null_model&quot;</span><span class="p">:</span> <span class="n">null_model</span><span class="p">,</span>
+                        <span class="s2">&quot;EBIC_min&quot;</span><span class="p">:</span> <span class="n">EBIC_min</span><span class="p">,</span>
+                        <span class="s2">&quot;input_mat_type&quot;</span><span class="p">:</span> <span class="n">mat_type</span><span class="p">,</span>
+                    <span class="p">}</span>
+                <span class="p">]</span>
+            <span class="c1"># print(res[len(res)-1][&quot;null_model&quot;], res[len(res)-1][&quot;EBIC_min&quot;], res[len(res)-1][&quot;mat_type&quot;])</span>
+
     <span class="n">pbar</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">res</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span></div>
 
+    <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;EBIC_min&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">res</span><span class="p">]))</span>
 
-<span class="k">def</span> <span class="nf">_golden_section_search</span><span class="p">(</span><span class="n">C_samp</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">null_model</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">pbar</span><span class="p">,</span> <span class="n">disp</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Find the Lasso penalty that minimises the extended BIC using</span>
-<span class="sd">    the golden-section search method.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    C_samp : 2D numpy.ndarray, shape (N, N)</span>
-<span class="sd">        Sample correlation matrix.</span>
-<span class="sd">    L : int</span>
-<span class="sd">        Number of samples.</span>
-<span class="sd">    null_model : str</span>
-<span class="sd">        Name of the null model.</span>
-<span class="sd">    beta : float</span>
-<span class="sd">        Hyperparameter for the extended BIC.</span>
-<span class="sd">    pbar : tqdm instance</span>
-<span class="sd">        This instance is used for computing and displaying </span>
-<span class="sd">        the progress of computation.</span>
-<span class="sd">    disp : bool, default True</span>
-<span class="sd">        Set disp=True to display the progress of computation.</span>
-<span class="sd">        Otherwise, set disp=False.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    W : 2D numpy.ndarray, shape (N, N)</span>
-<span class="sd">        Weighted adjacency matrix of the generated network.</span>
-<span class="sd">    C_null : 2D numpy.ndarray, shape (N, N)</span>
-<span class="sd">        Estimated null correlation matrix used for constructing the </span>
-<span class="sd">        network.</span>
-<span class="sd">    EBIC : float</span>
-<span class="sd">        The extended BIC value for the generated network.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">C_null</span><span class="p">,</span> <span class="n">K_null</span> <span class="o">=</span> <span class="n">_compute_null_correlation_matrix</span><span class="p">(</span><span class="n">C_samp</span><span class="p">,</span> <span class="n">null_model</span><span class="p">)</span>
-
-    <span class="n">lam_upper</span> <span class="o">=</span> <span class="n">_comp_upper_lam</span><span class="p">(</span><span class="n">C_samp</span><span class="p">,</span> <span class="n">C_null</span><span class="p">)</span>
-    <span class="n">lam_lower</span> <span class="o">=</span> <span class="mf">0.0</span>
-    <span class="n">invphi</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0</span>
-    <span class="n">invphi2</span> <span class="o">=</span> <span class="p">(</span><span class="mf">3.0</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">5.0</span><span class="p">))</span> <span class="o">/</span> <span class="mf">2.0</span>
-    <span class="n">h</span> <span class="o">=</span> <span class="n">lam_upper</span> <span class="o">-</span> <span class="n">lam_lower</span>
-    <span class="n">lam_1</span> <span class="o">=</span> <span class="n">lam_lower</span> <span class="o">+</span> <span class="n">invphi2</span> <span class="o">*</span> <span class="n">h</span>
-    <span class="n">lam_2</span> <span class="o">=</span> <span class="n">lam_lower</span> <span class="o">+</span> <span class="n">invphi</span> <span class="o">*</span> <span class="n">h</span>
-    <span class="n">n</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">invphi</span><span class="p">)))</span>
-    <span class="n">N</span> <span class="o">=</span> <span class="n">C_samp</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">W_best</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">lam_best</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">EBIC_min</span> <span class="o">=</span> <span class="mi">0</span>
-
-    <span class="n">ns</span> <span class="o">=</span> <span class="n">pbar</span><span class="o">.</span><span class="n">n</span>
-    <span class="n">nf</span> <span class="o">=</span> <span class="n">ns</span> <span class="o">+</span> <span class="n">n</span>
-
-    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-
-            <span class="n">W_l</span> <span class="o">=</span> <span class="n">C_samp</span> <span class="o">-</span> <span class="n">C_null</span>
-            <span class="n">pbar</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-            <span class="n">W_u</span> <span class="o">=</span> <span class="n">_MM_algorithm</span><span class="p">(</span><span class="n">C_samp</span><span class="p">,</span> <span class="n">C_null</span><span class="p">,</span> <span class="n">lam_upper</span><span class="p">)</span>
-            <span class="n">pbar</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-            <span class="n">W_1</span> <span class="o">=</span> <span class="n">_MM_algorithm</span><span class="p">(</span><span class="n">C_samp</span><span class="p">,</span> <span class="n">C_null</span><span class="p">,</span> <span class="n">lam_1</span><span class="p">)</span>
-            <span class="n">pbar</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-            <span class="n">W_2</span> <span class="o">=</span> <span class="n">_MM_algorithm</span><span class="p">(</span><span class="n">C_samp</span><span class="p">,</span> <span class="n">C_null</span><span class="p">,</span> <span class="n">lam_2</span><span class="p">)</span>
-            <span class="n">pbar</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-
-            <span class="n">EBIC_l</span> <span class="o">=</span> <span class="n">_comp_EBIC</span><span class="p">(</span><span class="n">W_l</span><span class="p">,</span> <span class="n">C_samp</span><span class="p">,</span> <span class="n">C_null</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">K_null</span><span class="p">)</span>
-            <span class="n">EBIC_u</span> <span class="o">=</span> <span class="n">_comp_EBIC</span><span class="p">(</span><span class="n">W_u</span><span class="p">,</span> <span class="n">C_samp</span><span class="p">,</span> <span class="n">C_null</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">K_null</span><span class="p">)</span>
-            <span class="n">EBIC_1</span> <span class="o">=</span> <span class="n">_comp_EBIC</span><span class="p">(</span><span class="n">W_1</span><span class="p">,</span> <span class="n">C_samp</span><span class="p">,</span> <span class="n">C_null</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">K_null</span><span class="p">)</span>
-            <span class="n">EBIC_2</span> <span class="o">=</span> <span class="n">_comp_EBIC</span><span class="p">(</span><span class="n">W_2</span><span class="p">,</span> <span class="n">C_samp</span><span class="p">,</span> <span class="n">C_null</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">K_null</span><span class="p">)</span>
-
-            <span class="n">mid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">([</span><span class="n">EBIC_l</span><span class="p">,</span> <span class="n">EBIC_u</span><span class="p">,</span> <span class="n">EBIC_1</span><span class="p">,</span> <span class="n">EBIC_2</span><span class="p">])</span>
-            <span class="n">W_best</span> <span class="o">=</span> <span class="p">[</span><span class="n">W_l</span><span class="p">,</span> <span class="n">W_u</span><span class="p">,</span> <span class="n">W_1</span><span class="p">,</span> <span class="n">W_2</span><span class="p">][</span><span class="n">mid</span><span class="p">]</span>
-            <span class="n">lam_best</span> <span class="o">=</span> <span class="p">[</span><span class="n">lam_lower</span><span class="p">,</span> <span class="n">lam_upper</span><span class="p">,</span> <span class="n">lam_1</span><span class="p">,</span> <span class="n">lam_2</span><span class="p">][</span><span class="n">mid</span><span class="p">]</span>
-            <span class="n">EBIC_min</span> <span class="o">=</span> <span class="p">[</span><span class="n">EBIC_l</span><span class="p">,</span> <span class="n">EBIC_u</span><span class="p">,</span> <span class="n">EBIC_1</span><span class="p">,</span> <span class="n">EBIC_2</span><span class="p">][</span><span class="n">mid</span><span class="p">]</span>
-            <span class="k">continue</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="n">EBIC_1</span> <span class="o">&lt;</span> <span class="n">EBIC_2</span><span class="p">)</span> <span class="o">|</span> <span class="p">((</span><span class="n">EBIC_1</span> <span class="o">==</span> <span class="n">EBIC_2</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mf">0.5</span><span class="p">)):</span>
-            <span class="n">lam_upper</span> <span class="o">=</span> <span class="n">lam_2</span>
-            <span class="n">lam_2</span> <span class="o">=</span> <span class="n">lam_1</span>
-            <span class="n">EBIC_u</span> <span class="o">=</span> <span class="n">EBIC_2</span>
-            <span class="n">EBIC_2</span> <span class="o">=</span> <span class="n">EBIC_1</span>
-            <span class="n">h</span> <span class="o">=</span> <span class="n">invphi</span> <span class="o">*</span> <span class="n">h</span>
-            <span class="n">lam_1</span> <span class="o">=</span> <span class="n">lam_lower</span> <span class="o">+</span> <span class="n">invphi2</span> <span class="o">*</span> <span class="n">h</span>
-
-            <span class="n">W_1</span> <span class="o">=</span> <span class="n">_MM_algorithm</span><span class="p">(</span><span class="n">C_samp</span><span class="p">,</span> <span class="n">C_null</span><span class="p">,</span> <span class="n">lam_1</span><span class="p">)</span>
-            <span class="n">pbar</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-            <span class="n">EBIC_1</span> <span class="o">=</span> <span class="n">_comp_EBIC</span><span class="p">(</span><span class="n">W_1</span><span class="p">,</span> <span class="n">C_samp</span><span class="p">,</span> <span class="n">C_null</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">K_null</span><span class="p">)</span>
-
-            <span class="k">if</span> <span class="n">EBIC_1</span> <span class="o">&lt;</span> <span class="n">EBIC_min</span><span class="p">:</span>
-                <span class="n">EBIC_min</span> <span class="o">=</span> <span class="n">EBIC_1</span>
-                <span class="n">W_best</span> <span class="o">=</span> <span class="n">W_1</span>
-                <span class="n">lam_best</span> <span class="o">=</span> <span class="n">lam_1</span>
-
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">lam_lower</span> <span class="o">=</span> <span class="n">lam_1</span>
-            <span class="n">lam_1</span> <span class="o">=</span> <span class="n">lam_2</span>
-            <span class="n">EBIC_l</span> <span class="o">=</span> <span class="n">EBIC_1</span>
-            <span class="n">EBIC_1</span> <span class="o">=</span> <span class="n">EBIC_2</span>
-            <span class="n">h</span> <span class="o">=</span> <span class="n">invphi</span> <span class="o">*</span> <span class="n">h</span>
-            <span class="n">lam_2</span> <span class="o">=</span> <span class="n">lam_lower</span> <span class="o">+</span> <span class="n">invphi</span> <span class="o">*</span> <span class="n">h</span>
-
-            <span class="n">W_2</span> <span class="o">=</span> <span class="n">_MM_algorithm</span><span class="p">(</span><span class="n">C_samp</span><span class="p">,</span> <span class="n">C_null</span><span class="p">,</span> <span class="n">lam_2</span><span class="p">)</span>
-            <span class="n">pbar</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-            <span class="n">EBIC_2</span> <span class="o">=</span> <span class="n">_comp_EBIC</span><span class="p">(</span><span class="n">W_2</span><span class="p">,</span> <span class="n">C_samp</span><span class="p">,</span> <span class="n">C_null</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">K_null</span><span class="p">)</span>
-
-            <span class="k">if</span> <span class="n">EBIC_2</span> <span class="o">&lt;</span> <span class="n">EBIC_min</span><span class="p">:</span>
-                <span class="n">EBIC_min</span> <span class="o">=</span> <span class="n">EBIC_2</span>
-                <span class="n">W_best</span> <span class="o">=</span> <span class="n">W_2</span>
-                <span class="n">lam_best</span> <span class="o">=</span> <span class="n">lam_2</span>
-
-    <span class="n">pbar</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
-    <span class="n">EBIC</span> <span class="o">=</span> <span class="n">EBIC_min</span>
-    <span class="k">return</span> <span class="n">W_best</span><span class="p">,</span> <span class="n">C_null</span><span class="p">,</span> <span class="n">EBIC</span>
-
-
-<span class="k">def</span> <span class="nf">_comp_upper_lam</span><span class="p">(</span><span class="n">C_samp</span><span class="p">,</span> <span class="n">C_null</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Compute the upper bound of the Lasso penalty.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    C_samp : 2D numpy.ndarray, shape (N, N)</span>
-<span class="sd">        Sample correlation matrix. </span>
-<span class="sd">    C_null : 2D numpy.ndarray, shape (N, N)</span>
-<span class="sd">        Null correlation matrix used for constructing the network.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    lam_upper : float</span>
-<span class="sd">        Upper bound of the Lasso penalty. </span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">abC_samp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">C_samp</span> <span class="o">-</span> <span class="n">C_null</span><span class="p">)</span>
-    <span class="n">iCov</span> <span class="o">=</span> <span class="n">_fast_mat_inv_lapack</span><span class="p">(</span><span class="n">C_null</span><span class="p">)</span>
-    <span class="n">D</span> <span class="o">=</span> <span class="n">iCov</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">iCov</span><span class="p">,</span> <span class="n">C_samp</span><span class="p">),</span> <span class="n">iCov</span><span class="p">)</span>
-    <span class="n">lam_upper</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">D</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">abC_samp</span><span class="p">,</span> <span class="mi">2</span><span class="p">)))</span>
-    <span class="k">return</span> <span class="n">lam_upper</span>
-
-
-<span class="k">def</span> <span class="nf">_compute_null_correlation_matrix</span><span class="p">(</span><span class="n">C_samp</span><span class="p">,</span> <span class="n">null_model</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Compute a null correlation matrix for a sample correlation matrix.</span>
-<span class="sd">        </span>
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    C_samp : 2D numpy.ndarray, shape (N, N)</span>
-<span class="sd">        Sample correlation matrix.</span>
-<span class="sd">    null_model : str</span>
-<span class="sd">        Name of the null model.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    C_null : 2D numpy.ndarray, shape (N, N)</span>
-<span class="sd">        Estimated null correlation matrix.</span>
-<span class="sd">    K_null : int</span>
-<span class="sd">        Number of parameters of the null model. </span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">C_null</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">K_null</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
-    <span class="k">if</span> <span class="n">null_model</span> <span class="o">==</span> <span class="s2">&quot;white-noise&quot;</span><span class="p">:</span>
-        <span class="n">C_null</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">C_samp</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-        <span class="n">K_null</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">elif</span> <span class="n">null_model</span> <span class="o">==</span> <span class="s2">&quot;hqs&quot;</span><span class="p">:</span>
-        <span class="n">C_null</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">triu</span><span class="p">(</span><span class="n">C_samp</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">C_samp</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">fill_diagonal</span><span class="p">(</span><span class="n">C_null</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="n">K_null</span> <span class="o">=</span> <span class="mi">1</span>
-    <span class="k">elif</span> <span class="n">null_model</span> <span class="o">==</span> <span class="s2">&quot;config&quot;</span><span class="p">:</span>
-        <span class="n">C_null</span> <span class="o">=</span> <span class="n">_estimate_configuration_model</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">C_samp</span><span class="p">),</span> <span class="mi">1</span><span class="n">e</span><span class="o">-</span><span class="mi">4</span><span class="p">)</span>
-        <span class="n">std_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">C_null</span><span class="p">))</span>
-        <span class="n">C_null</span> <span class="o">=</span> <span class="n">C_null</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">std_</span><span class="p">,</span> <span class="n">std_</span><span class="p">)</span>
-        <span class="n">K_null</span> <span class="o">=</span> <span class="n">C_samp</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s2">&quot;Null model </span><span class="si">%s</span><span class="s2"> is unknown. See the Readme for the available null models.&quot;</span>
-            <span class="o">%</span> <span class="n">null_model</span>
-        <span class="p">)</span>
-    <span class="k">return</span> <span class="n">C_null</span><span class="p">,</span> <span class="n">K_null</span>
-
-
-<span class="k">def</span> <span class="nf">_MM_algorithm</span><span class="p">(</span><span class="n">C_samp</span><span class="p">,</span> <span class="n">C_null</span><span class="p">,</span> <span class="n">lam</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Minorisation-maximisation algorithm. </span>
-<span class="sd">        </span>
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    C_samp : 2D numpy.ndarray, shape (N, N)</span>
-<span class="sd">        Sample correlation matrix. </span>
-<span class="sd">    C_null : 2D numpy.ndarray, shape (N, N)</span>
-<span class="sd">        Null correlation matrix.</span>
-<span class="sd">    lam : float</span>
-<span class="sd">        Lasso penalty.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    W : 2D numpy.ndarray, shape (N, N)</span>
-<span class="sd">        Weighted adjacency matrix of the generated network.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">N</span> <span class="o">=</span> <span class="n">C_samp</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">Lambda</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">C_samp</span> <span class="o">-</span> <span class="n">C_null</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="n">e</span><span class="o">-</span><span class="mi">20</span><span class="p">)</span>
-    <span class="n">W</span> <span class="o">=</span> <span class="n">_prox</span><span class="p">(</span><span class="n">C_samp</span> <span class="o">-</span> <span class="n">C_null</span><span class="p">,</span> <span class="n">lam</span> <span class="o">*</span> <span class="n">Lambda</span><span class="p">)</span>
-
-    <span class="n">score_prev</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="n">e300</span>
-    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-        <span class="n">_W</span> <span class="o">=</span> <span class="n">_maximisation_step</span><span class="p">(</span><span class="n">C_samp</span><span class="p">,</span> <span class="n">C_null</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">lam</span><span class="p">)</span>
-        <span class="n">score</span> <span class="o">=</span> <span class="n">_comp_penalized_loglikelihood</span><span class="p">(</span><span class="n">_W</span><span class="p">,</span> <span class="n">C_samp</span><span class="p">,</span> <span class="n">C_null</span><span class="p">,</span> <span class="n">lam</span> <span class="o">*</span> <span class="n">Lambda</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">score</span> <span class="o">&lt;=</span> <span class="n">score_prev</span><span class="p">:</span>
-            <span class="k">break</span>
-        <span class="n">W</span> <span class="o">=</span> <span class="n">_W</span>
-        <span class="n">score_prev</span> <span class="o">=</span> <span class="n">score</span>
-
-    <span class="k">return</span> <span class="n">W</span>
-
-
-<span class="k">def</span> <span class="nf">_maximisation_step</span><span class="p">(</span><span class="n">C_samp</span><span class="p">,</span> <span class="n">C_null</span><span class="p">,</span> <span class="n">W_base</span><span class="p">,</span> <span class="n">lam</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Maximisation step of the MM algorithm. </span>
-<span class="sd">    (A subroutine for _MM_algorithm). </span>
-<span class="sd">        </span>
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    C_samp : 2D numpy.ndarray, shape (N, N)</span>
-<span class="sd">        Sample correlation matrix. </span>
-<span class="sd">    C_null : 2D numpy.ndarray, shape (N, N)</span>
-<span class="sd">        Null correlation matrix.</span>
-<span class="sd">    W_base : 2D numpy.ndarray, shape (N, N)</span>
-<span class="sd">        W at which the minorisation is performed.  </span>
-<span class="sd">    lam : float</span>
-<span class="sd">        Lasso penalty.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    W : 2D numpy.ndarray, shape (N, N)</span>
-<span class="sd">        Weighted adjacency matrix of the generated network.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">N</span> <span class="o">=</span> <span class="n">C_samp</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">mt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">))</span>
-    <span class="n">vt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">))</span>
-    <span class="n">t</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">eps</span> <span class="o">=</span> <span class="mi">1</span><span class="n">e</span><span class="o">-</span><span class="mi">8</span>
-    <span class="n">b1</span> <span class="o">=</span> <span class="mf">0.9</span>
-    <span class="n">b2</span> <span class="o">=</span> <span class="mf">0.999</span>
-    <span class="n">maxscore</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="n">e300</span>
-    <span class="n">t_best</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">eta</span> <span class="o">=</span> <span class="mf">0.001</span>
-    <span class="n">maxIteration</span> <span class="o">=</span> <span class="mi">1</span><span class="n">e7</span>
-    <span class="n">maxLocalSearch</span> <span class="o">=</span> <span class="mi">300</span>
-    <span class="n">W</span> <span class="o">=</span> <span class="n">W_base</span>
-    <span class="n">Lambda</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">C_samp</span> <span class="o">-</span> <span class="n">C_null</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="n">e</span><span class="o">-</span><span class="mi">20</span><span class="p">)</span>
-    <span class="n">inv_C_base</span> <span class="o">=</span> <span class="n">_fast_mat_inv_lapack</span><span class="p">(</span><span class="n">C_null</span> <span class="o">+</span> <span class="n">W_base</span><span class="p">)</span>
-    <span class="n">_diff_min</span> <span class="o">=</span> <span class="mi">1</span><span class="n">e300</span>
-    <span class="k">while</span> <span class="p">(</span><span class="n">t</span> <span class="o">&lt;</span> <span class="n">maxIteration</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">((</span><span class="n">t</span> <span class="o">-</span> <span class="n">t_best</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">maxLocalSearch</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">_diff_min</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="n">e</span><span class="o">-</span><span class="mi">5</span><span class="p">):</span>
-        <span class="n">t</span> <span class="o">=</span> <span class="n">t</span> <span class="o">+</span> <span class="mi">1</span>
-        <span class="n">inv_C</span> <span class="o">=</span> <span class="n">_fast_mat_inv_lapack</span><span class="p">(</span><span class="n">C_null</span> <span class="o">+</span> <span class="n">W</span><span class="p">)</span>
-        <span class="n">gt</span> <span class="o">=</span> <span class="n">inv_C_base</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">inv_C</span><span class="p">,</span> <span class="n">C_samp</span><span class="p">),</span> <span class="n">inv_C</span><span class="p">)</span>
-        <span class="n">gt</span> <span class="o">=</span> <span class="p">(</span><span class="n">gt</span> <span class="o">+</span> <span class="n">gt</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0</span>
-        <span class="n">gt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">gt</span><span class="p">)</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">fill_diagonal</span><span class="p">(</span><span class="n">gt</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-
-        <span class="n">mt</span> <span class="o">=</span> <span class="n">b1</span> <span class="o">*</span> <span class="n">mt</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">b1</span><span class="p">)</span> <span class="o">*</span> <span class="n">gt</span>
-        <span class="n">vt</span> <span class="o">=</span> <span class="n">b2</span> <span class="o">*</span> <span class="n">vt</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">b2</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">gt</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-        <span class="n">mthat</span> <span class="o">=</span> <span class="n">mt</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">b1</span><span class="p">,</span> <span class="n">t</span><span class="p">))</span>
-        <span class="n">vthat</span> <span class="o">=</span> <span class="n">vt</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">b2</span><span class="p">,</span> <span class="n">t</span><span class="p">))</span>
-        <span class="n">dtheta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">mthat</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">vthat</span><span class="p">)</span> <span class="o">+</span> <span class="n">eps</span><span class="p">))</span>
-
-        <span class="n">W_prev</span> <span class="o">=</span> <span class="n">W</span>
-        <span class="n">W</span> <span class="o">=</span> <span class="n">_prox</span><span class="p">(</span><span class="n">W</span> <span class="o">-</span> <span class="n">eta</span> <span class="o">*</span> <span class="n">dtheta</span><span class="p">,</span> <span class="n">eta</span> <span class="o">*</span> <span class="n">lam</span> <span class="o">*</span> <span class="n">Lambda</span><span class="p">)</span>
-        <span class="n">_diff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">W</span> <span class="o">-</span> <span class="n">W_prev</span><span class="p">))</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">fill_diagonal</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">_diff</span> <span class="o">&lt;</span> <span class="n">_diff_min</span><span class="p">:</span>
-            <span class="n">_diff_min</span> <span class="o">=</span> <span class="n">_diff</span>
-            <span class="n">t_best</span> <span class="o">=</span> <span class="n">t</span>
-
-    <span class="k">return</span> <span class="n">W</span>
-
-
-<span class="k">def</span> <span class="nf">_fast_mat_inv_lapack</span><span class="p">(</span><span class="n">Mat</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Compute the inverse of a positive semidefinite matrix.</span>
-
-<span class="sd">    This function exploits the positive semidefiniteness to speed up</span>
-<span class="sd">    the matrix inversion.</span>
-<span class="sd">        </span>
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    Mat : 2D numpy.ndarray, shape (N, N)</span>
-<span class="sd">        A positive semidefinite matrix.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    inv_Mat : 2D numpy.ndarray, shape (N, N)</span>
-<span class="sd">        Inverse of Mat.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">zz</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">linalg</span><span class="o">.</span><span class="n">lapack</span><span class="o">.</span><span class="n">dpotrf</span><span class="p">(</span><span class="n">Mat</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
-    <span class="n">inv_Mat</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">linalg</span><span class="o">.</span><span class="n">lapack</span><span class="o">.</span><span class="n">dpotri</span><span class="p">(</span><span class="n">zz</span><span class="p">)</span>
-    <span class="n">inv_Mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">triu</span><span class="p">(</span><span class="n">inv_Mat</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">triu</span><span class="p">(</span><span class="n">inv_Mat</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
-    <span class="k">return</span> <span class="n">inv_Mat</span>
-
-
-<span class="k">def</span> <span class="nf">_comp_loglikelihood</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">C_samp</span><span class="p">,</span> <span class="n">C_null</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Compute the log likelihood for a network. </span>
-<span class="sd">    </span>
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    W : 2D numpy.ndarray, shape (N, N)</span>
-<span class="sd">        Weighted adjacency matrix of a network.</span>
-<span class="sd">    C_samp : 2D numpy.ndarray, shape (N, N)</span>
-<span class="sd">        Sample correlation matrix. </span>
-<span class="sd">    C_null : 2D numpy.ndarray, shape (N, N)</span>
-<span class="sd">        Null correlation matrix used for constructing the network.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    l : float</span>
-<span class="sd">        Log likelihood for the generated network. </span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">Cov</span> <span class="o">=</span> <span class="n">W</span> <span class="o">+</span> <span class="n">C_null</span>
-    <span class="n">w</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">eig</span><span class="p">(</span><span class="n">Cov</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">v</span> <span class="o">=</span> <span class="n">v</span><span class="p">[:,</span> <span class="n">w</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span>
-        <span class="n">w</span> <span class="o">=</span> <span class="n">w</span><span class="p">[</span><span class="n">w</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span>
-    <span class="n">iCov</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">w</span><span class="p">)),</span> <span class="n">v</span><span class="o">.</span><span class="n">T</span><span class="p">))</span>
-    <span class="n">l</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">w</span><span class="p">))</span>
-        <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">C_samp</span><span class="p">,</span> <span class="n">iCov</span><span class="p">))</span>
-        <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">Cov</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
-    <span class="p">)</span>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
-
-
-<span class="k">def</span> <span class="nf">_comp_penalized_loglikelihood</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">C_samp</span><span class="p">,</span> <span class="n">C_null</span><span class="p">,</span> <span class="n">Lambda</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Compute the penalized log likelihood for a network. </span>
-<span class="sd">    </span>
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    W : 2D numpy.ndarray, shape (N, N)</span>
-<span class="sd">        Weighted adjacency matrix of a network.</span>
-<span class="sd">    C_samp : 2D numpy.ndarray, shape (N, N)</span>
-<span class="sd">        Sample correlation matrix. </span>
-<span class="sd">    C_null : 2D numpy.ndarray, shape (N, N)</span>
-<span class="sd">        Null correlation matrix used for constructing the network.</span>
-<span class="sd">    Lambda : 2D numpy.ndarray, shape (N, N)</span>
-<span class="sd">        Lambda[i,j] is the Lasso penalty for W[i,j]. </span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    l : float</span>
-<span class="sd">        Penalized log likelihood for the generated network. </span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="p">(</span>
-        <span class="n">_comp_loglikelihood</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">C_samp</span><span class="p">,</span> <span class="n">C_null</span><span class="p">)</span>
-        <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">Lambda</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">W</span><span class="p">)))</span> <span class="o">/</span> <span class="mi">4</span>
-    <span class="p">)</span>
-
-
-<span class="k">def</span> <span class="nf">_comp_EBIC</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">C_samp</span><span class="p">,</span> <span class="n">C_null</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">Knull</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Compute the extended Bayesian Information Criterion (BIC) for a network. </span>
-<span class="sd">    </span>
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    W : 2D numpy.ndarray, shape (N, N)</span>
-<span class="sd">        Weighted adjacency matrix of a network.</span>
-<span class="sd">    C_samp : 2D numpy.ndarray, shape (N, N)</span>
-<span class="sd">        Sample correlation matrix.</span>
-<span class="sd">    C_null : 2D numpy.ndarray, shape (N, N)</span>
-<span class="sd">        Null correlation matrix used for constructing the network.</span>
-<span class="sd">    L : int</span>
-<span class="sd">        Number of samples.</span>
-<span class="sd">    beta : float</span>
-<span class="sd">        Parameter for the extended BIC. </span>
-<span class="sd">    K_null: int</span>
-<span class="sd">        Number of parameters of the null correlation matrix.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    EBIC : float</span>
-<span class="sd">        The extended BIC value for the generated network.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">k</span> <span class="o">=</span> <span class="n">Knull</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">count_nonzero</span><span class="p">(</span><span class="n">W</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
-    <span class="n">EBIC</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">L</span><span class="p">)</span> <span class="o">*</span> <span class="n">k</span>
-        <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">L</span> <span class="o">*</span> <span class="n">_comp_loglikelihood</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">C_samp</span><span class="p">,</span> <span class="n">C_null</span><span class="p">)</span>
-        <span class="o">+</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">beta</span> <span class="o">*</span> <span class="n">k</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">W</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-    <span class="p">)</span>
-    <span class="k">return</span> <span class="n">EBIC</span>
-
-
-<span class="k">def</span> <span class="nf">_prox</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">lam</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Soft thresholding operator.</span>
-<span class="sd">    </span>
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    x : float</span>
-<span class="sd">        Variable.</span>
-<span class="sd">    lam : float</span>
-<span class="sd">        Lasso penalty.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    y : float</span>
-<span class="sd">        Thresholded value of x. </span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="n">lam</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)))</span>
-
-
-<span class="k">def</span> <span class="nf">_estimate_configuration_model</span><span class="p">(</span><span class="n">C_samp</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="mi">1</span><span class="n">e</span><span class="o">-</span><span class="mi">5</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Compute the configuration model for correlation matrices</span>
-<span class="sd">    using the gradient descent algorithm.</span>
-<span class="sd">    </span>
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    C_samp : 2D numpy.ndarray, shape (N, N)</span>
-<span class="sd">        Sample correlation matrix.</span>
-<span class="sd">    tolerance: float</span>
-<span class="sd">        Tolerance in relative error.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    C_con : 2D numpy.ndarray, shape (N, N)</span>
-<span class="sd">        The correlation matrix under the configuration model that</span>
-<span class="sd">        preserves the row sum (and column sum) of C_samp as expectation.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">cov</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asanyarray</span><span class="p">(</span><span class="n">C_samp</span><span class="p">)</span>
-    <span class="n">std_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">cov</span><span class="p">))</span>
-    <span class="n">_C_samp</span> <span class="o">=</span> <span class="n">cov</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">std_</span><span class="p">,</span> <span class="n">std_</span><span class="p">)</span>
-
-    <span class="n">N</span> <span class="o">=</span> <span class="n">_C_samp</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">_C_samp</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">K</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">pinv</span><span class="p">(</span><span class="n">_C_samp</span><span class="p">)</span>
-
-    <span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">K</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">)])</span>
-    <span class="n">mt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">N</span><span class="p">)</span>
-    <span class="n">vt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">N</span><span class="p">)</span>
-    <span class="n">t</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">eps</span> <span class="o">=</span> <span class="mi">1</span><span class="n">e</span><span class="o">-</span><span class="mi">8</span>
-    <span class="n">b1</span> <span class="o">=</span> <span class="mf">0.9</span>
-    <span class="n">b2</span> <span class="o">=</span> <span class="mf">0.999</span>
-    <span class="n">t_best</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">eta</span> <span class="o">=</span> <span class="mf">0.001</span>
-    <span class="n">maxIteration</span> <span class="o">=</span> <span class="mi">1</span><span class="n">e7</span>
-    <span class="k">while</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="n">maxIteration</span><span class="p">:</span>
-        <span class="n">t</span> <span class="o">=</span> <span class="n">t</span> <span class="o">+</span> <span class="mi">1</span>
-
-        <span class="n">K_est</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">add</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">theta</span><span class="p">[</span><span class="n">N</span> <span class="p">:</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">N</span><span class="p">],</span> <span class="n">theta</span><span class="p">[</span><span class="n">N</span> <span class="p">:</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">N</span><span class="p">])</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">theta</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">N</span><span class="p">])</span>
-        <span class="n">C_con</span> <span class="o">=</span> <span class="n">_fast_mat_inv_lapack</span><span class="p">(</span><span class="n">K_est</span><span class="p">)</span>
-
-        <span class="n">error</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">C_con</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">s</span><span class="p">)</span> <span class="o">/</span> <span class="n">s</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">error</span> <span class="o">&lt;</span> <span class="n">tolerance</span><span class="p">:</span>
-            <span class="k">break</span>
-
-        <span class="n">dalpha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">C_con</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">_C_samp</span><span class="p">)</span>
-        <span class="n">dbeta</span> <span class="o">=</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">/</span> <span class="n">N</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">C_con</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">s</span><span class="p">)</span>
-
-        <span class="n">gt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">dalpha</span><span class="p">,</span> <span class="n">dbeta</span><span class="p">])</span>
-        <span class="n">mt</span> <span class="o">=</span> <span class="n">b1</span> <span class="o">*</span> <span class="n">mt</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">b1</span><span class="p">)</span> <span class="o">*</span> <span class="n">gt</span>
-        <span class="n">vt</span> <span class="o">=</span> <span class="n">b2</span> <span class="o">*</span> <span class="n">vt</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">b2</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">gt</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">)</span>
-        <span class="n">mthat</span> <span class="o">=</span> <span class="n">mt</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">b1</span><span class="p">,</span> <span class="n">t</span><span class="p">))</span>
-        <span class="n">vthat</span> <span class="o">=</span> <span class="n">vt</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">b2</span><span class="p">,</span> <span class="n">t</span><span class="p">))</span>
-        <span class="n">dtheta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">mthat</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">vthat</span><span class="p">)</span> <span class="o">+</span> <span class="n">eps</span><span class="p">))</span>
-
-        <span class="n">theta</span> <span class="o">=</span> <span class="n">theta</span> <span class="o">+</span> <span class="n">eta</span> <span class="o">*</span> <span class="n">dtheta</span>
-
-    <span class="k">return</span> <span class="n">C_con</span>
+    <span class="k">return</span> <span class="n">res</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">res</span></div>
 </pre></div>
 
            </div>
+           
           </div>
           <footer>
   
@@ -691,7 +298,7 @@
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -710,31 +317,26 @@
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
             VERSION:'0.0.0',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../../_static/jquery.js"></script>
       <script type="text/javascript" src="../../_static/underscore.js"></script>
       <script type="text/javascript" src="../../_static/doctools.js"></script>
-      <script type="text/javascript" src="../../_static/language_data.js"></script>
 
   
 
-  
-  
-    <script type="text/javascript" src="../../_static/js/theme.js"></script>
-  
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>
