@@ -116,6 +116,7 @@ def generate_network(C_samp, L, null_model="all", disp=True, input_mat_type="cor
                 ]
 
             elif mat_type == "pres":
+
                 estimator = iScola()
                 W, C_null, EBIC_min = _golden_section_search(
                     C_samp, L, iC_null, K_null, estimator, 0.5, pbar, disp
@@ -137,4 +138,4 @@ def generate_network(C_samp, L, null_model="all", disp=True, input_mat_type="cor
 
     idx = np.argmin(np.array([r["EBIC_min"] for r in res]))
 
-    return res[idx], res
+    return res[idx]["W"], res[idx]["C_null"], res[idx]["null_model"], res[idx]["EBIC_min"], res[idx]["input_mat_type"]

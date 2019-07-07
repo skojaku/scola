@@ -13,6 +13,7 @@ from ._common import _comp_loglikelihood
 
 
 class Scola:
+
     def __init__(self):
         pass
 

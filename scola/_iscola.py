@@ -17,6 +17,8 @@ class iScola:
     def __init__(self):
         pass
 
+    input_matrix_type = "pres"
+
     def detect(self, C_samp, iC_null, lam):
         """
         Scola algorithm for precision matrices. 
