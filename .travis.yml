@@ -90,7 +90,7 @@ install:
    - python -m pip install -U pip
    - python -m pip install numpy
    - python -m pip install pytest 
-   - python -m pip install scola
+   - python -m pip install .
 
 # command to run tests
 script:
