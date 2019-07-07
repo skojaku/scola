@@ -3,11 +3,11 @@ from codecs import open
 
 setup(
     name='scola',
-    version='0.0.15',
+    version='0.0.16',
     description='Python code for the Scola algorithm',
     long_description='Python code for the Scola algorithm',
     url='https://github.com/skojaku/scola',
-    author='Naoki Masuda',
+    author='Sadamori Kojaku',
     author_email='freesailing@gmail.com',
     license='MIT',
     classifiers=[
