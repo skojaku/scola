@@ -16,3 +16,5 @@ def test():
     W, C_null, selected_null_model, EBIC, input_mat_type = scola.generate_network(C_samp, L)
     W, C_null, selected_null_model, EBIC, input_mat_type = scola.generate_network(C_samp, L, input_mat_type="pres")
     W, C_null, selected_null_model, EBIC, input_mat_type = scola.generate_network(C_samp, L, input_mat_type="auto")
+
+test()

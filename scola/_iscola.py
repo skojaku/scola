@@ -116,9 +116,12 @@ class iScola:
         iC_samp = self._ridge(C_samp, 0.0001)
         absCov = np.abs(iC_samp - iC_null)
         D = iC_null - iC_samp
-        lam_upper = np.quantile(
-            np.triu(np.multiply(np.abs(D), np.power(absCov, 2)), 1), 0.95
-        )
+        v = np.triu(np.multiply(np.abs(D), np.power(absCov, 2)), 1)
+        nnz = np.nonzero(v)
+        if len(nnz) == 0:
+            return 1
+        else:
+            lam_upper = np.sort(v[nnz])[np.floor(len(nnz)*0.95).astype(int)]
         return lam_upper
 
     def _prox(self, x, lam):
