@@ -12,4 +12,7 @@ def test():
     L = int(X.shape[0])
     N = int(X.shape[1])
     C_samp = np.corrcoef(X.T)
-    best_est, all_est = scola.generate_network(C_samp, L, input_matrix="all")
+
+    W, C_null, selected_null_model, EBIC, input_mat_type = scola.generate_network(C_samp, L)
+    W, C_null, selected_null_model, EBIC, input_mat_type = scola.generate_network(C_samp, L, input_mat_type="pres")
+    W, C_null, selected_null_model, EBIC, input_mat_type = scola.generate_network(C_samp, L, input_mat_type="auto")
