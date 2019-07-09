@@ -118,10 +118,11 @@ class iScola:
         D = iC_null - iC_samp
         v = np.triu(np.multiply(np.abs(D), np.power(absCov, 2)), 1)
         nnz = np.nonzero(v)
+        K = len(nnz[0])
         if len(nnz) == 0:
             return 1
         else:
-            lam_upper = np.sort(v[nnz])[np.floor(len(nnz)*0.95).astype(int)]
+            lam_upper = np.sort(v[nnz])[np.floor(K * 0.99).astype(int)]
         return lam_upper
 
     def _prox(self, x, lam):
