@@ -5,29 +5,60 @@ Constructing networks with different null models
 With the Scola, two nodes are adjacent in the network if and only if the correlation between the nodes is considerably different from that in a null model.
 In this example, we will show that diffferent null models will generate considerably different netwowkrs.
 
-We use historic S&P 500 stock price data retrieved from Yahoo finance, `sample.txt <https://raw.githubusercontent.com/skojaku/scola/master/data/sample.txt>`_, is available on  `GitHub <https://raw.githubusercontent.com/skojaku/scola/master/data/sp500-log-return.csv>`_, which consists of the log return of the price of N=xxx stock prices between xxxx and xxx (L=xxx days). 
-The code to retrieve the data can be found in `here <https://raw.githubusercontent.com/skojaku/scola/master/data/get_sp500_stock_prices.py>`.  
-An example data, , which is composed of xx=300 rows and N=25 columns (space separated), where L is the number of samples and N is the number of variables (i.e., nodes). 
-The following code loads the data. 
+We use historic S&P 500 stock price data retrieved from Yahoo finance, `sp500-log-return.csv <https://raw.githubusercontent.com/skojaku/scola/master/data/sp500-log-return.csv>`_, which contains the log return of the prices of N=488 stocks between 2015/01/01 and 2019/01/01 (L=1,008 days). 
+The code to retrieve the data can be found in `here <https://raw.githubusercontent.com/skojaku/scola/master/data/get_sp500_stock_prices.py>`.
+
+First, download the toy data by 
 
 .. code-block:: python
 
    import numpy as np
    import pandas as pd
+   
+   # Load the log return of the stock prices
+   log_return = pd.read_csv("https://raw.githubusercontent.com/skojaku/scola/develop/data/sp500-log-return.csv", sep="\t")
+   
+   L = log_return.shape[0]
+   N = log_return.shape[1]
+   C_samp = log_return.corr().values
 
-   X = pd.read_csv("https://raw.githubusercontent.com/skojaku/scola/master/data/sample.txt", header=None, sep=" ").values
-   L = X.shape[0] # Number of samples
-   N = X.shape[1] # Number of nodes
+   # Ticker names
+   ticker_names = pd.read_csv("https://raw.githubusercontent.com/skojaku/scola/develop/data/ticker-names.csv", sep="\t")
 
-Then, compute the sample correlation matrix by 
+
+Let's see how the sample correlation matrix looks like:
 
 .. code-block:: python
+   
+   import matplotlib.colors as colors
+    
+   def plot_corr(A, ax = None):
+       
+       min_w = np.min(A)
+       max_w = np.max(A)
+       disc_min_w = 0.125 * np.floor(min_w / 0.125)
+       disc_max_w = 0.125 * np.ceil(max_w / 0.125)
+       bounds = np.linspace( disc_min_w, disc_max_w, np.round( (disc_max_w - disc_min_w) / 0.125) + 1 )
+       
+       norm = colors.BoundaryNorm(boundaries=bounds, ncolors=256)
+       cmap = sns.diverging_palette(220, 10, as_cmap=True)
+       ax = sns.heatmap(A, cmap=cmap,\
+                        center = 0,\
+                        vmax=max_w,\
+                        vmin=min_w,\
+                        square=True,\
+                        mask=A==0,\
+                        norm=norm,\
+                        ax = ax\
+                       )
+       
+       ax.set_xticks([])
+       ax.set_yticks([])
+       return ax
+  
+   plot_corr(C_samp)
 
-   C_samp = np.corrcoef(X.T) # NxN correlation matrix
-
-``C_samp`` looks like
-
-.. figure:: fig/C\_samp.png
+.. figure:: fig/C\_samp-sp500.png
    :scale: 20 %
    :align: center 
 
