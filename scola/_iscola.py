@@ -15,11 +15,11 @@ from ._common import _comp_loglikelihood
 class iScola:
 
     def __init__(self):
-        pass
+        self.approximation = True
 
     input_matrix_type = "pres"
 
-    def detect(self, C_samp, iC_null, lam):
+    def detect(self, C_samp, iC_null, lam, Winit = None):
         """
         Scola algorithm for precision matrices. 
             
@@ -53,7 +53,17 @@ class iScola:
         maxLocalSearch = 300
         Lambda = 1 / (np.power(np.abs(iC_samp - iC_null), 2) + 1e-20)
         np.fill_diagonal(Lambda, 0)
-        W = np.zeros_like(C_samp)
+        
+        if self.approximation:
+            W = self._prox(iC_samp - iC_null, lam * Lambda)
+            return W
+
+        if Winit is not None:
+            W = Winit 
+        else:
+            W = self._prox(iC_samp - iC_null, lam * Lambda)
+
+        score0 = self._comp_penalized_loglikelihood(W, C_samp, iC_null, Lambda)
         _diff_min = 1e300
         while (
             (t < maxIteration) & ((t - t_best) <= maxLocalSearch) & (_diff_min > 5e-5)
@@ -74,6 +84,20 @@ class iScola:
                 _diff_min = _diff
                 t_best = t
 
+            if _diff < 5e-5:
+                break
+
+            # If the score isn't improved in the first 50 iterations, then break
+            if t % 10 == 0:
+                score = self._comp_penalized_loglikelihood(W, C_samp, iC_null, Lambda)
+                #score = self._comp_penalized_loglikelihood(W, C_samp, C_null, Lambda)
+                if (prev_score > score):
+                    break
+                prev_score = score
+            if t % 50 == 0:
+                score = self._comp_penalized_loglikelihood(W, C_samp, iC_null, Lambda)
+                if (score0 > score):
+                    break
         return W
 
     def _ridge(self, C_samp, rho):
@@ -150,3 +174,28 @@ class iScola:
         g = (g + g.T) / 2
         g = np.nan_to_num(g)
         return g
+
+    def _comp_penalized_loglikelihood(self, W, C_samp, C_null, Lambda):
+        """
+	    Compute the penalized log likelihood for a network. 
+	    
+	    Parameters
+	    ----------
+	    W : 2D numpy.ndarray, shape (N, N)
+	        Weighted adjacency matrix of a network.
+	    C_samp : 2D numpy.ndarray, shape (N, N)
+	        Sample correlation matrix. 
+	    C_null : 2D numpy.ndarray, shape (N, N)
+	        Null correlation matrix used for constructing the network.
+	    Lambda : 2D numpy.ndarray, shape (N, N)
+	        Lambda[i,j] is the Lasso penalty for W[i,j]. 
+	
+	    Returns
+	    -------
+	    l : float
+	        Penalized log likelihood for the generated network. 
+	    """
+        return (
+            _comp_loglikelihood(W, C_samp, C_null, "pres")
+            - np.sum(np.multiply(Lambda, np.abs(W))) / 4
+        )

@@ -7,6 +7,7 @@ import os
 import tqdm
 import sys
 from functools import partial
+from . import gradient_descent as gd
 from ._common import _fast_mat_inv_lapack
 from ._common import _comp_EBIC
 from ._common import _comp_loglikelihood
@@ -15,11 +16,10 @@ from ._common import _comp_loglikelihood
 class Scola:
 
     def __init__(self):
-        pass
+        self.approximation = False
+        self.input_matrix_type = "cov"
 
-    input_matrix_type = "cov"
-
-    def detect(self, C_samp, C_null, lam):
+    def detect(self, C_samp, C_null, lam, Winit = None):
         """
 	    Minorisation-maximisation algorithm. 
 	        
@@ -40,15 +40,36 @@ class Scola:
 
         N = C_samp.shape[0]
         Lambda = 1.0 / (np.power(np.abs(C_samp - C_null), 2) + 1e-20)
-        W = np.zeros_like(C_samp)
+
+        if self.approximation:
+            W = self._prox(C_samp - C_null, lam * Lambda)
+            return W
+
+        if Winit is not None:
+            W = Winit 
+        else:
+            W = self._prox(C_samp - C_null, lam * Lambda)
 
         score_prev = -1e300
+        count_small_itnum = 0 
+        score = self._comp_penalized_loglikelihood(W, C_samp, C_null, lam * Lambda)
         while True:
-            _W = self._maximisation_step(C_samp, C_null, W, lam)
+            _W, itnum = self._maximisation_step(C_samp, C_null, W, lam)
             score = self._comp_penalized_loglikelihood(_W, C_samp, C_null, lam * Lambda)
+           
+            #print(score, itnum)
             if score <= score_prev:
                 break
             W = _W
+
+            # The changes in W are gentle, stop iteration.
+            if itnum <=2:
+               count_small_itnum+=1 
+               if count_small_itnum>5:
+                    break
+            else:
+               count_small_itnum=0 
+
             score_prev = score
 
         return W
@@ -138,47 +159,62 @@ class Scola:
 	    -------
 	    W : 2D numpy.ndarray, shape (N, N)
 	        Weighted adjacency matrix of the generated network.
-	    """
-
+	"""
         N = C_samp.shape[0]
-        mt = np.zeros((N, N))
-        vt = np.zeros((N, N))
         t = 0
-        eps = 1e-8
-        b1 = 0.9
-        b2 = 0.999
+        #eps = 1e-8
+        #b1 = 0.9
+        #b2 = 0.999
         maxscore = -1e300
         t_best = 0
-        eta = 0.001
-        maxIteration = 1e7
-        maxLocalSearch = 300
+        #eta = 0.001
+        maxLocalSearch = 30
+        maxIteration = 300 
+
+        #maxIteration = 1e7
+        #maxLocalSearch = 300
         W = W_base
-        Lambda = 1 / (np.power(np.abs(C_samp - C_null), 2) + 1e-20)
+        Lambda = lam / (np.power(np.abs(C_samp - C_null), 2) + 1e-20)
         inv_C_base = _fast_mat_inv_lapack(C_null + W_base)
         _diff_min = 1e300
+        score0 = self._comp_penalized_loglikelihood(W, C_samp, C_null, Lambda)
+
+        #adam = gd.ADABound()
+        adam = gd.ADAM()
+        adam.eta = 0.01
+        adam.decreasing_learning_rate = True
+        prev_score = score0
         while (
-            (t < maxIteration) & ((t - t_best) <= maxLocalSearch) & (_diff_min > 5e-5)
+            (t < maxIteration) & ((t - t_best) <= maxLocalSearch) & (_diff_min > 1e-5)
         ):
             t = t + 1
             inv_C = _fast_mat_inv_lapack(C_null + W)
             gt = inv_C_base - np.matmul(np.matmul(inv_C, C_samp), inv_C)
-            gt = (gt + gt.T) / 2.0
-            gt = np.nan_to_num(gt)
-            np.fill_diagonal(gt, 0)
-
-            mt = b1 * mt + (1.0 - b1) * gt
-            vt = b2 * vt + (1.0 - b2) * np.power(gt, 2)
-            mthat = mt / (1.0 - np.power(b1, t))
-            vthat = vt / (1.0 - np.power(b2, t))
-            dtheta = np.divide(mthat, (np.sqrt(vthat) + eps))
 
             W_prev = W
-            W = self._prox(W - eta * dtheta, eta * lam * Lambda)
-            _diff = np.max(np.abs(W - W_prev))
+            np.fill_diagonal(gt, 0.0)
+            W = adam.update( W, -gt, Lambda)    
             np.fill_diagonal(W, 0.0)
 
-            if _diff < _diff_min:
+            _diff = np.sqrt( np.mean(np.power(W - W_prev, 2)) )
+       
+
+            if _diff < (_diff_min * 0.95):
                 _diff_min = _diff
                 t_best = t
 
-        return W
+            if _diff < 5e-5:
+                break
+
+            # If the score isn't improved in the first 50 iterations, then break
+            if t % 10 == 0:
+                score = self._comp_penalized_loglikelihood(W, C_samp, C_null, Lambda)
+                if (prev_score > score):
+                    break
+                prev_score = score
+            if t % 50 == 0:
+                score = self._comp_penalized_loglikelihood(W, C_samp, C_null, Lambda)
+                if (score0 > score):
+                    break
+
+        return W, t

@@ -1,3 +1,4 @@
 __author_ = "Sadamori Kojaku"
 
-from .generate_network import *
+from . import corr2net
+from . import null_models

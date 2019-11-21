@@ -4,49 +4,44 @@ from ._common import _comp_EBIC
 from ._common import _comp_loglikelihood
 from ._common import _fast_mat_inv_lapack
 
-
-def _compute_null_correlation_matrix(C_samp, null_model):
+def estimate_white_noise_model(C_samp):
     """
-        Compute a null correlation matrix for a sample correlation matrix.
-            
+        Compute the white noise model for correlation matrices.
+        
         Parameters
         ----------
         C_samp : 2D numpy.ndarray, shape (N, N)
             Sample correlation matrix.
-        null_model : str
-            Name of the null model.
     
         Returns
         -------
-        C_null : 2D numpy.ndarray, shape (N, N)
-            Estimated null correlation matrix.
-        K_null : int
-            Number of parameters of the null model. 
-        """
-
-    C_null = []
-    K_null = -1
-    if null_model == "white-noise":
-        C_null = np.eye(C_samp.shape[0])
-        K_null = 0
-    elif null_model == "hqs":
-        C_null = np.mean(np.triu(C_samp, 1)) * np.ones(C_samp.shape)
-        np.fill_diagonal(C_null, 1)
-        K_null = 1
-    elif null_model == "config":
-        C_null = _estimate_configuration_model(np.array(C_samp), 1e-4)
-        std_ = np.sqrt(np.diag(C_null))
-        C_null = C_null / np.outer(std_, std_)
-        K_null = C_samp.shape[0]
-    else:
-        raise ValueError(
-            "Null model %s is unknown. See the Readme for the available null models."
-            % null_model
-        )
+        C_con : 2D numpy.ndarray, shape (N, N)
+            The correlation matrix under the white-noise model.
+    """
+    C_null = np.eye(C_samp.shape[0])
+    K_null = 0
     return C_null, K_null
 
+def estimate_hqs_model(C_samp):
+    """
+        Compute the HQS model for correlation matrices.
+        
+        Parameters
+        ----------
+        C_samp : 2D numpy.ndarray, shape (N, N)
+            Sample correlation matrix.
+    
+        Returns
+        -------
+        C_con : 2D numpy.ndarray, shape (N, N)
+            The correlation matrix under the HQS model.
+    """
+    C_null = np.mean(np.triu(C_samp, 1)) * np.ones(C_samp.shape)
+    np.fill_diagonal(C_null, 1)
+    K_null = 1
+    return C_null, K_null
 
-def _estimate_configuration_model(C_samp, tolerance=1e-5):
+def estimate_configuration_model(C_samp, tolerance=1e-5):
     """
         Compute the configuration model for correlation matrices
         using the gradient descent algorithm.
@@ -63,7 +58,7 @@ def _estimate_configuration_model(C_samp, tolerance=1e-5):
         C_con : 2D numpy.ndarray, shape (N, N)
             The correlation matrix under the configuration model that
             preserves the row sum (and column sum) of C_samp as expectation.
-        """
+    """
 
     cov = np.asanyarray(C_samp)
     std_ = np.sqrt(np.diag(cov))
@@ -106,4 +101,7 @@ def _estimate_configuration_model(C_samp, tolerance=1e-5):
 
         theta = theta + eta * dtheta
 
-    return C_con
+    std_ = np.sqrt(np.diag(C_con))
+    C_con = C_con / np.outer(std_, std_)
+    K_null = C_samp.shape[0]
+    return C_con, K_null

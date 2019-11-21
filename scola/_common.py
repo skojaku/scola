@@ -4,6 +4,30 @@ from scipy import sparse
 from scipy import stats
 import numpy as np
 
+def _remedy_degeneracy(C_samp, rho = 1e-3):
+    w, v = np.linalg.eigh(C_samp)
+    if np.min(w) < rho:
+
+        w[w<0] = rho
+
+        # Compute the precision matrix from covariance matrix with a ridge regularization.
+        lambda_hat = 2 / (np.sqrt(w ** 2) + np.sqrt(w ** 2 + 8 * rho))
+        iC = np.matmul(np.matmul(v, np.diag(lambda_hat)), v.T)
+
+        # Compute the correlation matrix from the precision matrix
+        _C_samp = np.linalg.inv(iC)
+        
+        # Homogenize the variance 
+        std_ = np.sqrt(np.diag(_C_samp))
+        C_samp = _C_samp / np.outer(std_, std_)
+
+    return C_samp
+
+def _penalized_inverse(C_samp, rho = 1e-3):
+    w, v = np.linalg.eigh(C_samp)
+    lambda_hat = 2 / (np.sqrt(w ** 2) + np.sqrt(w ** 2 + 8 * rho))
+    iC = np.matmul(np.matmul(v, np.diag(lambda_hat)), v.T)
+    return iC 
 
 def _fast_mat_inv_lapack(Mat):
     """
@@ -109,3 +133,4 @@ def _comp_loglikelihood(W, C_samp, C_null, input_matrix_type):
         )
 
     return np.real(l)
+
