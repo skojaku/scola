@@ -1,0 +1,506 @@
+gics	name
+Communication Services	FOXA
+Communication Services	CBS
+Communication Services	VZ
+Communication Services	TWTR
+Communication Services	TTWO
+Communication Services	NFLX
+Communication Services	VIAB
+Communication Services	TMUS
+Communication Services	CMCSA
+Communication Services	GOOG
+Communication Services	GOOGL
+Communication Services	DIS
+Communication Services	FOX
+Communication Services	CHTR
+Communication Services	OMC
+Communication Services	IPG
+Communication Services	CTL
+Communication Services	DISCA
+Communication Services	DISCK
+Communication Services	DISH
+Communication Services	T
+Communication Services	NWSA
+Communication Services	NWS
+Communication Services	EA
+Communication Services	TRIP
+Communication Services	FB
+Communication Services	ATVI
+Consumer Discretionary	HD
+Consumer Discretionary	HOG
+Consumer Discretionary	HAS
+Consumer Discretionary	TIF
+Consumer Discretionary	BBY
+Consumer Discretionary	HRB
+Consumer Discretionary	CCL
+Consumer Discretionary	KMX
+Consumer Discretionary	JWN
+Consumer Discretionary	BKNG
+Consumer Discretionary	BWA
+Consumer Discretionary	TJX
+Consumer Discretionary	TSCO
+Consumer Discretionary	HLT
+Consumer Discretionary	NKE
+Consumer Discretionary	CPRI
+Consumer Discretionary	NCLH
+Consumer Discretionary	CMG
+Consumer Discretionary	RL
+Consumer Discretionary	PHM
+Consumer Discretionary	EXPE
+Consumer Discretionary	EBAY
+Consumer Discretionary	ROST
+Consumer Discretionary	RCL
+Consumer Discretionary	DLTR
+Consumer Discretionary	DG
+Consumer Discretionary	M
+Consumer Discretionary	F
+Consumer Discretionary	DRI
+Consumer Discretionary	DHI
+Consumer Discretionary	SBUX
+Consumer Discretionary	GPS
+Consumer Discretionary	GRMN
+Consumer Discretionary	ORLY
+Consumer Discretionary	NVR
+Consumer Discretionary	GM
+Consumer Discretionary	TPR
+Consumer Discretionary	TGT
+Consumer Discretionary	GPC
+Consumer Discretionary	HBI
+Consumer Discretionary	NWL
+Consumer Discretionary	PVH
+Consumer Discretionary	ULTA
+Consumer Discretionary	MGM
+Consumer Discretionary	KSS
+Consumer Discretionary	VFC
+Consumer Discretionary	MHK
+Consumer Discretionary	AMZN
+Consumer Discretionary	LB
+Consumer Discretionary	MCD
+Consumer Discretionary	LVS
+Consumer Discretionary	LEG
+Consumer Discretionary	LEN
+Consumer Discretionary	WHR
+Consumer Discretionary	APTV
+Consumer Discretionary	AZO
+Consumer Discretionary	LKQ
+Consumer Discretionary	UAA
+Consumer Discretionary	YUM
+Consumer Discretionary	WYNN
+Consumer Discretionary	AAP
+Consumer Discretionary	LOW
+Consumer Discretionary	UA
+Consumer Discretionary	MAR
+Consumer Staples	GIS
+Consumer Staples	KHC
+Consumer Staples	KO
+Consumer Staples	PG
+Consumer Staples	CL
+Consumer Staples	WBA
+Consumer Staples	CLX
+Consumer Staples	PEP
+Consumer Staples	SYY
+Consumer Staples	STZ
+Consumer Staples	MO
+Consumer Staples	KR
+Consumer Staples	COST
+Consumer Staples	COTY
+Consumer Staples	KMB
+Consumer Staples	MKC
+Consumer Staples	LW
+Consumer Staples	PM
+Consumer Staples	CAG
+Consumer Staples	K
+Consumer Staples	WMT
+Consumer Staples	TSN
+Consumer Staples	HRL
+Consumer Staples	MNST
+Consumer Staples	MDLZ
+Consumer Staples	HSY
+Consumer Staples	EL
+Consumer Staples	CPB
+Consumer Staples	ADM
+Consumer Staples	TAP
+Consumer Staples	CHD
+Consumer Staples	BF.B
+Consumer Staples	SJM
+Energy	COG
+Energy	NOV
+Energy	MRO
+Energy	HFC
+Energy	XOM
+Energy	DVN
+Energy	FANG
+Energy	WMB
+Energy	PXD
+Energy	PSX
+Energy	NBL
+Energy	HES
+Energy	OKE
+Energy	BKR
+Energy	OXY
+Energy	XEC
+Energy	MPC
+Energy	EOG
+Energy	CVX
+Energy	KMI
+Energy	FTI
+Energy	HAL
+Energy	SLB
+Energy	HP
+Energy	CXO
+Energy	COP
+Energy	APA
+Energy	VLO
+Financials	PFG
+Financials	RE
+Financials	HBAN
+Financials	PGR
+Financials	PNC
+Financials	L
+Financials	PRU
+Financials	MTB
+Financials	MKTX
+Financials	GL
+Financials	NDAQ
+Financials	MET
+Financials	GS
+Financials	KEY
+Financials	JPM
+Financials	NTRS
+Financials	ZION
+Financials	HIG
+Financials	ICE
+Financials	BEN
+Financials	IVZ
+Financials	PBCT
+Financials	FRC
+Financials	FITB
+Financials	MSCI
+Financials	LNC
+Financials	MMC
+Financials	MCO
+Financials	MS
+Financials	DFS
+Financials	CMA
+Financials	SIVB
+Financials	SYF
+Financials	AMP
+Financials	TROW
+Financials	CME
+Financials	CFG
+Financials	C
+Financials	CINF
+Financials	CB
+Financials	SCHW
+Financials	STI
+Financials	AON
+Financials	CBOE
+Financials	AJG
+Financials	COF
+Financials	AIZ
+Financials	TRV
+Financials	USB
+Financials	BLK
+Financials	BAC
+Financials	BK
+Financials	BRK.B
+Financials	UNM
+Financials	STT
+Financials	BBT
+Financials	WLTW
+Financials	AIG
+Financials	RJF
+Financials	AXP
+Financials	ALL
+Financials	SPGI
+Financials	WFC
+Financials	RF
+Financials	AFL
+Financials	ETFC
+Financials	AMG
+Health Care	ISRG
+Health Care	UNH
+Health Care	A
+Health Care	VRTX
+Health Care	MYL
+Health Care	IQV
+Health Care	ABMD
+Health Care	ABBV
+Health Care	ILMN
+Health Care	ABT
+Health Care	ZBH
+Health Care	INCY
+Health Care	ANTM
+Health Care	LLY
+Health Care	MRK
+Health Care	MCK
+Health Care	AGN
+Health Care	BAX
+Health Care	LH
+Health Care	WAT
+Health Care	ALGN
+Health Care	ALXN
+Health Care	ABC
+Health Care	MTD
+Health Care	AMGN
+Health Care	WCG
+Health Care	VAR
+Health Care	JNJ
+Health Care	MDT
+Health Care	UHS
+Health Care	DGX
+Health Care	BIIB
+Health Care	BDX
+Health Care	TFX
+Health Care	CERN
+Health Care	CI
+Health Care	GILD
+Health Care	COO
+Health Care	IDXX
+Health Care	CVS
+Health Care	CNC
+Health Care	DHR
+Health Care	PKI
+Health Care	XRAY
+Health Care	PRGO
+Health Care	PFE
+Health Care	RMD
+Health Care	REGN
+Health Care	EW
+Health Care	DVA
+Health Care	CELG
+Health Care	SYK
+Health Care	HCA
+Health Care	HUM
+Health Care	BSX
+Health Care	HOLX
+Health Care	CAH
+Health Care	HSIC
+Health Care	TMO
+Health Care	BMY
+Health Care	ZTS
+Industrials	RTN
+Industrials	UTX
+Industrials	NLSN
+Industrials	RSG
+Industrials	XYL
+Industrials	PWR
+Industrials	RHI
+Industrials	ROK
+Industrials	ROL
+Industrials	ROP
+Industrials	SNA
+Industrials	MAS
+Industrials	UPS
+Industrials	VRSK
+Industrials	UNP
+Industrials	UAL
+Industrials	TXT
+Industrials	SWK
+Industrials	WM
+Industrials	PNR
+Industrials	WAB
+Industrials	PH
+Industrials	NOC
+Industrials	PCAR
+Industrials	TDG
+Industrials	URI
+Industrials	LUV
+Industrials	NSC
+Industrials	MMM
+Industrials	ITW
+Industrials	INFO
+Industrials	BA
+Industrials	IEX
+Industrials	HII
+Industrials	CHRW
+Industrials	HON
+Industrials	CAT
+Industrials	GWW
+Industrials	GE
+Industrials	CTAS
+Industrials	GD
+Industrials	FBHS
+Industrials	FTV
+Industrials	CPRT
+Industrials	CSX
+Industrials	CMI
+Industrials	DE
+Industrials	DAL
+Industrials	FLS
+Industrials	DOV
+Industrials	ETN
+Industrials	FDX
+Industrials	EMR
+Industrials	EFX
+Industrials	FAST
+Industrials	IR
+Industrials	ARNC
+Industrials	EXPD
+Industrials	JEC
+Industrials	KSU
+Industrials	AAL
+Industrials	ALK
+Industrials	LHX
+Industrials	AME
+Industrials	JBHT
+Industrials	ALLE
+Industrials	JCI
+Industrials	AOS
+Industrials	LMT
+Information Technology	XRX
+Information Technology	STX
+Information Technology	SWKS
+Information Technology	XLNX
+Information Technology	AMD
+Information Technology	AKAM
+Information Technology	ADBE
+Information Technology	ACN
+Information Technology	WU
+Information Technology	WDC
+Information Technology	GLW
+Information Technology	QCOM
+Information Technology	CRM
+Information Technology	ANET
+Information Technology	ADS
+Information Technology	CTSH
+Information Technology	ADSK
+Information Technology	ADP
+Information Technology	AAPL
+Information Technology	ANSS
+Information Technology	ADI
+Information Technology	APH
+Information Technology	QRVO
+Information Technology	BR
+Information Technology	VRSN
+Information Technology	CDNS
+Information Technology	CDW
+Information Technology	TXN
+Information Technology	TEL
+Information Technology	V
+Information Technology	CSCO
+Information Technology	CTXS
+Information Technology	AMAT
+Information Technology	SNPS
+Information Technology	AVGO
+Information Technology	DXC
+Information Technology	ORCL
+Information Technology	NTAP
+Information Technology	FLT
+Information Technology	FISV
+Information Technology	INTC
+Information Technology	IBM
+Information Technology	HPE
+Information Technology	GPN
+Information Technology	MSI
+Information Technology	FTNT
+Information Technology	INTU
+Information Technology	IPGP
+Information Technology	JKHY
+Information Technology	FIS
+Information Technology	MSFT
+Information Technology	HPQ
+Information Technology	MU
+Information Technology	MXIM
+Information Technology	IT
+Information Technology	NVDA
+Information Technology	LDOS
+Information Technology	MA
+Information Technology	LRCX
+Information Technology	PYPL
+Information Technology	FLIR
+Information Technology	NLOK
+Information Technology	FFIV
+Information Technology	KEYS
+Information Technology	PAYX
+Information Technology	JNPR
+Information Technology	MCHP
+Information Technology	KLAC
+Materials	NUE
+Materials	CF
+Materials	CE
+Materials	BLL
+Materials	AVY
+Materials	IP
+Materials	IFF
+Materials	VMC
+Materials	AMCR
+Materials	ALB
+Materials	WRK
+Materials	APD
+Materials	MLM
+Materials	LIN
+Materials	NEM
+Materials	MOS
+Materials	LYB
+Materials	PPG
+Materials	CTVA
+Materials	SEE
+Materials	PKG
+Materials	FMC
+Materials	SHW
+Materials	ECL
+Materials	DD
+Materials	DOW
+Materials	EMN
+Materials	FCX
+Real Estate	WY
+Real Estate	EQR
+Real Estate	AIV
+Real Estate	DRE
+Real Estate	MAC
+Real Estate	IRM
+Real Estate	KIM
+Real Estate	AMT
+Real Estate	EQIX
+Real Estate	VNO
+Real Estate	WELL
+Real Estate	REG
+Real Estate	O
+Real Estate	ARE
+Real Estate	VTR
+Real Estate	MAA
+Real Estate	SBAC
+Real Estate	FRT
+Real Estate	CCI
+Real Estate	PLD
+Real Estate	DLR
+Real Estate	EXR
+Real Estate	PEAK
+Real Estate	ESS
+Real Estate	PSA
+Real Estate	CBRE
+Real Estate	SLG
+Real Estate	BXP
+Real Estate	SPG
+Real Estate	UDR
+Real Estate	AVB
+Real Estate	HST
+Utilities	XEL
+Utilities	AES
+Utilities	PEG
+Utilities	ES
+Utilities	EVRG
+Utilities	PNW
+Utilities	EXC
+Utilities	WEC
+Utilities	ED
+Utilities	LNT
+Utilities	CMS
+Utilities	NRG
+Utilities	CNP
+Utilities	SO
+Utilities	D
+Utilities	NI
+Utilities	NEE
+Utilities	ETR
+Utilities	SRE
+Utilities	FE
+Utilities	DTE
+Utilities	DUK
+Utilities	AWK
+Utilities	AEP
+Utilities	EIX
+Utilities	AEE
+Utilities	ATO
+Utilities	PPL
