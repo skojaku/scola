@@ -1,14 +1,16 @@
+
+.. _constructing_networks_with_different_null_models:
+
 ================================================
 Constructing networks with different null models
 ================================================
 
-With the Scola, two nodes are adjacent in the network if and only if the correlation between the nodes is considerably different from that in a null model.
-In this example, we will show that diffferent null models will generate considerably different netwowkrs.
+With the Scola, two nodes are adjacent in the network if and only if the correlation between the nodes is considerably different from that for a null model.
+In this example, we will show that diffferent null models may generate different netwowkrs.
 
-We use historic S&P 500 stock price data retrieved from Yahoo finance, `sp500-log-return.csv <https://raw.githubusercontent.com/skojaku/scola/master/data/sp500-log-return.csv>`_, which contains the log return of the prices of N=488 stocks between 2015/01/01 and 2019/01/01 (L=1,008 days). 
-The code to retrieve the data can be found in `here <https://raw.githubusercontent.com/skojaku/scola/master/data/get_sp500_stock_prices.py>`.
+We use the historic S&P 500 stock price data retrieved from Yahoo finance, `sp500-log-return.csv <https://raw.githubusercontent.com/skojaku/scola/master/data/sp500-log-return.csv>`_, which contains the logarithmic return of the stock prices of N=488 companies between 2015/01/01 and 2019/01/01 (L=1,008 days; `code to retrieve the data  <https://raw.githubusercontent.com/skojaku/scola/master/data/get_sp500_stock_prices.py>`_).
 
-First, download the toy data by 
+We download the data and compute the correlation matrix: 
 
 .. code-block:: python
 
@@ -75,7 +77,8 @@ Let's see how the sample correlation matrix looks like:
    :align: center 
 
 
-We generate networks with three different null models, i.e., white noise model, HQS [1] model and configuration model [2] (see null models for details).
+We construct networks from the sample correlation matrices using the Scola. 
+Three null models are available in this python package: the white noise model, the HQS model and the configuration model (see null models for details).
 We can specify the null model with argument ``null_model`` of scola.corr2net.transform, e.g., scola.corr2net.transform(C_samp, L, null_model ="white-noise").
 
 We generate networks with the three null models:  
@@ -91,47 +94,108 @@ We generate networks with the three null models:
            = scola.corr2net.transform(C_samp, L, null_model = null_model)
        Results[null_model] = {"W":W, "EBIC":EBIC}
 
-We show the adjacency matrices and the networks as follows. 
+The generated networks look like:
 
 .. code-block:: python
 
-   fig, axes = plt.subplots(nrows = 1, ncols = 3, figsize=(15, 5))
+   import matplotlib.colors as colors
+   from matplotlib import cm
+   import networkx as nx
+   
+   def draw_network(W, ax = None, dw = 0.25):
+       
+       G = nx.from_numpy_array(W)
+       pos = nx.circular_layout(G)
+       
+       edge_weight = np.array([ d[2]["weight"] for d in G.edges(data=True)])
+       min_w = np.min(np.triu(W,1))
+       max_w = np.max(np.triu(W,1))
+       disc_min_w = dw * np.floor(min_w / dw)
+       disc_max_w = dw * np.ceil(max_w / dw)
+       
+       bounds = np.linspace( disc_min_w, disc_max_w, np.round( (disc_max_w - disc_min_w) / dw) + 1 )
+       norm = colors.BoundaryNorm(boundaries=bounds, ncolors=256)
+       
+       edge_cmap = sns.diverging_palette(10, 220, as_cmap=True)
+       edge_width_list = np.maximum( np.power( np.abs(edge_weight) / (max_w), 2 ) * 8, 1)
+       
+       edge_color_list = [ edge_cmap(norm(w)) for w in edge_weight]
+       
+       nx.draw_networkx_nodes(G, pos,\
+                              cmap="tab10",\
+                              node_color = sector_ids,\
+                              node_size = 5,\
+                              ax = ax)
+       
+       nx.draw_networkx_edges(G, pos,\
+                              edge_color=edge_color_list,\
+                              width=edge_width_list,\
+                              alpha = 0.5,\
+                              edge_vmin = min_w,\
+                              edge_vmax = max_w,\
+                              connectionstyle='arc3, rad=0.3',\
+                              ax=ax)
+       ax.axis('off')
+   
+   
+   fig, axes = plt.subplots(nrows = 3, ncols =2, figsize=(10, 15))
+   
    for i, null_model in enumerate(null_models):
        W = Results[null_model]["W"]
-       ax = plot_corr(W, ax=axes[i], dw=0.5)
-       ax.set_title(null_model, fontsize = 20)
-   plt.show()   
+       plot_corr(W, ax=axes[i,0], dw=0.5)
+       axes[i,0].set_title(null_model, fontsize = 20)
+   
+   
+   # Get sector label 
+   ticker_sector = pd.read_csv("https://raw.githubusercontent.com/skojaku/scola/develop/data/ticker-sector.csv", sep="\t")
+   sectors = ticker_sector.set_index("name").loc[ticker_names]
+   sectors, sector_ids = np.unique(sectors, return_inverse = True)
+   
+   for i, null_model in enumerate(null_models):
+       W = Results[null_model]["W"]
+       draw_network(W, ax = axes[i,1])
+       axes[i,1].set_title(null_model, fontsize = 20)
+   plt.show()  
+
+
 
 .. figure:: fig/W-sp500-net-all.png
-   :scale: 40 %
+   :scale: 30 %
    :align: center 
 
+The colour of the node in the network indicates the sector of company. 
+The colour of the edge indicates the weight of the edge. 
 
 The three null models yield considerably different networks. 
 In fact, for the networks generated by the white-noise model, one finds many edges between the stock prices of companies in different sectors (colour of nodes in circular plot).
-The HQS model yields the network with fewer inter-sector edges. The configuration model yields the sparsest network with the smallest number of inter-section edges.  
+The HQS model yields the network with fewer inter-sector edges. The configuration model yields the most sparse network with the smallest number of inter-sector edges.  
 
+So which network is better than the others?
+The Scola selects the most plausible network using an Information Criterion (i.e., extended Bayesian Information criterion). 
+The EBIC value is returned by the scola.corr2net.transform as ``EBIC`` variable.
 
-.. figure:: fig/W.png
-   :scale: 20 %
-   :align: center 
-
-See the :ref:`scola_package` for other return values.
-
-Scola can construct a network from precision matrices, which is often different from that constructed from correlation matrices. 
-To do this, give an extra parameter ``construct_from='pres'``: 
+The EBIC values for the generated networks are given by  
 
 .. code-block:: python
 
-   import scola
-   W, C_null, selected_null_model, EBIC, construct_from, all_networks = scola.corr2net.transform(C_samp, L, construct_from="pres")
+    for null_model in null_models:
+        print("%s EBIC=%f" % (null_model, Results[null_model]["EBIC"]))
 
-which produces a different network:
+which displays
 
-.. figure:: fig/Wpres.png
-   :scale: 20 %
-   :align: center 
+.. code-block:: python
 
-If one sets ``construct_from='auto'``, the Scola constructs networks from correlation matrices and precision matrices. 
-Then, it chooses the one that best represents the given data in terms of the extended BIC.
-The selected type of the matrix is indicated by ``construct_from`` in the return variables. 
+   white-noise: EBIC = 1239048.769948
+   hqs: EBIC = 1153825.929170
+   config: EBIC = 1128540.985291
+
+Smaller the EBIC value, better the network in terms of the extended Bayesian Information criterion.
+So the network generated with the configuration model is better than those generated with other null models. 
+
+If you don't specify the null model, the Scola generates networks with different null models and automatically chooses the best network in terms of the EBIC value, i.e., 
+
+.. code-block:: python
+
+       W, C_null, selected_null_model, EBIC,construct_from, all_networks\
+           = scola.corr2net.transform(C_samp, L)
+
