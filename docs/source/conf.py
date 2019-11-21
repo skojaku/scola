@@ -49,7 +49,7 @@ extensions = [
 todo_include_todos=True
 autodoc_member_order = 'bysource'
 # Default flags used by autodoc directives
-autodoc_default_flags = ['members']
+autodoc_default_flags = ['members', "show-inheritance"]
 napoleon_use_rtype = True
 autosectionlabel_prefix_document = True
 
