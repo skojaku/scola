@@ -13,8 +13,8 @@ def test():
     N = int(X.shape[1])
     C_samp = np.corrcoef(X.T)
 
-    W, C_null, selected_null_model, EBIC, input_mat_type = scola.generate_network(C_samp, L)
-    W, C_null, selected_null_model, EBIC, input_mat_type = scola.generate_network(C_samp, L, input_mat_type="pres")
-    W, C_null, selected_null_model, EBIC, input_mat_type = scola.generate_network(C_samp, L, input_mat_type="auto")
+    W, C_null, selected_null_model, EBIC, construct_from, all_networks = scola.corr2net.transform(C_samp, L)
+    W, C_null, selected_null_model, EBIC, construct_from, all_networks = scola.corr2net.transform(C_samp, L, construct_from="pres")
+    W, C_null, selected_null_model, EBIC, construct_from, all_networks = scola.corr2net.transform(C_samp, L, construct_from="auto")
 
 test()
