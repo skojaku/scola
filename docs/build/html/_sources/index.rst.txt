@@ -11,6 +11,11 @@ Please cite the paper if you use this package:
 
 `Sadamori Kojaku and Naoki Masuda. Proceedings of the Royal Society A, 475, 2231 (2019) <https://royalsocietypublishing.org/doi/abs/10.1098/rspa.2019.0578?af=R&>`_. [`Preprint <https://arxiv.org/abs/1903.10805>`_]
 
+
+.. figure:: fig/header.png
+   :scale: 20 %
+   :align: center 
+
 .. toctree::
    :hidden:
    :maxdepth: 2
@@ -26,5 +31,3 @@ Please cite the paper if you use this package:
 Licence
 =======
 GNU GENERAL PUBLIC LICENSE, Version 3, 29 June 2007
-
-
