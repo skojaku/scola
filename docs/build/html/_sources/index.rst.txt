@@ -9,7 +9,7 @@ In the generated network, edges between nodes indicate correlations that are not
 
 Please cite the paper if you use this package: 
 
-`Sadamori Kojaku and Naoki Masuda. Preprint arXiv:1903.10805 <https://arxiv.org/abs/1903.10805>`_.
+`Sadamori Kojaku and Naoki Masuda. Proceedings of the Royal Society A, 475, 2231 (2019) <https://royalsocietypublishing.org/doi/abs/10.1098/rspa.2019.0578?af=R&>`_. [`Preprint <https://arxiv.org/abs/1903.10805>`_]
 
 .. toctree::
    :hidden:

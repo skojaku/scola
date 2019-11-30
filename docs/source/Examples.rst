@@ -3,12 +3,8 @@ Examples
 ========
 
 
-
-.. toctree::
-   :maxdepth: 4
-
-   Getting_Started
-   Constructing_networks_with_different_null_models
-   Null_models
+*  :ref:`getting_started`
+* `Constructing networks with different null models <https://nbviewer.jupyter.org/github/skojaku/scola/blob/develop/notebook/construct_networks_with_different_null_models.ipynb>`_ 
+* `Null models <https://nbviewer.jupyter.org/github/skojaku/scola/blob/develop/notebook/null_models.ipynb>`_ 
 
    
