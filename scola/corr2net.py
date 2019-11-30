@@ -56,7 +56,7 @@ def transform(C_samp, L, null_model="all", disp=True, construct_from="corr", bet
         Setting "pres" constructs based on the precision matrix. If construct_from='auto', the Scola constructs networks from the correlation matrix and precision matrix. Then, it chooses the best one in terms of the extended BIC. 
 
     beta : float, default 0.5 
-        Hyperparameter for the extended BIC. When beta = 0, the EBIC is equivalent to the BCI. The higher value yields a sparser network. Range [0,1].
+        Hyperparameter for the extended BIC. When beta = 0, the EBIC is equivalent to the BIC. The higher value yields a sparser network. Range [0,1].
 
 
     Returns

@@ -9,21 +9,21 @@ import warnings
 
 def white_noise_model(C_samp):
     """
-        Compute the white noise model for correlation matrices.
-        
-        Parameters
-        ----------
-        C_samp : 2D numpy.ndarray, shape (N, N)
-            Sample correlation matrix.
+    Compute the white noise model for correlation matrices.
     
-        Returns
-        -------
-        C_null : 2D numpy.ndarray, shape (N, N)
-            The correlation matrix under the white-noise model.
-        K_null : int 
-            Number of parameters to generate the null correlation matrix
-        name : str
-            Name of the null model ("white-noise")
+    Parameters
+    ----------
+    C_samp : 2D numpy.ndarray, shape (N, N)
+        Sample correlation matrix.
+    
+    Returns
+    -------
+    C_null : 2D numpy.ndarray, shape (N, N)
+        The correlation matrix under the white-noise model.
+    K_null : int 
+        Number of parameters to generate the null correlation matrix
+    name : str
+        Name of the null model ("white-noise")
     """
     C_null = np.eye(C_samp.shape[0])
     K_null = 0
@@ -31,21 +31,21 @@ def white_noise_model(C_samp):
 
 def hqs_model(C_samp):
     """
-        Compute the HQS model for correlation matrices.
-        
-        Parameters
-        ----------
-        C_samp : 2D numpy.ndarray, shape (N, N)
-            Sample correlation matrix.
+    Compute the HQS model for correlation matrices.
     
-        Returns
-        -------
-        C_null : 2D numpy.ndarray, shape (N, N)
-            The correlation matrix under the HQS model.
-        K_null : int 
-            Number of parameters to generate the null correlation matrix
-        name : str
-            Name of the null model ("hqs")
+    Parameters
+    ----------
+    C_samp : 2D numpy.ndarray, shape (N, N)
+        Sample correlation matrix.
+    
+    Returns
+    -------
+    C_null : 2D numpy.ndarray, shape (N, N)
+        The correlation matrix under the HQS model.
+    K_null : int 
+        Number of parameters to generate the null correlation matrix
+    name : str
+        Name of the null model ("hqs")
     """
     C_null = np.mean(np.triu(C_samp, 1)) * np.ones(C_samp.shape)
     np.fill_diagonal(C_null, 1)
@@ -54,24 +54,24 @@ def hqs_model(C_samp):
 
 def configuration_model(C_samp, tolerance=5e-3):
     """
-        Compute the configuration model for correlation matrices
-        using the gradient descent algorithm.
-        
-        Parameters
-        ----------
-        C_samp : 2D numpy.ndarray, shape (N, N)
-            Sample correlation matrix.
-        tolerance: float
-            Tolerance in relative error.
+    Compute the configuration model for correlation matrices
+    using the gradient descent algorithm.
     
-        Returns
-        -------
-        C_null : 2D numpy.ndarray, shape (N, N)
-            The correlation matrix under the config model.
-        K_null : int 
-            Number of parameters to generate the null correlation matrix
-        name : str
-            Name of the null model ("config")
+    Parameters
+    ----------
+    C_samp : 2D numpy.ndarray, shape (N, N)
+        Sample correlation matrix.
+    tolerance: float
+        Tolerance in relative error.
+    
+    Returns
+    -------
+    C_null : 2D numpy.ndarray, shape (N, N)
+        The correlation matrix under the config model.
+    K_null : int 
+        Number of parameters to generate the null correlation matrix
+    name : str
+        Name of the null model ("config")
     """
 
     cov = np.asanyarray(C_samp)
